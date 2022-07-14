@@ -1,0 +1,31 @@
+name: Publish And Deploy Demo
+on:
+  # 模拟发布分支 push的时候就去自动部署
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # 部署到服务器
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      #  服务器配置信息
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        debug: true
+        # 运行在服务端的命令
+        script: |
+        	# tmp临时目录
+          cd /tmp
+          # 克隆git代码 记得安装git
+          git clone https://github.com/TheSleepGod/semesters.git
+          cd /tmp/vue-automated-deployment
+          # 运行项目中deploy.sh脚本文件
+          chmod +x ./deploy.sh
+          ./deploy.sh
