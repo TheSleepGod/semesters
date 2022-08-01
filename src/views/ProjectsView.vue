@@ -19,10 +19,10 @@
             </div>
           </div>
           <div class="projectsCard" id="newPrCard" @click="showCreateProject">
-            <div style="margin-top: 25px">
+            <div style="margin-top: 10px">
               <span id="prPlusSpan">+</span>
             </div>
-            <div style="margin-top: 110px">
+            <div class="projectsCardFoot">
               <span class="projectsNameSpan" id="newPrNameSpan">创建新项目</span>
             </div>
           </div>
@@ -194,7 +194,7 @@ export default {
   padding: 0 15px;
   margin-right: 25px;
   cursor: pointer;
-  border-radius: 25px;
+  border-radius: 20px;
   box-shadow: 1px 1px 2px 0 lightgrey;
   transition: all 0.25s;
 }
@@ -206,7 +206,7 @@ export default {
   background-image: url("../assets/nmb.png");
   background-repeat: no-repeat;
   background-position: 0 0;
-  background-size: 100% 75%;
+  background-size: 100% 70%;
 }
 #commonPrCard:hover{
   filter: brightness(0.75);
@@ -215,14 +215,14 @@ export default {
   background-image: url("../assets/nmb.png");
   background-repeat: no-repeat;
   background-position: 0 0;
-  background-size: 100% 75%;
+  background-size: 100% 70%;
   filter: grayscale(1);
 }
 #recyclePrCard:hover{
   filter: grayscale(0.3);
 }
 .projectsCardFoot{
-  margin-top: 110px;
+  margin-top: 108px;
 }
 .projectsNameSpan{
   font-weight: bold;
@@ -260,7 +260,7 @@ export default {
 }
 #newPrCard:hover #prPlusSpan{
   font-size: 28px;
-  transform: translateX(270%) rotate(810deg);
+  transform: translateX(270%) translateY(50%) rotate(810deg);
   color: deepskyblue;
 }
 #newPrCard:hover #newPrNameSpan{
