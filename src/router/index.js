@@ -5,10 +5,15 @@ import HomeView from '../views/HomeView.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  // {
+  //   path: '/',
+  //   name: 'home',
+  //   component: HomeView
+  // },
   {
-    path: '/',
+    path: '/home',
     name: 'home',
-    component: HomeView
+    component: () => import(/* webpackChunkName: "about" */ '../views/home.vue')
   },
   {
     path: '/about',
