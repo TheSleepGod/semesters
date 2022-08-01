@@ -8,7 +8,7 @@
     <el-tabs v-model="activeName" style="width: 70%;margin-left: 15%">
       <el-tab-pane label="团队项目" name="first">
         <div class="cards-container" style="margin-top: 10px">
-          <div class="projectsCard" v-for="item in tmpProjectsList" :key="item.data" v-if="item.isRecycled===false"
+          <div class="projectsCard" id="commonPrCard" v-for="item in tmpProjectsList" :key="item.data" v-if="item.isRecycled===false"
                @click="gotoProject(item)" @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
             <div class="projectsCardFoot">
               <span class="projectsNameSpan">{{item.name}}</span>
@@ -18,19 +18,19 @@
               </span>
             </div>
           </div>
-          <div class="newProjectCard" @click="showCreateProject">
+          <div class="projectsCard" id="newPrCard" @click="showCreateProject">
             <div style="margin-top: 25px">
-              <span class="newProjectNameSpanPlus">+</span>
+              <span class="projectNameSpanPlus">+</span>
             </div>
             <div style="margin-top: 110px">
-              <span class="newProjectNameSpan">创建新项目</span>
+              <span class="projectsNameSpan" id="newPrNameSpan">创建新项目</span>
             </div>
           </div>
         </div>
       </el-tab-pane>
       <el-tab-pane label="项目回收站" name="second">
         <div class="cards-container" style="margin-top: 10px">
-          <div class="recycleProjectsCard" v-for="item in tmpProjectsList" :key="item.data" v-if="item.isRecycled!==false"
+          <div class="projectsCard" id="recyclePrCard" v-for="item in tmpProjectsList" :key="item.data" v-if="item.isRecycled!==false"
                @click="gotoProject(item)" @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
             <div class="projectsCardFoot">
               <span class="projectsNameSpan">{{item.name}}</span>
@@ -195,39 +195,30 @@ export default {
   margin-right: 25px;
   cursor: pointer;
   border-radius: 25px;
-  background-image: url("../assets/nmb.png");
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-size: 100% 75%;
   box-shadow: 1px 1px 2px 0 lightgrey;
   transition: all 0.25s;
 }
 .projectsCard:hover{
   box-shadow: 3px 3px 5px 0 darkgrey;
   margin-top: -5px;
-  filter: brightness(0.75);
 }
-.recycleProjectsCard{
-  min-width: 150px;
-  max-width: 200px;
-  height:140px;
-  flex-basis: 25%;
-  margin-bottom: 30px;
-  padding: 0 15px;
-  margin-right: 25px;
-  cursor: pointer;
-  border-radius: 25px;
+#commonPrCard{
   background-image: url("../assets/nmb.png");
   background-repeat: no-repeat;
   background-position: 0 0;
   background-size: 100% 75%;
-  box-shadow: 1px 1px 2px 0 lightgrey;
-  filter: grayscale(1);
-  transition: all 0.25s;
 }
-.recycleProjectsCard:hover{
-  box-shadow: 3px 3px 5px 0 darkgrey;
-  margin-top: -5px;
+#commonPrCard:hover{
+  filter: brightness(0.75);
+}
+#recyclePrCard{
+  background-image: url("../assets/nmb.png");
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 100% 75%;
+  filter: grayscale(1);
+}
+#recyclePrCard:hover{
   filter: grayscale(0.3);
 }
 .projectsCardFoot{
@@ -249,46 +240,16 @@ export default {
   width: 75%;
   font-size: 16px;
 }
-.recycleProjectsCard:hover .projectsNameSpan{
-  width: 75%;
-  font-size: 16px;
-}
 .projectsBtn{
   margin-left: -15px;
 }
-.newProjectCard{
-  min-width: 150px;
-  max-width: 200px;
-  height:140px;
-  flex-basis: 25%;
-  margin-bottom: 30px;
-  padding: 0 15px;
-  margin-right: 25px;
-  cursor: pointer;
-  border-radius: 25px;
-  box-shadow: 1px 1px 2px 0 lightgrey;
-  transition: all 0.25s;
+#newPrCard{
   background-color: whitesmoke;
 }
-.newProjectCard:hover{
-  box-shadow: 3px 3px 5px 0 darkgrey;
-  margin-top: -5px;
+#newPrCard:hover{
   background-color: ghostwhite;
 }
-.newProjectNameSpan{
-  font-weight: bold;
-  font-size:15px;
-  transition: all 0.25s;
-  width: 90%;
-  float: left;
-  text-align: left;
-  margin-left: 5px;
-}
-.newProjectCard:hover .newProjectNameSpan{
-  font-size: 16px;
-  color: deepskyblue;
-}
-.newProjectNameSpanPlus{
+.projectNameSpanPlus{
   font-weight: bolder;
   font-size: 25px;
   transition: all 0.25s;
@@ -297,8 +258,12 @@ export default {
   text-align: left;
   margin-left: 5px;
 }
-.newProjectCard:hover .newProjectNameSpanPlus{
+#newPrCard:hover .projectNameSpanPlus{
   font-size: 28px;
+  color: deepskyblue;
+}
+#newPrCard:hover #newPrNameSpan{
+  font-size: 16px;
   color: deepskyblue;
 }
 </style>
