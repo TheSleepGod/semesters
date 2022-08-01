@@ -20,7 +20,7 @@
           </div>
           <div class="projectsCard" id="newPrCard" @click="showCreateProject">
             <div style="margin-top: 25px">
-              <span class="projectNameSpanPlus">+</span>
+              <span id="prPlusSpan">+</span>
             </div>
             <div style="margin-top: 110px">
               <span class="projectsNameSpan" id="newPrNameSpan">创建新项目</span>
@@ -249,21 +249,23 @@ export default {
 #newPrCard:hover{
   background-color: ghostwhite;
 }
-.projectNameSpanPlus{
+#prPlusSpan{
   font-weight: bolder;
   font-size: 25px;
   transition: all 0.25s;
-  width: 90%;
+  width: 30px;
   float: left;
   text-align: left;
   margin-left: 5px;
 }
-#newPrCard:hover .projectNameSpanPlus{
+#newPrCard:hover #prPlusSpan{
   font-size: 28px;
+  transform: translateX(270%) rotate(810deg);
   color: deepskyblue;
 }
 #newPrCard:hover #newPrNameSpan{
-  font-size: 16px;
+  font-size: 17px;
   color: deepskyblue;
+  transform: translateX(35%) translateY(-50%);
 }
 </style>
