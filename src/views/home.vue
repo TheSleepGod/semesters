@@ -1,0 +1,185 @@
+<template>
+  <div id="all">
+    <div id="topBar" style="background-color: white;height: 80px;margin: -8px;padding: 0px;border: 1px solid #EEEEEE;text-align:center">
+      <span><img src="../assets/logo.svg" height="80px" style="margin-left: 0%;position: relative;float: left"></span>
+      <span><el-button type="danger" @click="outerVisible = true" style="margin-left: 0%;position: relative;float: right;top: 20px;right: 20px" round>登录/注册</el-button></span>
+    </div>
+    <div id="main">
+      <div class="name">团队项目管理</div>
+      <div class="name1">专业一体化平台</div>
+      <div class="name2">墨书·让管理更简单</div>
+    </div>
+    <el-dialog title="登录" :visible.sync="outerVisible" width="600px" height="300px">
+      <el-form :model="loginForm" :rules="loginRules" label-width="80px" label-position="right">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="loginForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="loginForm.password"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-dialog
+          title="用户注册"
+          width="600px"
+          :visible.sync="innerVisible"
+          append-to-body>
+        <el-form :model="createUserForm" :rules="registerRules" label-width="120px" label-position="right">
+          <el-form-item label="真实姓名" prop="name">
+            <el-input v-model="createUserForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="昵称" prop="username">
+            <el-input v-model="createUserForm.username"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password1">
+            <el-input v-model="createUserForm.password1"></el-input>
+          </el-form-item>
+          <el-form-item label="再次输入密码" prop="password2">
+            <el-input v-model="createUserForm.password2"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <span><el-input v-model="createUserForm.email" style="width: 328px"></el-input></span>
+            <span><el-button type="info" plain>发送验证码</el-button></span>
+          </el-form-item>
+          <el-form-item label="验证码" prop="verifyCode">
+            <el-input v-model="createUserForm.verifyCode"></el-input>
+          </el-form-item>
+        </el-form>
+        <!-- 注册弹窗底部区 -->
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary">确 定</el-button>
+        </span>
+      </el-dialog>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" style="margin-right: 70px">登 录</el-button>
+<!--        <el-button @click="outerVisible = false">取 消</el-button>-->
+<!--        <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>-->
+        <a id="toRegister" @click="innerVisible = true">还未注册？点这里去注册</a>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "home",
+  data() {
+    let checkUsername = (rule, value, callback) => {
+      let userName = /[_a-zA-Z0-9]{2,12}/;
+      if (userName.test(value)) {	//匹配成功返回
+        callback();
+      }
+      callback(new Error("用户名格式：2-12位英文字母、数字或下划线"));
+    }
+    let checkNewPwd = (rule, value, callback) => {
+      let pwdReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,18}$/;
+      //如果字符串 string 中含有与 RegExpObject 匹配的文本，则返回 true，否则返回 false。
+      if (!pwdReg.test(value)) {
+        callback(new Error("密码长度8-18位，且需同时包含英文和数字"));
+      }
+      callback();
+    }
+    let checkNewPwd2 = (rule, value, callback) => {
+      if (value !== this.createUserForm.password1) {
+        callback(new Error("两次输入密码不一致！"));
+      }
+      callback();
+    }
+    let checkEmail = (rule, value, callback) => {
+      let mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      if (mailReg.test(value)) {	//匹配成功返回
+        callback();
+      }
+      callback(new Error("邮箱格式：xx@xx.xx，只含数字、大小写字母、下划线、横杠"));
+    };
+    return {
+      innerVisible: false,
+      outerVisible: false,
+      loginForm: {
+        email: '',
+        password: '',
+      },
+      createUserForm: {
+        name: '',
+        username: '',
+        password1: '',
+        password2: '',
+        email: '',
+        verifyCode: '',
+      },
+      loginRules: {
+        username: [{required: true, message: '请输入用户名', trigger: 'blur'}, {validator: checkUsername, trigger: 'blur'}],
+        password: [{required: true, message: '请输入密码', trigger: 'blur'}, {validator: checkNewPwd, trigger: 'blur'}],
+      },
+      registerRules: {
+        name: [{required: true, message: '请输入真实姓名', trigger: 'blur'}],
+        username: [{required: true, message: '请输入用户名', trigger: 'blur'}, {validator: checkUsername, trigger: 'blur'}],
+        password1: [{required: true, message: '请输入密码', trigger: 'blur'}, {validator: checkNewPwd, trigger: 'blur'}],
+        password2: [{required: true, message: '请确认密码', trigger: 'blur'}, {validator: checkNewPwd2, trigger: 'blur'}],
+        email: [{required: true, message: '请输入邮箱', trigger: 'blur'}, {validator: checkEmail, trigger: 'blur'}],
+        verifyCode: [{required: true, message: '请输入验证码', trigger: 'blur'}]
+      },
+    };
+  }
+}
+</script>
+
+<style scoped>
+
+#main{
+  background-image:url('../assets/mainBk.png');
+  background-size: 100% 100%;
+  background-position: center center;
+  width: 100%;
+  height: 710px;
+  margin-top: 10px;
+  /*background-color: #42b983;*/
+}
+
+.name{
+  font-size: 50px;
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #FF512F;
+  font-weight: 700;
+  text-shadow: 0px 0px 7px #ffd800;
+  background-image: linear-gradient(90deg,#ffd800 0%,#ff512f 100%,#fff);
+  animation:glow-animation 2s infinite linear;
+  color: #FFC0CB;
+  box-sizing: border-box;
+  vertical-align: inherit;
+  position: relative;
+  top: 200px;
+  font-family: NSimSun;
+}
+.name1{
+  font-family: STHeiTi;
+  position:relative;
+  top:220px;
+  font-size: 60px;
+}
+.name2{
+  position:relative;
+  top:250px;
+  font-size:25px;
+  color: #808080;
+}
+@keyframes glow-animation {
+  0%{filter: hue-rotate(360deg)}
+  /*25%{filter: hue-rotate(360deg)}*/
+  /*50%{filter: hue-rotate(-360deg)}*/
+  /*75%{filter: hue-rotate(360deg)}*/
+  4000%{filter: hue-rotate(-360deg)}
+}
+
+#toRegister{
+  color: black;
+  text-decoration:underline;
+}
+
+#toRegister:hover{
+  color: #0997F7;
+  cursor:pointer;
+}
+
+</style>
