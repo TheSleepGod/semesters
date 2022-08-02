@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +32,11 @@ const routes = [
     name: 'team',
     component: () => import('../views/Team')
   },
+  {
+    path: '/teamOne',
+    name: 'teamOne',
+    component: ()=> import('../views/TeamDes')
+  }
 ]
 
 const router = new VueRouter({
