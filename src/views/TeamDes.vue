@@ -16,10 +16,16 @@
       </div>
       <hr style="margin:0;background-color:black;height:1px;border:none; background-image: linear-gradient(to right, #333, #333, #ccc);width: 80%" />
       <div class = "right-people-mes">
-        <div class = "right-people-mes-box" v-for="people in teamPeople">
+        <div class = "right-people-mes-box" v-for="(people,index) in teamPeople" @mouseover="clickCome(index)" @mouseleave="clickLeave(index)">
           <div class = "rpm-left">
             <img class = "rpm-left-icon" src="../assets/icon.jpg" alt="">
             <span class = "font-1 rmp-left-id">TheSleepGod</span>
+            <img class = "rpm-name-per" src = "../assets/permissions/Owner.png" v-if = "people.permission === 2" 
+                 alt="创建者" title="创建者">
+            <img class = "rpm-name-per" src = "../assets/permissions/Manger.png" v-if = "people.permission === 1" 
+                 alt="管理员" title="管理员">
+            <img class = "rpm-name-per" src = "../assets/permissions/Person.png" v-if = "people.permission === 0" 
+                 alt="成员" title="成员">
           </div>
           <div class = "rpm-right" >
             <ul style="text-align: left; margin-top: 22px; margin-left: -20px">
@@ -27,6 +33,9 @@
               <li style="margin-bottom: 10px;">邮箱：{{people.email}}</li>
               <li style="margin-bottom: 10px;">真实姓名：{{people.name}}</li>
             </ul>
+          </div>
+          <div class = "rpm-del" style="display: none" :id = index @click="del(index)">
+            <span style="position: relative;float: left; top: 4px; left: 175px">删除</span>
           </div>
         </div>  
       </div>    
@@ -52,33 +61,63 @@ export default {
           tel: "15536833281",
           email: "1634504737@qq.com",
           name: "hhw",
+          permission: 1,
         },
       {
         tel: "15536833281",
         email: "1634504737@qq.com",
         name: "hhw",
+        permission: 0,
       },
       {
         tel: "15536833281",
         email: "1634504737@qq.com",
         name: "hhw",
+        permission: 2,
       },
       {
         tel: "114514",
         email: "11012138@qq.com",
         name: "killer",
+        permission: 0,
       },
       {
         tel: "214904777899",
         email: "62531122222@qq.com",
         name: "zzx",
+        permission: 0,
       }
     ]
+    let changePerM = -1;
     return {
       teamMes,
       teamPeople,
+      changePerM,
     }
-  }
+  },
+  methods: {
+    clickCome: function (id) {
+      document.getElementById(id).style.display = "inline";
+    },
+    clickLeave: function (id) {
+      document.getElementById(id).style.display = "none";
+    },
+    del: function(id) {
+      let r=confirm("确认删除吗");
+      if (r===true)
+      {
+        alert("You pressed OK!" + id);
+      }
+      else
+      {
+        alert("You pressed Cancel!");
+      }
+
+    },
+    changePer:function (id) {
+      this.changePerM = id;
+    }
+  },
 }
 </script>
 
@@ -178,10 +217,11 @@ export default {
   caret-color: transparent;
 }
 .rpm-left {
-  height: 150px;
+  height: 130px;
   width: 100px;
   position: relative;
   float: left;
+  margin-bottom: -50px;
 }
 .rpm-left-icon {
   position: relative;
@@ -199,9 +239,31 @@ export default {
 }
 .rpm-right {
   width: 250px;
-  height: 150px;
+  height: 130px;
   position: relative;
   float: left;
   left: 50px;
+  margin-bottom: -50px;
+}
+.rpm-del {
+  height: 30px;
+  width: 400px;
+  background: #0997F7;
+  position: relative;
+  top: 40px;
+  float: left;
+  z-index: 10;
+  border-radius: 0 0 30px 30px;
+  cursor:pointer;
+}
+.rpm-name-per {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  float: left;
+  z-index: 10;
+  margin-left: 70px;
+  transform: rotate(45deg);
+  top: -80px;
 }
 </style>

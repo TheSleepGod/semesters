@@ -28,7 +28,6 @@ export default {
   height: 700px;
   width: 100px;
   padding: 0;
-
 }
 .left-project-one {
   width: 100px;
