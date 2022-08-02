@@ -35,6 +35,12 @@ const routes = [
     component: () => import('../views/Team')
   },
   {
+
+    path: '/teamOne',
+    name: 'teamOne',
+    component: () => import('../views/TeamDes')
+  }, 
+  {
     path: '/editWord',
     name: 'Edit',
     component: () => import('../views/Edit'),
