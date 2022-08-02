@@ -49,6 +49,6 @@ export default Vue.extend({
 })
 </script>
 
-<style>
+<style src="@wangeditor/editor/dist/css/style.css">
 
 </style>
