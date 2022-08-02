@@ -1,62 +1,89 @@
-<draggable v-model="fileList" @update="fileDragEnd" v-bind="dragOptions">
-<transition-group tag="ul"  class="fileList">
-  <li v-for="(item,ins) in fileList" :key="ins"></li>
-</transition-group>
-</draggable>
+<template>
+  <div>
+    <el-button  size="mini" title="生成图片" @click="toImage()" icon="el-icon-download"></el-button>
+  <div style="height: 600px; width: 1000px; border: 1px solid red; position: relative;" ref="imageToFile">
+    <vdr :w="100" :h="100" v-on:dragging="onDrag" v-on:resizing="onResize" :parent="true" >
+      <p>Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
+        X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}</p>
+    </vdr>
+    <vdr
+        :w="200"
+        :h="200"
+        :parent="true"
+        :debug="false"
+        :min-width="200"
+        :min-height="200"
+        :isConflictCheck="true"
+        :snap="true"
+        :snapTolerance="20"
+    >
+    </vdr>
+  </div>
+  </div>
+</template>
+
 <script>
-import draggable from 'vuedraggable'
-export default({
-  name:'drag',
-  data () {
+import vdr from 'vue-draggable-resizable-gorkys'
+import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
+import html2canvas from "html2canvas";
+export default {
+  components: {vdr},
+  data: function () {
     return {
-      fileList: [],
-      dragOptions: { forceFallback: true, animation: 100, sort: false }
+      width: 0,
+      height: 0,
+      x: 0,
+      y: 0
     }
   },
-  components: {
-    draggable
-  },
-  methods:{
-    fileDragEnd (evt) {
-      console.log(evt)
-      //evt.item //可以知道拖动的本身
-      //evt.to    // 可以知道拖动的目标列表
-      //evt.from  // 可以知道之前的列表
-      //evt.oldIndex  // 可以知道拖动前的位置
-      //evt.newIndex  // 可以知道拖动后的位置
-    }
+  methods: {
+    onResize: function (x, y, width, height) {
+      this.x = x
+      this.y = y
+      this.width = width
+      this.height = height
+    },
+    onDrag: function (x, y) {
+      this.x = x
+      this.y = y
+    },
+    // 页面元素转图片
+    toImage () {
+      // 手动创建一个 canvas 标签
+      const canvas = document.createElement("canvas")
+      // 获取父标签，意思是这个标签内的 DOM 元素生成图片
+      // imageTofile是给截图范围内的父级元素自定义的ref名称
+      let canvasBox = this.$refs.imageToFile
+      // 获取父级的宽高
+      const width = parseInt(window.getComputedStyle(canvasBox).width)
+      const height = parseInt(window.getComputedStyle(canvasBox).height)
+      // 宽高 * 2 并放大 2 倍 是为了防止图片模糊
+      canvas.width = width * 2.5
+      canvas.height = height * 2.5
+      canvas.style.width = width + 'px'
+      canvas.style.height = height + 'px'
+      const context = canvas.getContext("2d");
+      context.scale(2, 2);
+      const options = {
+        backgroundColor: null,
+        canvas: canvas,
+        useCORS: true
+      }
+      html2canvas(canvasBox, options).then((canvas) => {
+        // toDataURL 图片格式转成 base64
+        let dataURL = canvas.toDataURL("image/png")
+        console.log(dataURL)
+        this.downloadImage(dataURL)
+      })
+    },
+    //下载图片
+    downloadImage(url) {
+      // 如果是在网页中可以直接创建一个 a 标签直接下载
+      let a = document.createElement('a')
+      a.href = url
+      a.download = '首页截图'
+      a.click()
+    },
   }
-})
-
+}
 </script>
-
-<style lang="less">
-.test-left {
-  float: left;
-  width: 300px;
-}
-.test-right {
-  float: left;
-  margin-left: 20px;
-  width: 300px;
-}
-.test-right > div {
-  min-height: 80px; /*为了防止右侧开始没有内容时不可以拖动*/
-}
-.item {
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-  background: #f2f2f2;
-  margin-bottom: 12px;
-}
-
-.ghostL {
-  opacity: 0.5;
-  width: 230px;
-}
-.ghostR {
-  opacity: 0;
-  width: 230px;
-}
-</style>

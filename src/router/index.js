@@ -59,6 +59,16 @@ const routes = [
     path: '/edit',
     name: 'Edit',
     component: () => import("../views/WordEdit")
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import("../views/test")
+  },
+  {
+    path: '/test2',
+    name: 'test2',
+    component: () => import("../views/test2")
   }
 ]
 
