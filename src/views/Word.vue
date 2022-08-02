@@ -81,7 +81,7 @@ export default {
   },
   methods:{
       beActive(item){
-        item.active="background-color: #cccccc;color: red;cursor : pointer;";
+        item.active="background-color: #ccc;color: red;cursor : pointer;";
       },
       beNormal(arg){
         arg.active='';
@@ -144,12 +144,15 @@ export default {
 .doc_all{
   margin-top: 20px;
   border: 1px solid mediumpurple;
-  background-color: gainsboro;
+  background-color: #eef0f4;
   height: 3000px;
 }
 .doc_content{
-  margin: 10px 30px 10px 30px;
+  margin: 60px 250px 60px 250px;
   background-color: white;
   height: 2980px;
+  border-radius: 10px;
+  box-shadow:2px 2px 10px #ccc;;
+  font-size: 35px;
 }
 </style>

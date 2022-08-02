@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <div style="margin-left: -10px;margin-top: -10px;">
+    <!-- 顶部栏（占位-->
+    <div style="height: 100px"></div>
+    <TeamLeft/>
     <!-- 页头-->
-    <div style="height: 40px;">
-      <span style="font-size: 30px;margin-top: 10px">{{teamName}}的工作台</span>
+    <div style="height: 35px;">
+      <div style="width: 50%;font-size: 26px;float: right">{{teamName}}的项目</div>
     </div>
     <!-- 项目展示-->
     <el-tabs v-model="activeName" style="width: 70%;margin-left: 15%">
@@ -59,7 +62,11 @@
 </template>
 
 <script>
+import TeamLeft from "@/components/ProjectLeft";
 export default {
+  components: {
+    TeamLeft
+  },
   name: "ProjectsView",
   data(){
     return{

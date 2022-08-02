@@ -63,7 +63,17 @@ const routes = [
   {
     path: '/markdown',
     name: 'markdown',
-    component: () => import("../views/UseForMarkdown")
+    component: () => import("../views/UseForMarkdown") 
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import("../views/test")
+  },
+  {
+    path: '/test2',
+    name: 'test2',
+    component: () => import("../views/test2")
   }
 ]
 

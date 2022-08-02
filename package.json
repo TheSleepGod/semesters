@@ -15,9 +15,14 @@
     "chalk": "^5.0.1",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.9",
+<<<<<<< HEAD
     "github-markdown-css": "^5.1.0",
     "highlight": "^0.2.4",
+=======
+    "html2canvas": "^1.4.1",
+>>>>>>> a9a049902eaf8a5c82e5552a6ea86ae82fd7d8cd
     "inquirer": "^9.0.1",
+    "lodash": "^4.17.21",
     "node-sass": "^7.0.1",
     "ora": "^6.1.2",
     "sass-loader": "^13.0.2",
@@ -25,6 +30,9 @@
     "sortablejs": "^1.15.0",
     "topology-vue": "^0.5.38",
     "vue": "^2.6.14",
+    "vue-drag-it-dude": "^1.3.0",
+    "vue-draggable-resizable": "^2.3.0",
+    "vue-draggable-resizable-gorkys": "^2.4.8",
     "vue-router": "^3.5.1",
     "vuedraggable": "^2.24.3",
     "vuex": "^3.6.2"
