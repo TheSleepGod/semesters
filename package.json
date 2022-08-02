@@ -15,12 +15,9 @@
     "chalk": "^5.0.1",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.9",
-<<<<<<< HEAD
     "github-markdown-css": "^5.1.0",
     "highlight": "^0.2.4",
-=======
     "html2canvas": "^1.4.1",
->>>>>>> a9a049902eaf8a5c82e5552a6ea86ae82fd7d8cd
     "inquirer": "^9.0.1",
     "lodash": "^4.17.21",
     "node-sass": "^7.0.1",
