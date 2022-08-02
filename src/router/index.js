@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Word from "@/views/Word";
+import Design from "@/views/Design";
 
 Vue.use(VueRouter)
 
@@ -33,9 +35,30 @@ const routes = [
     component: () => import('../views/Team')
   },
   {
+
     path: '/teamOne',
     name: 'teamOne',
-    component: ()=> import('../views/TeamDes')
+    component: () => import('../views/TeamDes')
+  }, 
+  {
+    path: '/editWord',
+    name: 'Edit',
+    component: () => import('../views/Edit'),
+    children: [
+      {
+        path: 'word',
+        component: Word
+      },
+      {
+        path: 'design',
+        component: Design
+      },
+    ]
+  },
+  {
+    path: '/edit',
+    name: 'Edit',
+    component: () => import("../views/WordEdit")
   }
 ]
 
