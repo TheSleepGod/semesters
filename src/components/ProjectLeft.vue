@@ -1,10 +1,10 @@
 <template>
   <div class = "left-box">
-      <div class = "left-project-one" title="项目">
+      <div class = "left-project-one" title="项目" @click="gotoTeamProjects">
         <img class = "left-project-one-img" src="../assets/teamProjects1.png" alt="">
 <!--        <span class="font-1 left-project-one-mes">项目</span>-->
       </div>
-      <div class = "left-project-one" title="成员">
+      <div class = "left-project-one" title="成员" @click="gotoTeamOne">
         <img class = "left-project-one-img" src="../assets/teamMembers1.png" alt="">
 <!--        <span class="font-1 left-project-one-mes">成员</span>-->
       </div>
@@ -13,7 +13,20 @@
 
 <script>
 export default {
-  name: "TeamDes"
+  name: "TeamDes",
+  data(){
+    return{
+
+    }
+  },
+  methods: {
+    gotoTeamOne(){
+      this.$router.push({path:'/teamOne',query:{}});
+    },
+    gotoTeamProjects() {
+      this.$router.push({path:'/projects',query:{}})
+    }
+  }
 }
 </script>
 
