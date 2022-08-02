@@ -1,8 +1,8 @@
 <template>
   <div id="all">
-    <div id="topBar" style="background-color: white;height: 80px;margin: -8px;padding: 0px;border: 1px solid #EEEEEE;text-align:center">
-      <span><img src="../assets/logo.svg" height="80px" style="margin-left: 0%;position: relative;float: left"></span>
-      <span><el-button type="danger" @click="outerVisible = true" style="margin-left: 0%;position: relative;float: right;top: 20px;right: 20px" round>登录/注册</el-button></span>
+    <div id="topBar" style="background-color: white;height: 80px;margin: -8px;padding: 0;border: 1px solid #EEEEEE;text-align:center">
+      <span><img src="../assets/logo.svg" height="80px" style="margin-left: 0;position: relative;float: left" alt=""></span>
+      <span><el-button type="danger" @click="outerVisible = true" style="margin-left: 0;position: relative;float: right;top: 20px;right: 20px" round>登录/注册</el-button></span>
     </div>
     <div id="main">
       <div class="name">团队项目管理</div>
@@ -140,9 +140,8 @@ export default {
   background-clip: border-box;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #FF512F;
   font-weight: 700;
-  text-shadow: 0px 0px 7px #ffd800;
+  text-shadow: 0 0 7px #ffd800;
   background-image: linear-gradient(90deg,#ffd800 0%,#ff512f 100%,#fff);
   animation:glow-animation 2s infinite linear;
   color: #FFC0CB;
@@ -150,10 +149,10 @@ export default {
   vertical-align: inherit;
   position: relative;
   top: 200px;
-  font-family: NSimSun;
+  font-family: NSimSun sans-serif;
 }
 .name1{
-  font-family: STHeiTi;
+  font-family: STHeiTi sans-serif;
   position:relative;
   top:220px;
   font-size: 60px;
