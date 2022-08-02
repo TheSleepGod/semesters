@@ -1,5 +1,7 @@
 <template>
   <div class = "box-body">
+    <!-- 顶部栏（占位-->
+    <div style="height: 100px"></div>
     <TeamLeft></TeamLeft>
     <div class = "right-box">
       <div class = "right-head-box">
@@ -99,7 +101,6 @@ export default {
   width: 1608px;
   height: 700px;
   padding: 0;
-  top: 100px;
   left: 100px;
 }
 .right-head-box {
