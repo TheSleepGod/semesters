@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Word from "@/views/Word";
+import Design from "@/views/Design";
 
 Vue.use(VueRouter)
 
@@ -34,10 +35,25 @@ const routes = [
     component: () => import('../views/Team')
   },
   {
-    path: '/test',
-    name: 'test',
-    component: () => import('../views/test.vue')
+    path: '/editWord',
+    name: 'Edit',
+    component: () => import('../views/Edit'),
+    children: [
+      {
+        path: 'word',
+        component: Word
+      },
+      {
+        path: 'design',
+        component: Design
+      },
+    ]
   },
+  {
+    path: '/edit',
+    name: 'Edit',
+    component: () => import("../views/WordEdit")
+  }
 ]
 
 const router = new VueRouter({
