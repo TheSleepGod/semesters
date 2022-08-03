@@ -531,6 +531,9 @@ export default {
   .lq-draggable-sign,
   .lq-draggable-select {
     border: dashed 1px #000;
+    background-image:url('../assets/mainBk.png');
+    background-size: 100% 100%;
+    background-position: center center;
   }
   .lq-draggable-seal {
     .seal-inner {
