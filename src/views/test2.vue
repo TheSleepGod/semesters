@@ -1,7 +1,7 @@
 <!-- drag-test -->
 <template>
-  <div class="drag-test">
-    <div class="controls-list">
+    <div class="drag-test">
+      <div class="controls-list">
       <div
           :class="commonClassName"
           @click="addControl(1)"
@@ -52,8 +52,7 @@
         直线
       </div>
     </div>
-    <el-button  size="mini" title="生成图片" @click="toImage()" icon="el-icon-download"></el-button>
-    <div class="drag-wrap"  ref="imageToFile">
+      <div class="drag-wrap"  ref="imageToFile">
       <vue-draggable-resizable
           v-for="(item, index) in controlsArr"
           :id = index
@@ -95,7 +94,10 @@
         </div>
       </vue-draggable-resizable>
     </div>
-  </div>
+      <div>
+        <el-button  size="mini" title="生成图片" @click="toImage()" icon="el-icon-download"></el-button>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -476,7 +478,7 @@ export default {
 .drag-test {
   display: flex;
   justify-content: space-between;
-  position: absolute;
+  position: relative;
   left: 20px;
   top: 20px;
   right: 20px;

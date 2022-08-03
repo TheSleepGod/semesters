@@ -44,6 +44,7 @@ export default {
       cache: {
         enable: false
       },
+      // mode: 'sv',
       //mode: 'sv',
       toolbar: [
         'emoji',
