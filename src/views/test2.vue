@@ -10,18 +10,18 @@
         <p>
           文本
         </p>
-        <!-- <vue-draggable-resizable
-            ref="textControl"
-            :h="30"
-            :w="120"
-            :x="controlTxtPos.x"
-            :y="controlTxtPos.y"
-            :z="999"
-            class-name-dragging="lq-dragging-class"
-            :handles="[]"
-            @dragstop="onTextDragStop"
-        >
-        </vue-draggable-resizable> -->
+<!--        <vue-draggable-resizable-->
+<!--            ref="textControl"-->
+<!--            :h="30"-->
+<!--            :w="120"-->
+<!--            :x="controlTxtPos.x"-->
+<!--            :y="controlTxtPos.y"-->
+<!--            :z="999"-->
+<!--            class-name-dragging="lq-dragging-class"-->
+<!--            :handles="[]"-->
+<!--            @dragstop="onTextDragStop"-->
+<!--        >-->
+<!--        </vue-draggable-resizable>-->
       </div>
       <div
           :class="commonClassName"
@@ -52,17 +52,17 @@
         日期
       </div>
     </div>
-    <div class="drag-wrap">
+    <el-button  size="mini" title="生成图片" @click="toImage()" icon="el-icon-download"></el-button>
+    <div class="drag-wrap"  ref="imageToFile">
       <vue-draggable-resizable
           v-for="(item, index) in controlsArr"
+          :id = index
           :key="item.customId"
           :ref="item.customId"
           :custom-id="item.customId"
           :h="item.fontsSize | filterFonstSizeToHeight(item)"
-          :w="item.width"
-          :x="item.x"
-          :y="item.y"
           :minWidth="200"
+          :w="item.width"
           :parentH="600"
           :parentW="800"
           :parent="true"
@@ -70,9 +70,14 @@
           :class-name="item.type | filterAccordingToType"
           :class-name-active="activedClass"
           :handles="item.type | filterAccordingToType('handles')"
+          :x="item.x"
+          :y="item.y"
+          :isActive="true"
+          :isResizable="true"
           @resizestop="onResizstop"
           @dragstop="onDragstop"
           @activated="onActivated"
+          @clicked="clickHandle"
       >
         <div :class="commonClassName" class="inner-container">
           {{ filterSignatory(item.signatory)
@@ -141,6 +146,7 @@
 import VueDraggableResizable from '@/components/vue-draggable-resizable';
 import { findIndex, find } from 'lodash';
 import { wordFontSizeToPx } from '@/utils';
+import html2canvas from "html2canvas";
 export default {
   components: { VueDraggableResizable },
   data() {
@@ -206,7 +212,7 @@ export default {
       textVal: '',
       fontSizeValue: 10, // 默认5号 14px
       signatory: 0, // 默认甲方
-      minLeft: 0, // 添加控件时拖拽的左边界
+      minLeft: 100, // 添加控件时拖拽的左边界
       controlTxtPos: {
         x: 60,
         y: 0
@@ -220,23 +226,23 @@ export default {
       switch (controlsType) {
         case 'text':
           className = 'lq-draggable-text';
-          handles = ['mr'];
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
         case 'seal':
           className = 'lq-draggable-seal';
-          handles = [];
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
         case 'sign':
           className = 'lq-draggable-sign';
-          handles = [];
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
         case 'date':
           className = 'lq-draggable-date';
-          handles = [];
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
         case 'select':
           className = 'lq-draggable-select';
-          handles = [];
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
         default:
           break;
@@ -288,20 +294,23 @@ export default {
   methods: {
     // 计算距离
     getDomData() {
-      let domCtrList = document.getElementsByClassName(
-          'controls-list'
-      )[0];
+      //本来用于计算控制组件的距离，但是我们只有一个控制组件就是那个大框，所以没什么用（
+      // let domCtrList = document.getElementsByClassName(
+      //     'controls-list'
+      // )[0];
       let domFile = document.getElementsByClassName('drag-wrap')[0];
-      console.log(domFile.offsetLeft);
+      //console.log(domFile.offsetLeft);
+      //console.log(domCtrList);
       this.minLeft = domFile.offsetLeft;
     },
+    //设计用于将文本直接拖拽至指定地点时，在该位置产生一个新的文本框，但由于错误的minLeft导致该功能会产生额外的文本框
     onTextDragStop(left, top) {
       console.log(left, top);
       if (left >= this.minLeft) {
         // 拖拽控件到了文件区域
         this.addControl(1, left - this.minLeft, top);
       }
-      this.$refs.textControl.setPosByHands(left, top);
+      //this.$refs.textControl.setPosByHands(left, top);
       console.log(this.controlTxtPos);
     },
     // 点击控件
@@ -364,7 +373,7 @@ export default {
           y: y,
           className: 'lq-draggable-text',
           type: 'text', // 控件类型
-          handles: ['mr'],
+          handles: ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'],
           name: '文本框',
           fontsSize: 10,
           signatory: 0 // 签署方默认甲方
@@ -432,7 +441,47 @@ export default {
       this.textVal = '文本'; // 设置文本名称
       this.signatory = 0; // 设置签署方
       this.fontSizeValue = 10;
-    }
+    },
+    toImage () {
+      // 手动创建一个 canvas 标签
+      const canvas = document.createElement("canvas");
+      // 获取父标签，意思是这个标签内的 DOM 元素生成图片
+      // imagefile是给截图范围内的父级元素自定义的ref名称
+      let canvasBox = this.$refs.imageToFile
+      // 获取父级的宽高
+      const width = parseInt(window.getComputedStyle(canvasBox).width)
+      const height = parseInt(window.getComputedStyle(canvasBox).height)
+      // 宽高 * 2 并放大 2 倍 是为了防止图片模糊
+      canvas.width = width * 2.5
+      canvas.height = height * 2.5
+      canvas.style.width = width + 'px'
+      canvas.style.height = height + 'px'
+      const context = canvas.getContext("2d");
+      context.scale(2, 2);
+      const options = {
+        backgroundColor: null,
+        canvas: canvas,
+        useCORS: true
+      }
+      html2canvas(canvasBox, options).then((canvas) => {
+        // toDataURL 图片格式转成 base64
+        let dataURL = canvas.toDataURL("image/png")
+        //console.log(dataURL)
+        console.log("图片格式转化成功")
+        this.downloadImage(dataURL)
+      })
+    },
+    clickHandle(e){
+      e.target.focus()
+    },
+    downloadImage(url) {
+      // 如果是在网页中可以直接创建一个 a 标签直接下载
+      let a = document.createElement('a')
+      a.href = url
+      a.download = '首页截图'
+      a.click()
+      console.log("图片生成成功")
+    },
   }
 };
 </script>
@@ -495,9 +544,6 @@ export default {
   .lq-draggable-date,
   .lq-draggable-sign,
   .lq-draggable-select {
-    background-image:url('../assets/mainBk.png');
-    background-size: 100% 100%;
-    background-position: center center;
     border: dashed 1px #000;
   }
   .lq-draggable-seal {

@@ -61,6 +61,11 @@ const routes = [
     component: () => import("../views/WordEdit")
   },
   {
+    path: '/markdown',
+    name: 'markdown',
+    component: () => import("../views/UseForMarkdown") 
+  },
+  {
     path: '/test',
     name: 'test',
     component: () => import("../views/test")
