@@ -51,6 +51,13 @@
       >
         日期
       </div>
+      <div
+          :class="commonClassName"
+          class="controls-item controls-rr"
+          @click="addControl(6)"
+      >
+        圆角矩形
+      </div>
     </div>
     <el-button  size="mini" title="生成图片" @click="toImage()" icon="el-icon-download"></el-button>
     <div class="drag-wrap"  ref="imageToFile">
@@ -91,53 +98,6 @@
           <div class="seal" :class="commonClassName"></div>
         </div>
       </vue-draggable-resizable>
-    </div>
-    <div class="set-wrap">
-      <div class="control-set-item">
-        <p class="title">文本设置</p>
-        <el-input
-            size="mini"
-            v-model="textVal"
-            @change="textChange"
-        ></el-input>
-      </div>
-      <div
-          class="control-set-item"
-          v-if="['text', 'date', 'select'].includes(activedType)"
-      >
-        <p class="title">字体设置</p>
-        <el-select
-            size="mini"
-            v-model="fontSizeValue"
-            @change="selectFontsize"
-            placeholder="请选择"
-        >
-          <el-option
-              v-for="item in fontSizeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </div>
-      <div class="control-set-item">
-        <p class="title">签署人设置</p>
-        <el-select
-            size="mini"
-            v-model="signatory"
-            @change="selectSignatory"
-            placeholder="请选择"
-        >
-          <el-option
-              v-for="item in signatoryOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </div>
     </div>
   </div>
 </template>
@@ -244,6 +204,10 @@ export default {
           className = 'lq-draggable-select';
           handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
+        case 'rr':
+          className = 'lq-draggable-rr';
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
+          break;
         default:
           break;
       }
@@ -339,23 +303,23 @@ export default {
       // console.log(left, top, customId);
     },
     // 文本编辑完成
-    textChange(val) {
-      this.setVal(val);
-    },
+    // textChange(val) {
+    //   this.setVal(val);
+    // },
     setVal(val) {
       let editIndex = this.getEditIndex();
       this.controlsArr[editIndex].name = val;
     },
     // 选择字体
-    selectFontsize(fontsSize) {
-      let editIndex = this.getEditIndex();
-      this.controlsArr[editIndex].fontsSize = fontsSize;
-    },
+    // selectFontsize(fontsSize) {
+    //   let editIndex = this.getEditIndex();
+    //   this.controlsArr[editIndex].fontsSize = fontsSize;
+    // },
     // 选择签署方
-    selectSignatory(signatory) {
-      let editIndex = this.getEditIndex();
-      this.controlsArr[editIndex].signatory = signatory;
-    },
+    // selectSignatory(signatory) {
+    //   let editIndex = this.getEditIndex();
+    //   this.controlsArr[editIndex].signatory = signatory;
+    // },
     // 获取当前编辑控件的索引Index
     getEditIndex() {
       return findIndex(this.controlsArr, o => {
@@ -417,6 +381,17 @@ export default {
           y: 380,
           type: 'select', // 控件类型
           name: '选项',
+          fontsSize: 10,
+          signatory: 0 // 签署方默认甲方
+        },
+        6: {
+          customId: Date.now(),
+          width: 80,
+          height: 30,
+          x: 200,
+          y: 380,
+          type: 'rr', // 控件类型 圆角矩形
+          name: '圆角矩形',
           fontsSize: 10,
           signatory: 0 // 签署方默认甲方
         }
@@ -568,6 +543,10 @@ export default {
         border-color: rgb(14, 74, 238);
       }
     }
+  }
+  .lq-draggable-rr {
+    border: dashed 1px #000;
+    border-radius: 50px;
   }
 }
 .set-wrap {
