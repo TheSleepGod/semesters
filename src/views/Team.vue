@@ -53,10 +53,10 @@
           <div class = "right-head-choose-tab" id="added-team-btn" @click="showAdded">
             <span class = "font-1"><icon class="el-icon-suitcase"/> 我参与的团队</span>
           </div>
-          <div class = "right-head-choose-tab" id="created-team-btn" style="margin-left: 240px" @click="showCreated">
+          <div class = "right-head-choose-tab" id="created-team-btn" style="margin-left: 220px" @click="showCreated">
             <span class = "font-1"><icon class="el-icon-suitcase-1"/> 我创建的团队</span>
           </div>
-          <div class="right-head-choose-tab" id="createNew-btn" style="margin-left: 480px" @click="showCreateNew">
+          <div class="right-head-choose-tab" id="createNew-btn" style="margin-left: 420px" @click="showCreateNew">
             <span class="font-1"><icon class="el-icon-plus"/> 创建新团队</span>
           </div>
           <div class="font-1" style="margin-left: 80%;margin-top:5px;min-width: 200px;position: absolute">
@@ -193,6 +193,8 @@ export default {
     },
     createNewTeam(name){
       this.$message.success("成功创建团队 "+name);
+      this.newTeamVisible = false;
+      this.newTeamName = "";
     }
   },
   mounted() {
@@ -401,6 +403,7 @@ export default {
   position: absolute;
   font-size: 18px;
   width: 18%;
+  min-width: 55px;
   margin-left: 19%;
   border: 1px grey solid;
   border-radius: 15px;
