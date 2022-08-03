@@ -1,8 +1,7 @@
 <template>
   <div class = "box-body">
-    <!-- 顶部栏（占位-->
-    <div style="height: 100px"></div>
-    <TeamLeft></TeamLeft>
+    <TopBar/>
+    <TeamLeft/>
     <div class = "right-box">
       <div class = "right-head-box font-1">
         <div style="width: 100%;height: 60px">
@@ -69,11 +68,12 @@
 </template>
 
 <script>
-import TeamLeft from '../components/ProjectLeft'
+import TeamLeft from '../components/ProjectLeft';
+import TopBar from "@/components/topBar";
 export default {
   name: "TeamDes",
   components: {
-    TeamLeft
+    TeamLeft,TopBar
   },
   data() {
     let teamMes = {
@@ -373,7 +373,7 @@ export default {
   margin-top: -40px;
   width: 80px;
   font-size: 22px;
-  margin-left: 78%;
+  margin-left: 80%;
   transition: all 0.25s;
 }
 .right-head-invite:hover{

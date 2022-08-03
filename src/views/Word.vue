@@ -1,60 +1,67 @@
 <template>
   <el-container>
-    <el-aside width="200px"style="border: 0.1px solid gray;height: 100%">
-      <div class="doc_title">文档列表</div>
-      <hr/>
-      <div class="doc_new">
-        <i class="el-icon-plus" title="新建文档" style="width: 30px;height: 30px;left: 10px" @click="docVis=true"></i>
-        <i class="el-icon-folder" title="新建文件夹" style="width: 30px;height: 30px;left: 50px" @click="WenVis=true"></i>
-      </div>
-      <el-dialog
-          title="新建文档"
-          :visible.sync="docVis"
-          width="30%"
-          :before-close="handleClose">
-        <el-input
-            placeholder="请输入文档名称"
-            v-model="nameDoc"
-            clearable>
-        </el-input>
+    <el-aside class="aside-box">
+      <div class="aside-doc-list-panel">
+        <div class="doc_list_title">文档列表</div>
+        <hr/>
+        <div class="doc_new">
+          <i class="el-icon-plus" title="新建文档" style="width: 30px;height: 30px;left: 10px" @click="docVis=true"></i>
+          <i class="el-icon-folder" title="新建文件夹" style="width: 30px;height: 30px;left: 50px" @click="WenVis=true"></i>
+        </div>
+        <el-dialog
+            title="新建文档"
+            :visible.sync="docVis"
+            width="30%"
+            :before-close="handleClose">
+          <el-input
+              placeholder="请输入文档名称"
+              v-model="nameDoc"
+              clearable>
+          </el-input>
           <span slot="footer" class="dialog-footer">
            <el-button @click="docVis = false">取 消</el-button>
             <el-button type="primary" @click="createDoc(nameDoc)">确 定</el-button>
         </span>
-      </el-dialog>
-      <el-dialog
-          title="新建文件夹"
-          :visible.sync="WenVis"
-          width="30%"
-          :before-close="handleClose">
-        <el-input
-            placeholder="请输入文件夹名称"
-            v-model="nameWen"
-            clearable>
-        </el-input>
-        <span slot="footer" class="dialog-footer">
+        </el-dialog>
+        <el-dialog
+            title="新建文件夹"
+            :visible.sync="WenVis"
+            width="30%"
+            :before-close="handleClose">
+          <el-input
+              placeholder="请输入文件夹名称"
+              v-model="nameWen"
+              clearable>
+          </el-input>
+          <span slot="footer" class="dialog-footer">
            <el-button @click="WenVis = false">取 消</el-button>
             <el-button type="primary" @click="createWen(nameWen)">确 定</el-button>
         </span>
-      </el-dialog>
-      <hr/>
-      <div v-for="items in words" class="doc_list" >
-        <div @mouseover="beActive(items)" @mouseleave="beNormal(items)" :style="items.active" @click="switchWord(items)">
-          {{items.name}}
+        </el-dialog>
+        <hr/>
+        <div v-for="items in words" class="doc_list" >
+          <div @click="switchWord(items)">
+            &nbsp{{items.name}}
+          </div>
         </div>
       </div>
     </el-aside>
     <el-main>
-      <div class="doc_toolbox">
-        {{nowWord.name}}
-        <el-button icon="el-icon-download" circle style="position: absolute;right: 105px" title="下载"></el-button>
-        <el-button icon="el-icon-edit" circle style="position: absolute ;right: 45px" title="编辑" @click="jump_to_edit"></el-button>
-      </div>
-      <hr/>
-      <div class="doc_all">
-          <div class="doc_content">
-              {{nowWord.name}}
-          </div>
+      <div class="main-doc-box">
+        <div class="doc_toolbox">
+          <el-button icon="el-icon-download" circle title="下载"></el-button><br/>
+          <el-button icon="el-icon-edit" circle title="编辑" @click="jump_to_edit"></el-button>
+        </div>
+        <div class="doc_background_box">
+            <div class="doc_text_box">
+              <div class="doc_title">
+                {{nowWord.name}}
+              </div>
+              <div class="doc_content">
+                {{nowWord.content}}
+              </div>
+            </div>
+        </div>
       </div>
     </el-main>
   </el-container>
@@ -66,12 +73,14 @@ export default {
   name:'Word',
   data(){
     return{
+      pageScrollData: 0,
       docVis:false,
       WenVis:false,
       nameDoc:'',
       nameWen:'',
       words:[
-        {name:"word1",content:"测试文档",active:''},
+        {name:"word1",content:"测试文档测试文档测试文档测试文档测试文" +
+              "档测试文档测试文档测试文档测试文档测试文档测试文档测试文档测试文档测试文档测试文档测试文档测试文档测试文档",active:''},
         {name:"word2",content:"测试文档",active:''},
         {name:"word3",content:"测试文档",active:''},
         {name:"word4",content:"测试文档",active:''},
@@ -79,13 +88,19 @@ export default {
       nowWord:{name:"",content:"",active:''}
     }
   },
+  created(){
+    window.addEventListener('scroll', this.Scrollbottom);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.Scrollbottom)//页面离开后销毁监听事件
+  },
   methods:{
-      beActive(item){
-        item.active="background-color: #ccc;color: red;cursor : pointer;";
-      },
-      beNormal(arg){
-        arg.active='';
-      },
+    beActive(item){
+      item.active="background-color: #ccc;color: red;cursor : pointer;";
+    },
+    beNormal(arg){
+      arg.active='';
+    },
     jump_to_edit(){
         this.$router.push('/edit');
     },
@@ -122,14 +137,23 @@ export default {
 </script>
 
 <style >
-
-.doc_title{
-  margin-top: 15px;
+.aside-box{
+  max-width: 200px;
+  height: 100%;
 }
-.doc_toolbox{
-  height: 30px;
-  margin-bottom: 30px;
-  font-size: 30px;
+.aside-doc-list-panel{
+  width: 200px;
+  position: fixed;
+  box-shadow: 2px 2px 10px 0 grey;
+  border-radius: 10px;
+  margin-top: 5px;
+  display: block;
+  z-index: 20;
+}
+.doc_list_title{
+  margin-top: 10px;
+  font-size: 22px;
+  height: 100%;
 }
 .doc_new{
   display: flex;
@@ -137,22 +161,52 @@ export default {
   height: 30px;
 }
 .doc_list{
-  margin-top: 0px;
-  font-size: 20px;
-  height: 100%;
+  cursor: pointer;
+  margin-top: 0;
+  height: 30px;
+  font-size: 18px;
+  text-align: left;
+  transition: all 0.25s;
 }
-.doc_all{
-  margin-top: 20px;
-  border: 1px solid mediumpurple;
+.doc_list:hover{
+  background-color: whitesmoke;
+  font-weight: bold;
+  border-radius: 10px;
+}
+.main-doc-box{
+  margin-top: -15px;
+  box-shadow: 2px 2px 10px 0 grey;
+  border-radius: 19px;
+}
+.doc_toolbox{
+  display: block;
+  z-index: 20;
+  position: fixed;
+  margin-top: 30px;
+  right: 70px;
+  height: 120px;
+  font-size: 30px;
+}
+.doc_background_box{
+  padding-top: 40px;
+  border-radius: 0 0 10px 10px;
   background-color: #eef0f4;
   height: 3000px;
 }
-.doc_content{
-  margin: 60px 250px 60px 250px;
+.doc_text_box{
+  padding: 10px 20px 10px 20px;
+  margin: 0 250px 60px 250px;
   background-color: white;
   height: 2980px;
   border-radius: 10px;
   box-shadow:2px 2px 10px #ccc;;
+  font-size: 19px;
+}
+.doc_title{
   font-size: 35px;
+}
+.doc_content{
+  text-align: left;
+  margin-top: 10px;
 }
 </style>

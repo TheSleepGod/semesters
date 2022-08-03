@@ -50,7 +50,7 @@
         </span>
       </el-dialog>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" style="margin-right: 70px">登 录</el-button>
+        <el-button type="primary" style="margin-right: 70px" @click="login">登 录</el-button>
 <!--        <el-button @click="outerVisible = false">取 消</el-button>-->
 <!--        <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>-->
         <a id="toRegister" @click="innerVisible = true">还未注册？点这里去注册</a>
@@ -119,6 +119,11 @@ export default {
         verifyCode: [{required: true, message: '请输入验证码', trigger: 'blur'}]
       },
     };
+  },
+  methods:{
+    login(){
+      this.$router.push('/team');
+    }
   }
 }
 </script>

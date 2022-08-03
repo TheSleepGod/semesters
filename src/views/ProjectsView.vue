@@ -1,14 +1,13 @@
 <template>
   <div style="margin-left: -10px;margin-top: -10px;">
-    <!-- 顶部栏（占位-->
-    <div style="height: 100px"></div>
+    <TopBar/>
     <TeamLeft/>
     <!-- 页头-->
     <div style="height: 35px;">
-      <div style="width: 50%;font-size: 26px;float: right">{{teamName}}的项目</div>
+      <div style="width: 45%;font-size: 26px;float: right">{{teamName}}的项目</div>
     </div>
     <!-- 项目展示-->
-    <el-tabs v-model="activeName" style="width: 70%;margin-left: 15%">
+    <el-tabs v-model="activeName" style="width: 76%;margin-left: 12%">
       <el-tab-pane label="团队项目" name="first">
         <div class="cards-container" style="margin-top: 10px">
           <div class="projectsCard" id="commonPrCard" v-for="item in tmpProjectsList" :key="item.data" v-if="item.isRecycled===false"
@@ -63,9 +62,10 @@
 
 <script>
 import TeamLeft from "@/components/ProjectLeft";
+import TopBar from "@/components/topBar";
 export default {
   components: {
-    TeamLeft
+    TeamLeft,TopBar
   },
   name: "ProjectsView",
   data(){
@@ -153,7 +153,7 @@ export default {
     showIcon(item){item.isHover=true},
     hideIcon(item){item.isHover=false},
     gotoProject(item){
-      this.$router.push({name:'inProject',query:{projectName:item.name,projectId:item.id}})
+      this.$router.push({path:'/editWord',query:{projectName:item.name,projectId:item.id}})
     },
     rename(item){
       this.$message.success("重命名成功")
@@ -199,7 +199,8 @@ export default {
   flex-basis: 25%;
   margin-bottom: 30px;
   padding: 0 15px;
-  margin-right: 25px;
+  margin-left: 5px;
+  margin-right: 35px;
   cursor: pointer;
   border-radius: 20px;
   box-shadow: 1px 1px 2px 0 lightgrey;

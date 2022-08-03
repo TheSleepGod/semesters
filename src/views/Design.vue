@@ -2,7 +2,10 @@
 <template>
   <div class="drag-test" style="margin-top: 50px">
     <div class="controls-list">
-      <p>组件栏</p>
+      <div style="display: inline-grid;margin-left: 25px;margin-top:15px;margin-bottom: 15px;font-size: 20px">组件栏</div>
+      <div style="display: inline-grid;float: right;margin-top: 15px">
+        <el-button  size="mini" title="生成图片" circle @click="toImage()" icon="el-icon-download"/>
+      </div>
       <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
@@ -407,9 +410,6 @@
           <div class="seal" :class="commonClassName"></div>
         </div>
       </vue-draggable-resizable>
-    </div>
-    <div>
-      <el-button  size="mini" title="生成图片" @click="toImage()" icon="el-icon-download"></el-button>
     </div>
   </div>
 </template>

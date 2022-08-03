@@ -1,10 +1,6 @@
 <template>
   <div class="box-body">
-    <div id = "head">
-      <div class = "icon-box">
-        <img class = "icon-head" src="../assets/icon.jpg" alt="">
-      </div>
-    </div>
+    <topBar/>
     <div class="left">
       <div id="showCase1" v-if="!isChanging">
         <div class = "left-head-box">
@@ -51,13 +47,13 @@
         </div>
         <div class = "right-head-choose">
           <div class = "right-head-choose-tab" id="added-team-btn" @click="showAdded">
-            <span class = "font-1"><icon class="el-icon-suitcase"/> 我参与的团队</span>
+            <span class = "font-1"><i class="el-icon-suitcase"/> 我参与的团队</span>
           </div>
           <div class = "right-head-choose-tab" id="created-team-btn" style="margin-left: 220px" @click="showCreated">
-            <span class = "font-1"><icon class="el-icon-suitcase-1"/> 我创建的团队</span>
+            <span class = "font-1"><i class="el-icon-suitcase-1"/> 我创建的团队</span>
           </div>
           <div class="right-head-choose-tab" id="createNew-btn" style="margin-left: 420px" @click="showCreateNew">
-            <span class="font-1"><icon class="el-icon-plus"/> 创建新团队</span>
+            <span class="font-1"><i class="el-icon-plus"/> 创建新团队</span>
           </div>
           <div class="font-1" style="margin-left: 80%;margin-top:5px;min-width: 200px;position: absolute">
             <i class="el-icon-s-grid"/>
@@ -67,7 +63,7 @@
         <hr style="margin:0;height: 2px;border:none;background-image: linear-gradient(to right, black,grey,white)"/>
       </div>
       <div class = "right-mes-box">
-        <div class = "right-team-mes" v-for="(myTeam) in allTeam">
+        <div class = "right-team-mes" v-for="(myTeam) in allTeam" @click="gotoTeamOne(myTeam)">
           <div class = "right-team-name">
             <span class="font-1 right-team-name-font">{{ myTeam.teamName }}</span>
           </div>
@@ -88,7 +84,11 @@
 </template>
 
 <script>
+import topBar from "@/components/topBar";
 export default {
+  components:{
+    topBar
+  },
   name: "Team",
   data() {
     let createdTeam = [
@@ -155,6 +155,9 @@ export default {
     }
   },
   methods: {
+    gotoTeamOne(team) {
+      this.$router.push({path:'/projects',query:{teamName:team.teamName,teamId:team.id}})
+    },
     showCreated() {
       this.allTeam = this.createdTeam;
       document.getElementById("created-team-btn").style.borderBottom = "4px solid lightblue";
@@ -210,32 +213,12 @@ export default {
   margin-top: -10px;
   overflow: hidden;
 }
-#head {
-  height: 100px;
-  width: 100%;
-}
-
-.icon-box {
-  position: relative;
-  float: right;
-  height: 70px;
-  width: 70px;
-  top: 15px;
-  right: 15px;
-}
-.icon-head {
-  position: relative;
-  float: right;
-  height: 70px;
-  width: 70px;
-  border-radius: 35px;
-}
 .left {
   display: inline-block;
   position: relative;
   float: left;
   width: 25%;
-  height: 700px;
+  height: 550px;
 }
 .left-head-box {
   position: relative;
