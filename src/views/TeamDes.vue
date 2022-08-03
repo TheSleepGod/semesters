@@ -10,8 +10,10 @@
             <span class = "font-1 right-head-teamName">{{teamMes.teamName}}</span>
           </div>
           <div class = "right-head-identity-box">
-            <div class="font-1 right-head-identity-mes" style="width: 40%;height: 100%;display: inline-grid">身份</div>
-            <div class="font-1 right-head-identity-mes" id="right-head-identity-mes-idy" style="width: 60%;height: 100%;display: inline-grid">{{ teamMes.myIdentity }}</div>
+            <div class="font-1 right-head-identity-mes" style="width:40%;">身份</div>
+            <div class="font-1 right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='成员'" style="background-color:darkolivegreen;">成 员</div>
+            <div class="font-1 right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='管理员'" style="background-color:darkblue;">管理员</div>
+            <div class="font-1 right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='创建者'" style="background-color:black;color:gold">创建者</div>
           </div>
         </div>
         <div class = "right-head-mes-box">
@@ -65,7 +67,7 @@ export default {
   },
   data() {
     let teamMes = {
-      myIdentity: "管理员",
+      myIdentity: "创建者",
       teamName: "啊对对队",
       teamNumber: 6,
       teamWorks: 9,
@@ -200,14 +202,17 @@ export default {
   cursor: default;
 }
 .right-head-identity-mes {
+  height: 100%;
+  display: inline-block;
   position: relative;
   color: white;
 }
-#right-head-identity-mes-idy{
-  background-color: darkslateblue;
+.right-head-identity-mes-idy{
+  width: 60%;
   font-weight: bold;
   border-radius: 5px;
   float: right;
+  transition: all 0.25s;
 }
 .right-people-boxes-container {
   margin-top: 20px;
@@ -317,18 +322,27 @@ export default {
   z-index: 10;
   margin-left: 70px;
   transform: rotate(35deg);
-  top: -80px;
+  margin-top: -80px;
   transition: all 0.25s;
 }
 .right-people-mes-box:hover .rpm-per-icon{
-  animation: perIcon-everFloat 2.5s infinite linear;
+  height: 40px;
+  width: 40px;
+  margin-left: 66px;
+  margin-top: -85px;
+  animation: perIcon-everShake 1.5s infinite linear;
 }
-@keyframes perIcon-everFloat {
-  0%{transform: translateX(0) translateY(0) rotate(35deg);}
-  20%{transform: translateX(-4px) translateY(4px) rotate(35deg);}
-  50%{transform: translateX(0) translateY(0) rotate(35deg);}
-  75%{transform: translateX(4px) translateY(-4px) rotate(35deg);}
-  100%{transform: translateX(0) translateY(0) rotate(35deg);}
+@keyframes perIcon-everShake {
+  0%{transform: rotate(35deg)}
+  4%{transform: rotate(20deg)}
+  8%{transform: rotate(35deg)}
+  12%{transform: rotate(50deg)}
+  16%{transform: rotate(35deg)}
+  20%{transform: rotate(20deg)}
+  24%{transform: rotate(35deg)}
+  28%{transform: rotate(50deg)}
+  32%{transform: rotate(35deg)}
+  100%{transform: rotate(35deg)}
 }
 
 </style>
