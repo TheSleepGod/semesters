@@ -28,6 +28,7 @@
     "topology-vue": "^0.5.38",
     "vue": "^2.6.14",
     "vue-drag-it-dude": "^1.3.0",
+    "vue-drag-resize": "^1.5.4",
     "vue-draggable-resizable": "^2.3.0",
     "vue-draggable-resizable-gorkys": "^2.4.8",
     "vue-router": "^3.5.1",

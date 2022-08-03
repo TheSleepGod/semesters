@@ -1,41 +1,34 @@
 <template>
-  <div>
-    <article v-html="htmlText" class="markdown-body"></article>
-    <article v-html="htmlCode" class="markdown-body"></article>
+  <div class = "body-box">
+    <vue-drag-resize style="" :isActive="true" :isResizable="true"></vue-drag-resize>
   </div>
 </template>
 <script>
-import "/node_modules/github-markdown-css/github-markdown.css"
-import showdown from 'showdown';
-let converter = new showdown.Converter();
-// 显示表格
-converter.setOption("tables",true);
+
+import VueDragResize from 'vue-drag-resize';
 
 export default {
   name: "Home",
-  data(){
-    return{
-      htmlText: '',
-      htmlCode: ''
-    }
+  components: {
+    VueDragResize,
   },
   mounted(){
     this.test();
   },
   methods: {
     test(){
-      let text= `# hello`;
-      this.htmlText = converter.makeHtml(text);
-
-      let code = `
-            public void main(){
-                System.out.println();
-            }`;
-      this.htmlCode=converter.makeHtml(code);
-
     }
   }
 }
 </script>
 <style scoped>
+.body-box {
+  padding: 0;
+  width: 1600px;
+  height: 800px;
+  margin-left: -10px;
+  margin-top: -10px;
+  overflow: hidden;
+  background: #0997F7;
+}
 </style>

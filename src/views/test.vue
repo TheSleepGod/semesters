@@ -6,6 +6,7 @@
       <p>Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
         X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}</p>
     </vdr>
+    <div>1111</div>
     <vdr
         :w="200"
         :h="200"
