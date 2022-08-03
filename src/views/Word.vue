@@ -189,6 +189,7 @@ export default {
 }
 .doc_background_box{
   padding-top: 40px;
+  padding-bottom: 30px;
   border-radius: 0 0 10px 10px;
   background-color: #eef0f4;
   height: 3000px;
