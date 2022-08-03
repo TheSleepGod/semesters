@@ -16,6 +16,7 @@
       <div class="top_head_middle">
           <router-link to="/editWord/word">文档</router-link>
           <router-link to="/editWord/design" >设计图</router-link>
+          <router-link to="/editWord/UML">绘制UML图</router-link>
       </div>
     </div>
     <router-view/>
