@@ -7,21 +7,7 @@
           @click="addControl(1)"
           class="controls-item controls-text"
       >
-        <p>
           文本
-        </p>
-<!--        <vue-draggable-resizable-->
-<!--            ref="textControl"-->
-<!--            :h="30"-->
-<!--            :w="120"-->
-<!--            :x="controlTxtPos.x"-->
-<!--            :y="controlTxtPos.y"-->
-<!--            :z="999"-->
-<!--            class-name-dragging="lq-dragging-class"-->
-<!--            :handles="[]"-->
-<!--            @dragstop="onTextDragStop"-->
-<!--        >-->
-<!--        </vue-draggable-resizable>-->
       </div>
       <div
           :class="commonClassName"
@@ -86,13 +72,14 @@
           @activated="onActivated"
           @clicked="clickHandle"
       >
-        <div :class="commonClassName" class="inner-container">
+        <div :class="commonClassName" class="inner-container" v-if = "false">
           {{ filterSignatory(item.signatory)
           }}<span class="name">({{ item.name }})</span>
         </div>
         <i
             class="close el-icon-error"
             @click="removeControl(item.customId)"
+            v-if="activedId === item.customId"
         ></i>
         <div class="seal-inner" :class="commonClassName">
           <div class="seal" :class="commonClassName"></div>
@@ -509,8 +496,8 @@ export default {
   .el-icon-error {
     font-size: 16px;
     position: absolute;
-    top: -20px;
-    right: -10px;
+    top: -30px;
+    right: -30px;
     z-index: 100;
     cursor: pointer;
   }
