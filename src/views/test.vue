@@ -87,9 +87,22 @@ export default {
       a.click()
     },
     test: function () {
-      let params = {
-        user_id: 0,
-        project_name: "test",
+      // let params = {
+      //   user_id: 0,
+      //   project_name: "test",
+      //   team_id: 1,
+      // };
+      // this.$axios
+      //     .post("/user/newproject", qs.stringify(params))
+      //     .then((res) => {
+      //       console.log(res);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
+      var params = {
+        user_id: 1,
+        project_name: 1,
         team_id: 1,
       };
       this.$axios

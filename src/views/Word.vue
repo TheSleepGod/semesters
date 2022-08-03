@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container style="caret-color: transparent;">
     <el-aside width="200px"style="border: 0.1px solid gray;height: 100%">
       <div class="doc_title">文档列表</div>
       <hr/>
@@ -125,6 +125,7 @@ export default {
 
 .doc_title{
   margin-top: 15px;
+  caret-color: transparent;
 }
 .doc_toolbox{
   height: 30px;

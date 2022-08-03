@@ -18,13 +18,13 @@
           <transition name="plus-icon">
             <div class = "font-1 left-input" v-if="!changing">
               <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">昵称</span>
-              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
+              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="30" />
               <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">邮箱</span>
-              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
+              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="30" />
               <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">真实姓名</span>
-              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
+              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="30" />
               <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">电话</span>
-              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
+              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="30" />
             <div class = "left-ok" @click="changeOk">
               <span style="position:relative; float: left; top: 4px; left: 33px">保存</span>
             </div>

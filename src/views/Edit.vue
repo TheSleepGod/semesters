@@ -36,7 +36,7 @@ export default {
     }
   },
   mounted() {
-    this.$router.push('./editWord/word')
+    //this.$router.push('./editWord/word')
   }
 }
 </script>
@@ -70,6 +70,7 @@ a{
   color: #eef0f4;
   background: #283142;
   line-height: 50px;
+  caret-color: transparent;
 }
 
 .top_head_left {
