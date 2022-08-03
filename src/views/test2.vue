@@ -61,7 +61,7 @@
           :ref="item.customId"
           :custom-id="item.customId"
           :h="item.fontsSize | filterFonstSizeToHeight(item)"
-          :minWidth="200"
+          :minWidth="1"
           :w="item.width"
           :parentH="600"
           :parentW="800"
@@ -206,7 +206,7 @@ export default {
           break;
         case 'line':
           className = 'lq-draggable-line';
-          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
+          handles = ['mr', 'ml'];
           break;  
         default:
           break;
@@ -220,6 +220,9 @@ export default {
     filterFonstSizeToHeight(fontSize, item) {
       if (item.type === 'sign' || item.type === 'seal') {
         // 印章和签名固定高度
+        return item.height;
+      }
+      if (item.type === "line") {
         return item.height;
       }
       return wordFontSizeToPx(fontSize) + 10; // 上下5px padding
@@ -398,7 +401,7 @@ export default {
         7: {
           customId: Date.now(),
           width: 80,
-          height: 30,
+          height: 1,
           x: 200,
           y: 380,
           type: 'line', // 控件类型 圆角矩形
@@ -474,6 +477,7 @@ export default {
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
 .drag-test {
+  
   display: flex;
   justify-content: space-between;
   position: absolute;
@@ -563,9 +567,7 @@ export default {
     border-radius: 50px;
   }
   .lq-draggable-line {
-    border: solid 1px #000;
     height: 1px;
-    width: 1px;
     background: #0997F7;
   }
 }

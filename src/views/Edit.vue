@@ -33,6 +33,9 @@ export default {
         {img:require("../assets/logo.png"),name:"member2"}
       ],
     }
+  },
+  mounted() {
+    this.$router.push('./editWord/word')
   }
 }
 </script>

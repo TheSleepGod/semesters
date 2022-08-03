@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import axios from '@/plugins/axios/axios'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -17,6 +18,10 @@ import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 Vue.component('vdr', vdr)
+
+
+Vue.use(ElementUI);
+Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false
 new Vue({
