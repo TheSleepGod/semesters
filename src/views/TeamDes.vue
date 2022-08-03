@@ -227,6 +227,7 @@ export default {
   transition: all 0.25s;
 }
 .right-people-mes-box:hover{
+  cursor: default;
   transform: translateY(-5px);
   box-shadow: 2px 2px 5px 1px grey;
 }
@@ -269,6 +270,7 @@ export default {
   float: left;
   cursor: pointer;
   color: white;
+  font-size: 17px;
 }
 .rpm-del-whole {
   height: 25px;
@@ -279,7 +281,7 @@ export default {
   transition: all 0.5s;
 }
 .rpm-del-whole:hover{
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #00a67c, 0 0 35px #00a67c, 0 0 40px #00a67c, 0 0 50px #00a67c, 0 0 75px #00a67c;
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
 }
 .rpm-changePer-leftHalf{
   display: inline-block;
@@ -292,7 +294,7 @@ export default {
   transition: all 0.5s;
 }
 .rpm-changePer-leftHalf:hover{
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #00a67c, 0 0 35px #00a67c, 0 0 40px #00a67c, 0 0 50px #00a67c, 0 0 75px #00a67c;
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
 }
 .rpm-del-rightHalf {
   display: inline-block;
@@ -305,7 +307,7 @@ export default {
   transition: all 0.25s;
 }
 .rpm-del-rightHalf:hover{
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #00a67c, 0 0 35px #00a67c, 0 0 40px #00a67c, 0 0 50px #00a67c, 0 0 75px #00a67c;
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
 }
 .rpm-per-icon {
   height: 30px;
