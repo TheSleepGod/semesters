@@ -6,78 +6,92 @@
       </div>
     </div>
     <div class="left">
-      <div class = "left-head-box">
-        <img class = "left-head-img" src="../assets/icon.jpg" alt="">
-      </div>
-      <div class = "left-message-box">
-        <div class = "left-id-box" v-if="this.changing">
-          <span class = "font-1 font-id">TheSleepGod</span>
+      <div id="showCase1" v-if="!isChanging">
+        <div class = "left-head-box">
+          <img class = "left-head-img" src="../assets/icon.jpg" alt="">
         </div>
-        <div class="font-1 left-mes-button-box">
-          <button class = "btn" @click="changeMes" v-if="changing">编辑资料</button>
-          <transition name="plus-icon">
-            <div class = "font-1 left-input" v-if="!changing">
-              <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">昵称</span>
-              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
-              <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">邮箱</span>
-              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
-              <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">真实姓名</span>
-              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
-              <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">电话</span>
-              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
-            <div class = "left-ok" @click="changeOk">
-              <span style="position:relative; float: left; top: 4px; left: 33px">保存</span>
-            </div>
-            <div class = "left-no" @click="changeNo">
-              <span style="position:relative; float: left; top: 4px; left: 33px">取消</span>
-            </div>
+        <div class = "left-message-box" style="margin-top: 10px">
+          <div class = "left-id-box">
+            <span class = "font-1" style="font-size: 26px;width: 100%">TheSleepGod</span>
           </div>
-          </transition>  
-        </div>  
-        <div class= "left-mes-box" v-if="changing">
-          <img class="left-mes-group-img" src="../assets/Team-group.png" alt="">
-          <span class="font-1 font-mes">3teams&nbsp·&nbsp4projects</span>        
-        </div>  
-      </div>  
+          <div style="margin-top: 20px">
+            <button class ="left-changeMes-btn" @click="showChangeMesForm">编辑资料</button>
+          </div>
+        </div>
+      </div>
+      <div id="showCase2" v-if="isChanging">
+        <div class="left-changeMesForm">
+          <div class="left-changeMesForm-line">
+            <span class="changeMesForm-label">昵称</span>
+            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" />
+          </div>
+          <div class="left-changeMesForm-line">
+            <span class="changeMesForm-label">邮箱</span>
+            <input type="text" placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" />
+          </div>
+          <div class="left-changeMesForm-line">
+            <span class="changeMesForm-label">真实姓名</span>
+            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" />
+          </div>
+          <div class="left-changeMesForm-line">
+            <span class="changeMesForm-label">电话</span>
+            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" />
+          </div>
+          <div style="height: 50px;">
+            <button class="changeMesForm-btn" style="margin-left: 20%;" @click="changeOk">保存</button>
+            <button class="changeMesForm-btn" style="margin-left: 59%;" @click="changeNo">取消</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class = "right">
       <div class = "right-head-box">
-        <div class = "right-head">
-          <div id = "create" class = "right-head-mes">
-            <div @click = "create" class = "right-head-click">
-              <img class = "right-head-mes-img" src = "../assets/Team-group-second.png" alt="">
-              <span class = "font-1 right-head-mes-tab">Created</span>
-            </div> 
+        <div class="right-head-title">
+          <span style="margin-left: 2%">我的团队</span>
+        </div>
+        <div class = "right-head-choose">
+          <div class = "right-head-choose-tab" id="added-team-btn" @click="showAdded">
+            <span class = "font-1"><icon class="el-icon-suitcase"/> 我参与的团队</span>
           </div>
-          <div id = "add" class = "right-head-mes">
-            <div @click = "add" class = "right-head-click">
-              <img class = "right-head-mes-img" src = "../assets/Team-group-second.png" alt="">
-              <span class = "font-1 right-head-mes-tab">Added</span>
-            </div>
+          <div class = "right-head-choose-tab" id="created-team-btn" style="margin-left: 240px" @click="showCreated">
+            <span class = "font-1"><icon class="el-icon-suitcase-1"/> 我创建的团队</span>
+          </div>
+          <div class="right-head-choose-tab" id="createNew-btn" style="margin-left: 480px" @click="showCreateNew">
+            <span class="font-1"><icon class="el-icon-plus"/> 创建新团队</span>
+          </div>
+          <div class="font-1" style="margin-left: 80%;margin-top:5px;min-width: 200px;position: absolute">
+            <i class="el-icon-s-grid"/>
+            3teams · 4projects
           </div>
         </div>
-        <hr style="margin:0;background-color:black;height:1px;border:none; background-image: linear-gradient(to right, #333, #333, #ccc);width: 80%" />
-      </div>  
+        <hr style="margin:0;height: 2px;border:none;background-image: linear-gradient(to right, black,grey,white)"/>
+      </div>
       <div class = "right-mes-box">
-        <div class = "right-team-mes" :id = index v-for="(myTeam,index) in allTeam" @mouseover="clickCome(index)" @mouseleave="clickLeave(index)">
+        <div class = "right-team-mes" v-for="(myTeam) in allTeam">
           <div class = "right-team-name">
             <span class="font-1 right-team-name-font">{{ myTeam.teamName }}</span>
           </div>
           <div class = "right-team-number">
             <span class="font-1">{{ myTeam.teamNumber }}人&nbsp;&nbsp;</span>
             <span class="font-1">{{ myTeam.teamTime }}</span>
-          </div>  
+          </div>
         </div>
-      </div>  
-    </div>  
-  </div>  
+      </div>
+    </div>
+
+    <el-dialog title="创建新团队" :visible.sync="newTeamVisible" style="width:60%;margin-left: 20%">
+      <el-input v-model="newTeamName" placeholder="请输入团队名" maxlength="20" show-word-limit>
+        <el-button slot="append" @click="createNewTeam(newTeamName)">确认</el-button>
+      </el-input>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
 export default {
   name: "Team",
   data() {
-    let createTeam = [
+    let createdTeam = [
       {
       id: 1,  
       teamName: "TheSleepGod",
@@ -95,9 +109,22 @@ export default {
         teamName: "TheLDS",
         teamNumber: "1",
         teamTime: "2022-05-03"
+      },
+      {
+        id: 4,
+        teamName: "TheLDSTheLDSTheLDSTheLDSTheLDSTheLDSTheLDS",
+        teamNumber: "1",
+        teamTime: "2022-05-03"
+      }
+      ,
+      {
+        id: 5,
+        teamName: "TheLDS",
+        teamNumber: "1",
+        teamTime: "2022-05-03"
       }
     ];
-    let addTeam = [
+    let addedTeam = [
       {
         id: 1,
         teamName: "TheASD",
@@ -117,58 +144,69 @@ export default {
         teamTime: "2022-05-03"
       }
     ];
-    let allTeam = createTeam;
-    let changing = true;
+    let allTeam = addedTeam;
     return {
-      createTeam,
-      addTeam,
+      newTeamName: "",
+      newTeamVisible: false,
+      createdTeam,
+      addedTeam,
       allTeam,
-      changing,
+      isChanging: false,
     }
   },
   methods: {
-    create: function() {
-      this.allTeam = this.createTeam;
-      document.getElementById("create").style.borderBottom = "3px solid coral";
-      document.getElementById("add").style.borderBottom = "0px solid white";
+    showCreated() {
+      this.allTeam = this.createdTeam;
+      document.getElementById("created-team-btn").style.borderBottom = "4px solid lightblue";
+      document.getElementById("added-team-btn").style.borderBottom = "0px solid white";
     },
-    add: function() {
-      this.allTeam = this.addTeam;
-      document.getElementById("add").style.borderBottom = "3px solid coral";
-      document.getElementById("create").style.borderBottom = "0px solid white";
+    showAdded() {
+      this.allTeam = this.addedTeam;
+      document.getElementById("added-team-btn").style.borderBottom = "4px solid lightblue";
+      document.getElementById("created-team-btn").style.borderBottom = "0px solid white";
     },
-    clickCome: function (id) {
-      document.getElementById(id).style.border = "2px solid lightskyblue";
-      document.getElementById(id).style.color = "white";
+    showChangeMesForm: function() {
+      document.getElementById("showCase1").style = "opacity: 0;transform: translateY(100px);";
+      setTimeout(()=>{
+        document.getElementById("showCase1").style = "transition: all 0.5s";
+        this.isChanging = true;
+      },740);
+      setTimeout(()=>{
+        document.getElementById("showCase2").style = "transform: translateY(0);filter:opacity(1)";
+      },750)
     },
-    clickLeave: function (id) {
-      document.getElementById(id).style.border = "0px solid lightskyblue";
-      document.getElementById(id).style.color = "lightsteelblue";
-    },
-    changeMes: function() {
-      this.changing = false;
+    closeChangeMesForm: function (){
+      document.getElementById("showCase2").style = "opacity: 0;transform: translateY(100px);";
+      setTimeout(()=>{
+        document.getElementById("showCase2").style = "";
+        this.isChanging = false;
+      },750);
     },
     changeOk: function() {
-      this.changing = true;
+      this.closeChangeMesForm();
     },
     changeNo: function() {
-      this.changing = true;
+      this.closeChangeMesForm();
+    },
+    showCreateNew(){
+      this.newTeamVisible = true;
+    },
+    createNewTeam(name){
+      this.$message.success("成功创建团队 "+name);
     }
   },
   mounted() {
-    this.create();
+    this.showAdded()
   }
 }
 </script>
 
 <style scoped>
 .box-body {
-  height: 800px;
   padding: 0;
   margin-left: -10px;
   margin-top: -10px;
   overflow: hidden;
-
 }
 #head {
   height: 100px;
@@ -191,230 +229,204 @@ export default {
   border-radius: 35px;
 }
 .left {
+  display: inline-block;
   position: relative;
   float: left;
-  min-width: 300px;
   width: 25%;
   height: 700px;
-
 }
 .left-head-box {
   position: relative;
-  height: 325px;
+  width: 80%;
+  margin-left: 10%;
 }
 .left-head-img {
   position: relative;
-  height: 300px;
-  width: 300px;
-  margin-top: 25px;
+  width: 80%;
+  margin-top: 10%;
   border-radius: 150px;
-  left: 10px;
 }
 .left-id-box {
   height: 40px;
-  width: 100%;
+  width: 80%;
+  margin-left: 10%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .font-1 {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
 }
-.font-id {
-  position: relative;
-  float: left;
-  left: 35px;
-  font-size: 26px;
-  line-height: 1.5;
-  caret-color: transparent;
-}
-.font-mes {
-  position: relative;
-  float: left;
-  left: 35px;
-  top:5px;
+.left-changeMes-btn{
+  display: inline-block;
+  padding: 10px 25px;
   font-size: 20px;
-  line-height: 1.5;
+  cursor: pointer;
+  color:#fff;
+  background-color: rgb(16, 185, 214);
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
 }
-.left-mes-box {
-  height: 40px;
-  width: 100%;
+.left-changeMes-btn:hover{
+  background-color: #1795bb;
 }
-.left-mes-button-box {
-  display: block;
-  height: 50px;
-  width: 100%;
-  text-align: center;
-}
-.btn {
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  height: 50px;
-  width: 300px;
-  position: relative;
-  float: left;
-  left: 30px;
-  color: black;
-  border-top-color: lightgoldenrodyellow;
-  border-right-color: lightgoldenrodyellow;
-  border-bottom-color: lightgoldenrodyellow;
-  border-left-color: lightgoldenrodyellow;
-  transition: 80ms cubic-bezier(0.33, 1, 0.68, 1);
-  transition-property: color,background-color;
-}
-.left-mes-group-img {
-  height: 25px;
-  width: 25px;
-  position: relative;
-  float: left;
-  left: 30px;
-  top: 10px
+.left-changeMes-btn:active{
+  background-color: #1795bb;
+  box-shadow: 0 5px #666;
+  transform:translateY(4px);
 }
 .right {
+  display: inline-block;
   position: relative;
-  float: left;
-  height: 700px;
-  width: 1358px;
-
+  width: 75%;
 }
 .right-head-box {
-  height: 100px;
-}
-.right-head {
-  height: 103px;
-  display: flex;
-}
-.right-head-mes {
-  height: 70px;
-  width: 175px;
-  position: relative;
-  float: left;
-  top: 30px;
-  left: 50px;
-}
 
-.right-head-mes-img {
-  height: 40px;
-  width: 40px;
-  position: relative;
-  float: left;
-  top:10px;
-  left: 10px;
 }
-.right-head-mes-tab {
-  height: 20px;
-  width: 150px;
-  position: relative;
-  margin-left: 5px;
-  font-size: 26px;
-  top: 10px;
+.right-head-title{
+  font-size: 28px;
   text-align: left;
 }
-.right-head-click {
-  cursor: pointer;
-  caret-color: transparent;
-  height: 50px;
-  width: 170px;
-  position: relative;
-  top:10px;
-  border-radius: 10px;
+.right-head-choose{
+  margin-top: 20px;
+  text-align: left;
+  height: 37px;
+  width: 100%;
 }
-.right-head-click:hover {
-  background: #cccccc;
+.right-head-choose-tab {
+  height: 35px;
+  margin-left: 2%;
+  display: inline-block;
+  position: absolute;
+  font-size: 22px;
+  transition: all 0.25s;
+}
+.right-head-choose-tab:hover {
+  background-color: aliceblue;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 24px;
+}
+#createNew-btn{
+  transition: all 0.25s;
+}
+#createNew-btn:hover{
+  background-color: navajowhite;
 }
 .right-mes-box {
   position: relative;
-  float: left;
-  width: 1358px;
-  height: 700px;
-  caret-color: transparent;
+  flex-wrap: wrap;
+  display: flex;
 }
 .right-team-mes{
-  width: 400px;
+  width: 25%;
+  min-width: 180px;
   height: 150px;
   position: relative;
-  float: left;
-  margin-top: 50px;
-  margin-left: 40px;
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-right: 25px;
   border-radius: 10px;
-  border: 1px solid black;
-  background-image: url("../assets/icon.jpg");
-  background-position: center center;
   color: lightsteelblue;
+  box-shadow: 0 0 4px 0 grey;
+  transition: all 0.25s;
+  background: -webkit-linear-gradient(right, rgba(255,255,255,0)0, rgba(255,255,255,0.5)50%, rgba(255,255,255,0)100%) no-repeat -300px 0, url("../assets/icon.jpg") no-repeat;
+}
+.right-team-mes:hover{
+  background-position: 200px 0, 0 0;
+  cursor: pointer;
+  transform: translateY(-5px);
+  box-shadow: 0 0 8px 0 grey;
+  color: lightcyan;
+  animation: team-everShine 2s infinite linear;
+}
+@keyframes team-everShine {
+  0%{text-shadow: none;}
+  50%{text-shadow: 0 0 4px white, 0 0 8px white;}
+  100%{text-shadow: none;}
 }
 .right-team-name {
-  position: relative;
-  float: left;
-  width: 200px;
-  height: 30px;
-  left: 40px;
-  top: 30px;
+  position: absolute;
+  top: 20%;
+  margin-left: 10%;
+  width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-align: left;
-}
-.right-team-name-font {
   font-size: 20px;
-  text-align: left;
 }
 .right-team-number {
-  position: relative;
-  float: left;
-  width: 180px;
-  height: 30px;
-  left: -190px;
-  top: 80px;
+  position: absolute;
+  margin-left: 10%;
+  top: 65%;
 }
-.demoInput{
+.left-changeMesForm{
+  margin-top: 10%;
+  font-weight: bold;
+  text-align: left;
+  transition: all 0.5s;
+}
+.left-changeMesForm-line{
+  display: inline-grid;
+  width: 100%;
+  height: 100px;
+}
+.changeMesForm-label{
+  width: 20%;
+  margin-top: 2%;
+  margin-left: 5%;
+}
+.changeMesForm-input{
+  flex-wrap: nowrap;
+  width: 60%;
+  height: 14px;
+  position: absolute;
+  margin-left: 25%;
   outline-style: none ;
   border: 1px solid #ccc;
   border-radius: 3px;
   padding: 13px 14px;
-  width:300px;
   font-size: 14px;
   font-weight: 700;
 }
-.demoInput:focus{
+.changeMesForm-input:focus{
   border-color: #66afe9;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
 }
-.left-input {
-  position: relative;
-  float: left;
+.changeMesForm-btn{
+  position: absolute;
+  font-size: 18px;
+  width: 18%;
+  margin-left: 19%;
+  border: 1px grey solid;
+  border-radius: 15px;
+  /*color: white;*/
+  /*background-color: blueviolet;*/
+  transition: all 0.25s;
 }
-.left-ok {
-  caret-color: transparent;
+.changeMesForm-btn:hover{
   cursor: pointer;
-  position: relative;
-  float: left;
-  width: 100px;
-  height: 30px;
-  top: 20px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  left: 30px;
+  border-radius: 15px;
+  box-shadow: 1px 1px 3px 0 black;
+  text-shadow: 0 0 4px white;
 }
-.left-ok:hover {
-  border: 1px solid #66afe9;
+#added-team-btn{
+  transition: all 0.5s;
 }
-.left-no {
-  caret-color: transparent;
-  cursor: pointer;
-  position: relative;
-  float: left;
-  width: 100px;
-  height: 30px;
-  top: 20px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  left: 100px;
+#created-team-btn{
+  transition: all 0.5s;
 }
-.left-no:hover {
-  border: 1px solid #66afe9;
+#showCase1{
+  transition: all 0.75s;
 }
-.plus-icon-leave-active {
-  transition: opacity 0.5s;
-}
-.plus-icon-leave-to {
-  opacity: 0;
+#showCase2{
+  filter: opacity(0);
+  transform: translateY(100px);
+  transition: all 0.75s;
 }
 </style>
 

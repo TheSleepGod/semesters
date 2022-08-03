@@ -286,7 +286,7 @@ export default {
   transition: all 0.5s;
 }
 .rpm-del-whole:hover{
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+  text-shadow: 0 0 2px #fff, 0 0 4px #fff;
 }
 .rpm-changePer-leftHalf{
   display: inline-block;
@@ -299,7 +299,7 @@ export default {
   transition: all 0.5s;
 }
 .rpm-changePer-leftHalf:hover{
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+  text-shadow: 0 0 2px #fff, 0 0 4px #fff;
 }
 .rpm-del-rightHalf {
   display: inline-block;
@@ -312,7 +312,7 @@ export default {
   transition: all 0.25s;
 }
 .rpm-del-rightHalf:hover{
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+  text-shadow: 0 0 2px #fff, 0 0 4px #fff;
 }
 .rpm-per-icon {
   height: 30px;
