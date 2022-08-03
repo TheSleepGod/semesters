@@ -7,7 +7,7 @@
     </div>
     <div class="left">
       <div class = "left-head-box">
-        <img class = "left-head" src="../assets/icon.jpg" alt="">
+        <img class = "left-head-img" src="../assets/icon.jpg" alt="">
       </div>
       <div class = "left-message-box">
         <div class = "left-id-box" v-if="this.changing">
@@ -164,7 +164,6 @@ export default {
 <style scoped>
 .box-body {
   height: 800px;
-  width: 1708px;
   padding: 0;
   margin-left: -10px;
   margin-top: -10px;
@@ -194,16 +193,16 @@ export default {
 .left {
   position: relative;
   float: left;
-  width: 350px;
+  min-width: 300px;
+  width: 25%;
   height: 700px;
 
 }
 .left-head-box {
   position: relative;
-  height: 325px;  
-  width: 350px;
+  height: 325px;
 }
-.left-head {
+.left-head-img {
   position: relative;
   height: 300px;
   width: 300px;
