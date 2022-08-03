@@ -495,6 +495,9 @@ export default {
   .lq-draggable-date,
   .lq-draggable-sign,
   .lq-draggable-select {
+    background-image:url('../assets/mainBk.png');
+    background-size: 100% 100%;
+    background-position: center center;
     border: dashed 1px #000;
   }
   .lq-draggable-seal {
