@@ -44,6 +44,13 @@
       >
         圆角矩形
       </div>
+      <div
+          :class="commonClassName"
+          class="controls-item controls-line"
+          @click="addControl(7)"
+      >
+        直线
+      </div>
     </div>
     <el-button  size="mini" title="生成图片" @click="toImage()" icon="el-icon-download"></el-button>
     <div class="drag-wrap"  ref="imageToFile">
@@ -67,6 +74,8 @@
           :y="item.y"
           :isActive="true"
           :isResizable="true"
+          :snap="true"
+          :snap-tolerance="20"
           @resizestop="onResizstop"
           @dragstop="onDragstop"
           @activated="onActivated"
@@ -195,6 +204,10 @@ export default {
           className = 'lq-draggable-rr';
           handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
+        case 'line':
+          className = 'lq-draggable-line';
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
+          break;  
         default:
           break;
       }
@@ -381,6 +394,17 @@ export default {
           name: '圆角矩形',
           fontsSize: 10,
           signatory: 0 // 签署方默认甲方
+        },
+        7: {
+          customId: Date.now(),
+          width: 80,
+          height: 30,
+          x: 200,
+          y: 380,
+          type: 'line', // 控件类型 圆角矩形
+          name: '直线',
+          fontsSize: 10,
+          signatory: 0 // 签署方默认甲方
         }
       };
       this.controlsArr.push(controlObjMap[type]);
@@ -534,6 +558,12 @@ export default {
   .lq-draggable-rr {
     border: dashed 1px #000;
     border-radius: 50px;
+  }
+  .lq-draggable-line {
+    border: solid 1px #000;
+    height: 1px;
+    width: 1px;
+    background: #0997F7;
   }
 }
 .set-wrap {
