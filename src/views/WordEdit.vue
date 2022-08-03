@@ -45,6 +45,7 @@ export default {
         enable: false
       },
       // mode: 'sv',
+      //mode: 'sv',
       toolbar: [
         'emoji',
         'headings',
@@ -73,7 +74,7 @@ export default {
         'redo',
         '|',
         'edit-mode',
-        //'content-theme',
+        'content-theme',
         'code-theme',
         'export',
         {
