@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -18,8 +17,8 @@ import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 Vue.component('vdr', vdr)
+
 Vue.config.productionTip = false
-Vue.use(ElementUI);
 new Vue({
   router,
   store,

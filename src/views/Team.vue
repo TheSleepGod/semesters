@@ -10,13 +10,31 @@
         <img class = "left-head" src="../assets/icon.jpg" alt="">
       </div>
       <div class = "left-message-box">
-        <div class = "left-id-box">
+        <div class = "left-id-box" v-if="this.changing">
           <span class = "font-1 font-id">TheSleepGod</span>
         </div>
         <div class="font-1 left-mes-button-box">
-          <button class = "btn">编辑资料</button>
-        </div>
-        <div class= "left-mes-box">
+          <button class = "btn" @click="changeMes" v-if="changing">编辑资料</button>
+          <transition name="plus-icon">
+            <div class = "font-1 left-input" v-if="!changing">
+              <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">昵称</span>
+              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
+              <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">邮箱</span>
+              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
+              <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">真实姓名</span>
+              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
+              <span style="text-align: left; position: relative; float: left; left: 20px; margin-top:10px; font-weight: bold">电话</span>
+              <input type="text" placeholder="TheSleepGod" class="demoInput font-1" maxlength="16" />
+            <div class = "left-ok" @click="changeOk">
+              <span style="position:relative; float: left; top: 4px; left: 33px">保存</span>
+            </div>
+            <div class = "left-no" @click="changeNo">
+              <span style="position:relative; float: left; top: 4px; left: 33px">取消</span>
+            </div>
+          </div>
+          </transition>  
+        </div>  
+        <div class= "left-mes-box" v-if="changing">
           <img class="left-mes-group-img" src="../assets/Team-group.png" alt="">
           <span class="font-1 font-mes">3teams&nbsp·&nbsp4projects</span>        
         </div>  
@@ -100,11 +118,12 @@ export default {
       }
     ];
     let allTeam = createTeam;
-
+    let changing = true;
     return {
       createTeam,
       addTeam,
       allTeam,
+      changing,
     }
   },
   methods: {
@@ -125,6 +144,15 @@ export default {
     clickLeave: function (id) {
       document.getElementById(id).style.border = "0px solid lightskyblue";
       document.getElementById(id).style.color = "lightsteelblue";
+    },
+    changeMes: function() {
+      this.changing = false;
+    },
+    changeOk: function() {
+      this.changing = true;
+    },
+    changeNo: function() {
+      this.changing = true;
     }
   },
   mounted() {
@@ -311,6 +339,7 @@ export default {
   border: 1px solid black;
   background-image: url("../assets/icon.jpg");
   background-position: center center;
+  color: lightsteelblue;
 }
 .right-team-name {
   position: relative;
@@ -332,6 +361,61 @@ export default {
   height: 30px;
   left: -190px;
   top: 80px;
+}
+.demoInput{
+  outline-style: none ;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 13px 14px;
+  width:300px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.demoInput:focus{
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+}
+.left-input {
+  position: relative;
+  float: left;
+}
+.left-ok {
+  caret-color: transparent;
+  cursor: pointer;
+  position: relative;
+  float: left;
+  width: 100px;
+  height: 30px;
+  top: 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  left: 30px;
+}
+.left-ok:hover {
+  border: 1px solid #66afe9;
+}
+.left-no {
+  caret-color: transparent;
+  cursor: pointer;
+  position: relative;
+  float: left;
+  width: 100px;
+  height: 30px;
+  top: 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  left: 100px;
+}
+.left-no:hover {
+  border: 1px solid #66afe9;
+}
+.plus-icon-leave-active {
+  transition: opacity 0.5s;
+}
+.plus-icon-leave-to {
+  opacity: 0;
 }
 </style>
 
