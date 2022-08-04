@@ -1,6 +1,6 @@
 <template>
     <div>
-      <iframe src="https://app.diagrams.net/" width="100%" height="1000px"   frameborder="2"  name="myframe" scrolling="no"></iframe>
+      <iframe src="http://43.142.82.180:8080/draw/" width="99.8%" height="1000px"   frameborder="2"  name="myframe" scrolling="no"></iframe>
     </div>
 </template>
 

@@ -1,12 +1,15 @@
 <template>
   <div class = "left-box">
-      <div class = "left-project-one" title="项目" @click="gotoTeamProjects">
-        <img class = "left-project-one-img" src="../assets/teamProjects1.png" alt="">
+      <div class = "left-project-one" title="查看项目" @click="gotoTeamProjects">
+        <img class = "left-project-one-img" src="../assets/teamProjects1.png" alt=""/>
 <!--        <span class="font-1 left-project-one-mes">项目</span>-->
       </div>
-      <div class = "left-project-one" title="成员" @click="gotoTeamOne">
-        <img class = "left-project-one-img" src="../assets/teamMembers1.png" alt="">
+      <div class = "left-project-one" title="查看成员" @click="gotoTeamOne">
+        <img class = "left-project-one-img" src="../assets/teamMembers1.png" alt=""/>
 <!--        <span class="font-1 left-project-one-mes">成员</span>-->
+      </div>
+      <div class="left-project-one" title="返回团队" @click="gotoTeams">
+        <img class="left-project-one-img" src="../assets/goBack.png" alt=""/>
       </div>
     </div>
 </template>
@@ -21,11 +24,14 @@ export default {
   },
   methods: {
     gotoTeamOne(){
-      this.$router.push({path:'/teamOne',query:{}});
+      this.$router.push({path:'/teamOne'});
     },
     gotoTeamProjects() {
-      this.$router.push({path:'/projects',query:{}})
-    }
+      this.$router.push({path:'/projects'});
+    },
+    gotoTeams(){
+      this.$router.push({path:'/team'});
+    },
   }
 }
 </script>
@@ -37,8 +43,8 @@ export default {
 .left-box {
   position: relative;
   float: left;
-  top: 20px;
-  height: 700px;
+  top: 60px;
+  height: 500px;
   width: 100px;
   padding: 0;
 }
@@ -68,9 +74,5 @@ export default {
 }
 .left-project-one:hover .left-project-one-img{
   transform: rotate(360deg);
-}
-.left-project-one-mes {
-  position: relative;
-  top: 10%;
 }
 </style>

@@ -6,6 +6,13 @@ import Drawio from "@/views/Drawio";
 
 Vue.use(VueRouter)
 
+//获取原型对象的push函数
+const originalPush = VueRouter.prototype.push
+// 修改 原型对象中的push方法
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err=>err)
+}
+
 const routes = [
   // {
   //   path: '/',
