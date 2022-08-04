@@ -202,7 +202,7 @@ export default {
   },
   mounted() {
     this.showAdded()
-  }
+  },
 }
 </script>
 
