@@ -40,7 +40,7 @@
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <span><el-input v-model="createUserForm.email" style="width: 328px"></el-input></span>
-            <span><el-button type="info" plain>发送验证码</el-button></span>
+            <span><el-button type="info" @click="verify()" plain>发送验证码</el-button></span>
           </el-form-item>
           <el-form-item label="验证码" prop="verifyCode">
             <el-input v-model="createUserForm.verifyCode"></el-input>
@@ -48,11 +48,11 @@
         </el-form>
         <!-- 注册弹窗底部区 -->
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary">确 定</el-button>
+          <el-button type="primary" @click="register()">确 定</el-button>
         </span>
       </el-dialog>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" style="margin-right: 70px" @click="login">登 录</el-button>
+        <el-button type="primary" style="margin-right: 70px" @click="login()">登 录</el-button>
 <!--        <el-button @click="outerVisible = false">取 消</el-button>-->
 <!--        <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>-->
         <a id="toRegister" @click="innerVisible = true">还未注册？点这里去注册</a>
@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "home",
   data() {
@@ -97,7 +99,7 @@ export default {
       innerVisible: false,
       outerVisible: false,
       loginForm: {
-        email: '',
+        username: '',
         password: '',
       },
       createUserForm: {
@@ -123,9 +125,64 @@ export default {
     };
   },
   methods:{
-    login(){
-      this.$router.push('/team');
-    }
+    login: function () {
+      let con = {};
+      con['username'] = this.loginForm.username;
+      con['password'] = this.loginForm.password;
+      console.log(con);
+      axios({
+        url: 'http://101.42.160.94:8000/api/user_web/login',
+        method: 'post',
+        data: JSON.stringify(con),
+      }).then((ret) => {
+        if (ret.data.errno === 0) {
+          this.$message.success("登录成功");
+          this.$router.push('/team');
+        } else {
+          alert(ret.data.msg);
+          this.$message.error("登录失败");
+        }
+      })
+    },
+    register: function () {
+      let con = {};
+      con['name'] = this.createUserForm.name;
+      con['password_1'] = this.createUserForm.password1;
+      con['password_2'] = this.createUserForm.password2;
+      con['email'] = this.createUserForm.email;
+      con['code'] = this.createUserForm.verifyCode;
+      con['username'] = this.createUserForm.username;
+      console.log(con);
+      axios({
+        url: 'http://101.42.160.94:8000/api/user_web/register',
+        method: 'post',
+        data: JSON.stringify(con),
+      }).then((ret) => {
+        if (ret.data.errno === 0) {
+          this.$message.success("注册成功");
+        } else {
+          alert(ret.data.msg);
+          this.$message.error("登录失败");
+        }
+      })
+    },
+    verify: function () {
+      let con = {};
+      con['email'] = this.createUserForm.email;
+      console.log(con);
+      axios({
+        url: 'http://101.42.160.94:8000/api/user_web/check_mail',
+        method: 'post',
+        data: JSON.stringify(con),
+      }).then((ret) => {
+        if (ret.data.errno === 0) {
+          this.$message.success("发送成功");
+        } else {
+          alert(ret.data.msg);
+          this.$message.error("发送失败");
+        }
+      })
+    },
   }
 }
 </script>
