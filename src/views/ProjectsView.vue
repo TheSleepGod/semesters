@@ -156,10 +156,11 @@ export default {
   created() {
     this.team.teamName = this.$route.query.teamName
     this.team.teamId = this.$route.query.teamId
-    // this.getNowUser()
   },
   mounted() {
-    this.getTeamProjects()
+    this.team.teamId = this.$route.query.teamId;
+    this.team.teamName = this.$route.query.teamName;
+    this.getTeamProjects();
   },
   methods:{
     getNowUser() {

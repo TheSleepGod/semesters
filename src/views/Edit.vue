@@ -33,6 +33,8 @@ export default {
         {img:require("../assets/logo.png"),name:"member1"},
         {img:require("../assets/logo.png"),name:"member2"}
       ],
+      nowProjectId: 1,
+      nowProjectName: 1,
     }
   },
   methods: {
@@ -42,6 +44,8 @@ export default {
   },
   mounted() {
     //this.$router.push('./editWord/word')
+    this.nowProjectId = this.$route.query.projectId;
+    this.nowProjectName = this.$route.query.projectName;
   }
 }
 </script>
