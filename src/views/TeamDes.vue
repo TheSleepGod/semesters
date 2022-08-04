@@ -81,7 +81,6 @@
 import TeamLeft from '../components/ProjectLeft';
 import TopBar from "@/components/topBar";
 import qs from "qs";
-
 export default {
   name: "TeamDes",
   components: {
@@ -141,7 +140,25 @@ export default {
       let r=confirm("确认删除吗");
       if (r===true)
       {
-        alert("You pressed OK! del " + people.name);
+        let todo ={
+          user_id : '1',
+          team_id : '3',
+          del_user_id : '2',
+        };
+        this.$axios({
+          method : 'post',
+          url : 'http://43.138.22.20:8000/api/user/deletemember',
+          data : qs.stringify(todo)
+        }).then((res) =>{
+          console.log(res);
+          let ans = res.data;
+          if(ans.errno===0){
+            alert("You pressed OK! del " + people.name);
+          }
+          else {
+            alert("del default ! !");
+          }
+        })
       }
       else
       {
@@ -193,6 +210,27 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+      let todo = {
+        user_id : '3',
+        team_id : '3',
+        new_user_id : '8'
+      }
+      this.$axios({
+        method : 'post',
+        url:'http://43.138.22.20:8000/api/user/invitemember',
+        data : qs.stringify(todo),
+      }).then((res) =>{
+        console.log(res);
+        let ans=res.data;
+        if(ans.errno===0){
+          this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
+          this.invitePanelVisible = false;
+          this.inviteName = "";
+        }
+        else {
+          alert("邀请失败!!!");
+        }
+      })
     }
   },
   mounted() {
