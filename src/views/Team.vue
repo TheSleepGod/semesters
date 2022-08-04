@@ -197,7 +197,7 @@ export default {
     showCreateNew(){
       this.newTeamVisible = true;
     },
-    createNewTeam(name){
+    createNewTeam(name) {
       let params = {
         user_id: 1,
         teamname: name,
