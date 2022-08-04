@@ -4,13 +4,13 @@
     <TeamLeft/>
     <!-- 页头-->
     <div style="height: 35px;">
-      <div style="width: 45%;font-size: 26px;float: right">{{teamName}}的项目</div>
+      <div style="width: 45%;font-size: 26px;float: right">{{team.teamName}}的项目</div>
     </div>
     <!-- 项目展示-->
     <el-tabs v-model="activeName" style="width: 76%;margin-left: 12%">
       <el-tab-pane label="团队项目" name="first">
         <div class="cards-container" style="margin-top: 10px">
-          <div class="projectsCard" id="commonPrCard" v-for="item in tmpProjectsList" :key="item.data" v-if="item.isRecycled===false"
+          <div class="projectsCard" id="commonPrCard" v-for="item in projectsList" :key="item.data" v-if="item.isRecycled===false"
                @click="gotoProject(item)" @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
             <div class="projectsCardFoot">
               <span class="projectsNameSpan">{{item.name}}</span>
@@ -47,14 +47,14 @@
     </el-tabs>
 
     <!-- 对话框-->
-    <el-dialog title="重命名项目" :visible.sync="renameVisible" style="width: 60%;margin-left: 20%">
-      <el-input v-model="tmpProjectName" placeholder="请输入项目名" maxlength="20" show-word-limit>
+    <el-dialog title="重命名项目" :visible="renameVisible" :close-on-click-modal=false :before-close="beClose" style="width: 60%;margin-left: 20%">
+      <el-input v-model="renameProject.newName" placeholder="请输入项目名" maxlength="20" show-word-limit>
         <el-button slot="append" @click="rename">确认</el-button>
       </el-input>
     </el-dialog>
-    <el-dialog title="新建项目" :visible.sync="newProjectVisible" style="width:60%;margin-left: 20%">
-      <el-input v-model="tmpProjectName" placeholder="请输入项目名" maxlength="20" show-word-limit>
-        <el-button slot="append" @click="createProject(tmpProjectName)">确认</el-button>
+    <el-dialog title="新建项目" :visible="newProjectVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
+      <el-input v-model="newProjectName" placeholder="请输入项目名" maxlength="20" show-word-limit>
+        <el-button slot="append" @click="createProject(newProjectName)">确认</el-button>
       </el-input>
     </el-dialog>
   </div>
@@ -63,6 +63,7 @@
 <script>
 import TeamLeft from "@/components/ProjectLeft";
 import TopBar from "@/components/topBar";
+import qs from "qs";
 export default {
   components: {
     TeamLeft,TopBar
@@ -70,19 +71,21 @@ export default {
   name: "ProjectsView",
   data(){
     return{
+      userId: 1,
       newProjectVisible: false,
       iconVisible: false,
       renameVisible: false,
-      tmpProjectName: '',
-      activeName: "first",
-      teamName: "团队1",
-      projectsList: [],
-      oneProject: {
+      renameProject: {
         id: 0,
-        name: '',
-        isRecycled: false,
-        isHover: false,
+        newName: "",
       },
+      newProjectName: '',
+      activeName: "first",
+      team: {
+        teamName: "团队1",
+        teamId: 1,
+      },
+      projectsList: [],
       tmpProjectsList: [
         {
           id: 12345,
@@ -147,16 +150,40 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.getTeamProjects()
+  },
   methods:{
+    beClose(){this.newProjectVisible=false;this.renameVisible=false},
     showCreateProject(){this.newProjectVisible=true},
-    showRename(item){this.tmpProjectName = item.name;this.renameVisible = true},
+    showRename(item){
+      this.renameProject.newName = item.name;
+      this.renameProject.id = item.id;
+      this.renameVisible = true
+    },
     showIcon(item){item.isHover=true},
     hideIcon(item){item.isHover=false},
     gotoProject(item){
       this.$router.push({path:'/editWord',query:{projectName:item.name,projectId:item.id}})
     },
-    rename(item){
-      this.$message.success("重命名成功")
+    rename(){
+      this.$axios.post(
+          "http://43.138.22.20:8000/api/user/renameproject",
+          qs.stringify({
+            project_id: this.renameProject.id,
+            new_project_name: this.renameProject.newName,
+          })).then((res)=>{
+            if(res.data.errno===0){
+              this.$message.success("重命名成功")
+              this.getTeamProjects();
+              this.renameVisible = false;
+              this.renameProject.id = 0;
+              this.renameProject.newName = "";
+            } else this.$notify.error(res.data.msg)
+          }).catch((error)=>{
+            console.log(error);
+          }
+      )
     },
     confirmRecycle(item){
       this.$confirm('此操作将移除该项目至回收站, 是否继续?', '提示', {
@@ -180,8 +207,48 @@ export default {
         this.$message.success("已彻底删除项目："+item.name)
       })
     },
-    createProject(name){
-      this.$message.success("新建项目成功")
+    createProject(){
+      this.$axios.post(
+          "http://43.138.22.20:8000/api/user/newproject",
+          qs.stringify({
+            user_id: this.userId,
+            project_name: this.newProjectName,
+            team_id: this.team.teamId,
+          })).then((res)=>{
+            // console.log(res);
+            if(res.data.errno===0){
+              this.getTeamProjects();
+              this.newProjectVisible = false;
+              this.$message.success("成功创建项目 "+this.newProjectName);
+              this.newProjectName = "";
+              this.newProjectVisible = false;
+            } else this.$notify.error(res.data.msg)
+          }).catch((error)=>{
+            console.log(error)
+          })
+    },
+    getTeamProjects(){
+      this.projectsList = [];
+      this.$axios.post(
+          "http://43.138.22.20:8000/api/user/check_team_project",
+          qs.stringify({
+            team_id: this.team.teamId,
+          }))
+          .then((res) => {
+            console.log(res);
+            let array = res.data.data;
+            for(let i in array){
+              this.projectsList.push({
+                id:array[i].project_id,
+                name:array[i].project_name,
+                isRecycled: false,
+                isHover: false,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     }
   }
 }

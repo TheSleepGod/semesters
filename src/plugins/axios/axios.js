@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from '@/router'
 import user from "@/store/user";
-axios.defaults.baseURL = 'http://43.138.22.20:8000/api'
+// axios.defaults.baseURL = 'http://43.138.22.20:8000/api'
 // axios.defaults.baseURL = 'http://43.138.29.81:8080/api'
 // 如果请求话费了超过 `timeout` 的时间，请求将被中断
 axios.defaults.timeout = 10800000;
