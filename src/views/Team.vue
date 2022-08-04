@@ -69,7 +69,6 @@
           </div>
           <div class = "right-team-number">
             <span class="font-1">{{ myTeam.teamNumber }}人&nbsp;&nbsp;</span>
-            <span class="font-1">{{ myTeam.teamTime }}</span>
           </div>
         </div>
       </div>
@@ -92,59 +91,8 @@ export default {
   },
   name: "Team",
   data() {
-    let createdTeam = [
-      {
-      id: 1,  
-      teamName: "TheSleepGod",
-      teamNumber: "3",
-      teamTime: "2022-05-02"
-      },
-      {
-        id: 2,
-        teamName: "TheAwakeHome",
-        teamNumber: "4",
-        teamTime: "2022-05-01"
-      },
-      {
-        id: 3,
-        teamName: "TheLDS",
-        teamNumber: "1",
-        teamTime: "2022-05-03"
-      },
-      {
-        id: 4,
-        teamName: "TheLDSTheLDSTheLDSTheLDSTheLDSTheLDSTheLDS",
-        teamNumber: "1",
-        teamTime: "2022-05-03"
-      }
-      ,
-      {
-        id: 5,
-        teamName: "TheLDS",
-        teamNumber: "1",
-        teamTime: "2022-05-03"
-      }
-    ];
-    let addedTeam = [
-      {
-        id: 1,
-        teamName: "TheASD",
-        teamNumber: "3",
-        teamTime: "2022-05-02"
-      },
-      {
-        id: 2,
-        teamName: "TheAwakeHome",
-        teamNumber: "4",
-        teamTime: "2022-05-01"
-      },
-      {
-        id: 3,
-        teamName: "TheYuanShen",
-        teamNumber: "1",
-        teamTime: "2022-05-03"
-      }
-    ];
+    let createdTeam = [];
+    let addedTeam = [];
     let allTeam = addedTeam;
     return {
       newTeamName: "",
@@ -186,7 +134,18 @@ export default {
         this.isChanging = false;
       },750);
     },
-    changeOk: function() {
+    changeOk: function() { //修改个人资料
+      let toSend = {
+
+      };
+      this.$axios({
+        method : 'post',
+        url : 'http://',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        console.log(res);
+        let ans = res.data;
+      })
       this.closeChangeMesForm();
     },
     changeNo: function() {
@@ -196,28 +155,78 @@ export default {
       this.newTeamVisible = true;
     },
     createNewTeam(name){
-      let params = {
+      let toSend = {
         user_id: 1,
-        teamname: name,
+        team_name: name,
       };
-      this.$axios
-          .post("http://43.138.22.20:8000/api/user/newproject", qs.stringify(params))
-          .then((res) => {
-            console.log("服务器:" + res + "  团队" + name + "创建成功");
-            this.$message.error("创建团队失败 "+name);
-            // this.$message.success("成功创建团队 "+name);
-            this.newTeamVisible = false;
-            this.newTeamName = "";
-          })
-          .catch((error) => {
-            this.$message.error("创建团队失败 "+name);
-            console.log(error);
-          });
+      this.$axios({
+        method : 'post',
+        url : 'http://43.138.22.20:8000/api/user/newteam',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        console.log(res);
+        let ans=res.data;
+        if(ans.errno === 0){
+          alert("创建成功！！！");
+        }
+        else {
+          alert("创建失败！！！");
+        }
+      })
     }
   },
   mounted() {
     this.showAdded()
   },
+  created() {
+    let toSend = {
+      user_id: 1
+    }
+    let that = this;
+    this.$axios({
+      method : 'post',
+      url : 'http://43.138.22.20:8000/api/user/check_user_team',
+      data : qs.stringify(toSend)
+    }).then((res) =>{
+      console.log(res);
+      var ans = res.data;
+      var rec =res.data.data;
+      console.log(rec);
+      if(ans.errno==0){
+        for(let i in rec){
+            that.addedTeam.push({
+                id : rec[i].team_id,
+                teamName: rec[i].name,
+                teamNumber: rec[i].count
+            });
+        }
+      }
+      else {
+        alert("页面加载错误 ! ! !");
+      }
+    })
+    this.$axios({
+      method : 'post',
+      url : 'http://',
+      data : qs.stringify(toSend)
+    }).then((res) =>{
+      console.log(res);
+      let ans =res.data;
+      let rec =ans.data;
+      if(ans.errno==0){
+        for(let i in rec){
+          this.addedTeam.push({
+            id : rec[i].team_id,
+            teamName: rec[i].name,
+            teamNumber: rec[i].count
+          })
+        }
+      }
+      else {
+        alert("页面加载错误 ! ! !");
+      }
+    })
+  }
 }
 </script>
 

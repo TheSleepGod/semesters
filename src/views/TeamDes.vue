@@ -122,6 +122,8 @@ export default {
     return {
       inviteName: "",
       invitePanelVisible: false,
+      team_id:3,
+      user_id:1,
       teamMes,
       teamPeople,
       changePerM,
@@ -142,7 +144,7 @@ export default {
       {
         let todo ={
           user_id : '1',
-          team_id : '3',
+          team_id : this.team_id,
           del_user_id : '2',
         };
         this.$axios({
@@ -180,7 +182,7 @@ export default {
     inviteMember(name){
       let todo = {
         user_id : '3',
-        team_id : '3',
+        team_id : this.team_id,
         new_user_id : '8'
       }
       this.$axios({
@@ -205,7 +207,7 @@ export default {
     },
     getTeamMessage() {
       let params = {
-        team_id: 3,
+        team_id: this.team_id,
       };
       this.$axios
           .post("http://43.138.22.20:8000/api/user/checkteam", qs.stringify(params))
@@ -218,7 +220,7 @@ export default {
     },
     getTeamNumber() {
       let params = {
-        team_id: 3,
+        team_id: this.team_id,
       };
       this.$axios
           .post("http://43.138.22.20:8000/api/user/check_team_user", qs.stringify(params))
@@ -235,6 +237,16 @@ export default {
   mounted() {
     this.getTeamMessage();
     this.getTeamNumber();
+  },
+  created() {
+    this.$axios({
+      method:'post',
+      url: 'http://101.42.160.94:8000/api/user_web/get_user'
+    }).then((res) =>{
+      console.log(res);
+      this.user_id=res.data.data;
+      console.log(this.user_id);
+    })
   }
 }
 </script>
