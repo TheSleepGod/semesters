@@ -33,7 +33,7 @@
       <el-tab-pane label="项目回收站" name="second">
         <div class="cards-container" style="margin-top: 10px">
           <div class="projectsCard" id="recyclePrCard" v-for="item in projectsList" :key="item.data" v-if="item.isRecycled!==0"
-               @click="gotoProject(item)" @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
+               @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
             <div class="projectsCardFoot">
               <span class="projectsNameSpan">{{item.name}}</span>
               <span class="projectsBtn">
@@ -154,10 +154,13 @@ export default {
     }
   },
   created() {
-    this.getNowUser()
+    this.team.teamName = this.$route.query.teamName
+    this.team.teamId = this.$route.query.teamId
   },
   mounted() {
-    this.getTeamProjects()
+    this.team.teamId = this.$route.query.teamId;
+    this.team.teamName = this.$route.query.teamName;
+    this.getTeamProjects();
   },
   methods:{
     getNowUser() {
@@ -345,6 +348,7 @@ export default {
   filter: brightness(0.75);
 }
 #recyclePrCard{
+  cursor: default;
   background-image: url("../assets/nmb.png");
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -374,6 +378,7 @@ export default {
   font-size: 16px;
 }
 .projectsBtn{
+  cursor: pointer;
   margin-left: -15px;
 }
 #newPrCard{

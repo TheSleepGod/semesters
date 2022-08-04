@@ -235,7 +235,7 @@ export default {
         //console.log(res);
         let ans =res.data;
         let rec =ans.data;
-        if(ans.errno==0){
+        if(ans.errno===0){
           for(let i in rec){
             this.createdTeam.push({
               id : rec[i].team_id,
