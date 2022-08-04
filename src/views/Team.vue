@@ -216,6 +216,24 @@ export default {
             console.log(error);
           });
     },
+    getNowUser() {
+      console.log(this.username);
+      axios({
+        url: 'http://101.42.160.94:8000/api/user_web/get_user',
+        method: 'post',
+      }).then((ret) => {
+        if (ret.data.errno === 0) {
+          console.log(ret.data.username);
+          this.username = ret.data.username;
+        } else {
+          console.log("ERROR!");
+          alert(ret.data.msg);
+        }
+      })
+    },
+  },
+  created() {
+    this.getNowUser();
   },
   mounted() {
     this.showAdded();
