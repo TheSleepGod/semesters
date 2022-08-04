@@ -98,6 +98,7 @@ export default {
     return {
       username: '',
       newTeamName: "",
+      user_id:1,
       newTeamVisible: false,
       createdTeam,
       addedTeam,
@@ -158,7 +159,7 @@ export default {
     },
     createNewTeam(name){
       let toSend = {
-        user_id: 1,
+        user_id: this.user_id,
         team_name: name,
       };
       this.$axios({
@@ -182,7 +183,7 @@ export default {
   },
   created() {
     let toSend = {
-      user_id: 1
+      user_id: this.user_id
     }
     let that = this;
     this.$axios({
