@@ -118,7 +118,7 @@ export default {
     ]
     let changePerM = -1;
     let isHover = [false,false,false,false,false,false,false,false,false,false,false];
-    let nowLogin = 1;
+    let nowLogin = 2;
     return {
       inviteName: "",
       invitePanelVisible: false,
@@ -164,7 +164,6 @@ export default {
       {
         alert("You pressed Cancel!");
       }
-
     },
     changePer:function (people) {
       this.changePerM = people.name;
@@ -179,9 +178,27 @@ export default {
       },300);
     },
     inviteMember(name){
-      this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
-      this.invitePanelVisible = false;
-      this.inviteName = "";
+      let todo = {
+        user_id : '3',
+        team_id : '3',
+        new_user_id : '8'
+      }
+      this.$axios({
+        method : 'post',
+        url:'http://43.138.22.20:8000/api/user/invitemember',
+        data : qs.stringify(todo),
+      }).then((res) =>{
+        console.log(res);
+        let ans=res.data;
+        if(ans.errno===0){
+          this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
+          this.invitePanelVisible = false;
+          this.inviteName = "";
+        }
+        else {
+          alert("邀请失败!!!");
+        }
+      })
     },
     getTeamMessage() {
       let params = {
@@ -210,32 +227,11 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      let todo = {
-        user_id : '3',
-        team_id : '3',
-        new_user_id : '8'
-      }
-      this.$axios({
-        method : 'post',
-        url:'http://43.138.22.20:8000/api/user/invitemember',
-        data : qs.stringify(todo),
-      }).then((res) =>{
-        console.log(res);
-        let ans=res.data;
-        if(ans.errno===0){
-          this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
-          this.invitePanelVisible = false;
-          this.inviteName = "";
-        }
-        else {
-          alert("邀请失败!!!");
-        }
-      })
-    }
+  }
   },
   mounted() {
     this.getTeamMessage();
-    //this.getTeamNumber();
+    this.getTeamNumber();
   }
 }
 </script>
