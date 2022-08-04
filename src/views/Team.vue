@@ -171,9 +171,67 @@ export default {
         let ans=res.data;
         if(ans.errno === 0){
           alert("创建成功！！！");
+          this.newTeamVisible = false;
+          this.newTeamName = "";
+          this.getAddedTeam();
+          this.getCreatedTeam();
         }
         else {
           alert("创建失败！！！");
+        }
+      })
+    },
+    getAddedTeam(){
+      this.addedTeam = [];
+      let toSend = {
+        user_id: this.user_id
+      }
+      let that = this;
+      this.$axios({
+        method : 'post',
+        url : 'http://43.138.22.20:8000/api/user/check_user_team',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        console.log(res);
+        var ans = res.data;
+        var rec =res.data.data;
+        console.log(rec);
+        if(ans.errno==0){
+          for(let i in rec){
+            that.addedTeam.push({
+              id : rec[i].team_id,
+              teamName: rec[i].name,
+              teamNumber: rec[i].count
+            });
+          }
+        }
+        else {
+          alert("页面加载错误 ! ! !");
+        }
+      })
+    },
+    getCreatedTeam(){
+      //todo
+      this.createdTeam = [];
+      this.$axios({
+        method : 'post',
+        url : 'http://',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        console.log(res);
+        let ans =res.data;
+        let rec =ans.data;
+        if(ans.errno==0){
+          for(let i in rec){
+            this.createdTeam.push({
+              id : rec[i].team_id,
+              teamName: rec[i].name,
+              teamNumber: rec[i].count
+            })
+          }
+        }
+        else {
+          alert("页面加载错误 ! ! !");
         }
       })
     }
@@ -182,53 +240,8 @@ export default {
     this.showAdded();
   },
   created() {
-    let toSend = {
-      user_id: this.user_id
-    }
-    let that = this;
-    this.$axios({
-      method : 'post',
-      url : 'http://43.138.22.20:8000/api/user/check_user_team',
-      data : qs.stringify(toSend)
-    }).then((res) =>{
-      console.log(res);
-      var ans = res.data;
-      var rec =res.data.data;
-      console.log(rec);
-      if(ans.errno==0){
-        for(let i in rec){
-            that.addedTeam.push({
-                id : rec[i].team_id,
-                teamName: rec[i].name,
-                teamNumber: rec[i].count
-            });
-        }
-      }
-      else {
-        alert("页面加载错误 ! ! !");
-      }
-    })
-    this.$axios({
-      method : 'post',
-      url : 'http://',
-      data : qs.stringify(toSend)
-    }).then((res) =>{
-      console.log(res);
-      let ans =res.data;
-      let rec =ans.data;
-      if(ans.errno==0){
-        for(let i in rec){
-          this.addedTeam.push({
-            id : rec[i].team_id,
-            teamName: rec[i].name,
-            teamNumber: rec[i].count
-          })
-        }
-      }
-      else {
-        alert("页面加载错误 ! ! !");
-      }
-    })
+    this.getAddedTeam();
+    this.getCreatedTeam();
   }
 }
 </script>
