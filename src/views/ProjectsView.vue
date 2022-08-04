@@ -154,7 +154,9 @@ export default {
     }
   },
   created() {
-    this.getNowUser()
+    this.team.teamName = this.$route.query.teamName
+    this.team.teamId = this.$route.query.teamId
+    // this.getNowUser()
   },
   mounted() {
     this.getTeamProjects()
