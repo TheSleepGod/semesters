@@ -3,6 +3,10 @@
     <div class="webLogo-box">
       <img class="webLogo" src="../assets/moshulogo.png" alt=""/>
     </div>
+    <div class="user">
+    <div class="username">
+      {{username}}
+    </div>
     <div class = "icon-head-box">
       <el-dropdown @command="handleHeadCommand" placement="bottom" trigger="hover">
         <img class = "icon-head" src="../assets/icon.jpg" alt="">
@@ -12,15 +16,18 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "topBar",
   data(){
     return{
-
+      username: 'lsc1111',
     }
   },
   methods:{
@@ -30,11 +37,49 @@ export default {
           this.$router.push("/team");
           break;
         case "logout":
-          this.$router.push("/home");
-          this.$message.success("已退出登录");
+          this.exit();
+          this.$router.push("/");
           break;
       }
-    }
+    },
+    getNowUser() {
+      let con = {};
+      console.log(this.username);
+      axios({
+        url: 'http://101.42.160.94:8000/api/user_web/get_user',
+        method: 'post',
+        data: JSON.stringify(con),
+      }).then((ret) => {
+        if (ret.data.errno === 0) {
+          console.log(ret.data.username);
+          this.username = ret.data.username;
+        } else {
+          console.log("ERROR!");
+          alert(ret.data.msg);
+        }
+      })
+    },
+    exit: function () {
+      let con = {};
+      con['username'] = this.username;
+      console.log(con);
+      axios({
+        //TODO
+        url: 'http://101.42.160.94:8000/api/user_web/get_user',
+        method: 'post',
+        // data: JSON.stringify(con),
+      }).then((ret) => {
+        if (ret.data.errno === 0) {
+          this.$message.success("退出成功");
+        } else {
+          alert(ret.data.msg);
+          this.$message.error("退出失败");
+        }
+      })
+    },
+    created() {
+      this.getNowUser();
+    },
   }
 }
 </script>
@@ -66,5 +111,16 @@ export default {
   height: 50px;
   width: 50px;
   border-radius: 35px;
+}
+.username {
+  display: inline-block;
+  position: relative;
+  margin-right: 10px;
+  top: 18px;
+  font-size: 25px;
+}
+
+.user{
+  float: right;
 }
 </style>

@@ -85,6 +85,7 @@
 <script>
 import topBar from "@/components/topBar";
 import qs from "qs";
+import axios from "axios";
 export default {
   components:{
     topBar
@@ -95,6 +96,7 @@ export default {
     let addedTeam = [];
     let allTeam = addedTeam;
     return {
+      username: '',
       newTeamName: "",
       newTeamVisible: false,
       createdTeam,
@@ -176,7 +178,7 @@ export default {
     }
   },
   mounted() {
-    this.showAdded()
+    this.showAdded();
   },
   created() {
     let toSend = {
