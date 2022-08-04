@@ -86,6 +86,7 @@
 <script>
 import topBar from "@/components/topBar";
 import qs from "qs";
+import axios from "axios";
 export default {
   components:{
     topBar
@@ -147,6 +148,7 @@ export default {
     ];
     let allTeam = addedTeam;
     return {
+      username: '',
       newTeamName: "",
       newTeamVisible: false,
       createdTeam,
@@ -213,10 +215,10 @@ export default {
             this.$message.error("创建团队失败 "+name);
             console.log(error);
           });
-    }
+    },
   },
   mounted() {
-    this.showAdded()
+    this.showAdded();
   },
 }
 </script>
