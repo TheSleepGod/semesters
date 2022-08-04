@@ -43,11 +43,12 @@ export default {
       }
     },
     getNowUser() {
+      console.log(111)
       let con = {};
       console.log(this.username);
       axios({
         url: 'http://101.42.160.94:8000/api/user_web/get_user',
-        method: 'post',
+        method: 'get',
         data: JSON.stringify(con),
       }).then((ret) => {
         if (ret.data.errno === 0) {
