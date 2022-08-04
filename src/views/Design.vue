@@ -1,47 +1,48 @@
 <!-- drag-test -->
 <template>
-  <div class="drag-test" style="margin-top: 50px">
-    <div class="controls-list">
+  <div class="drag-test" style="margin-top: 50px" contenteditable="false">
+    <div class="controls-list" contenteditable="false">
       <div style="display: inline-grid;margin-left: 25px;margin-top:15px;margin-bottom: 15px;font-size: 20px">组件栏</div>
       <div style="display: inline-grid;float: right;margin-top: 15px">
         <el-button  size="mini" title="生成图片" circle @click="toImage()" icon="el-icon-download"/>
+        <el-button  size="mini" title="保存" circle @click="saveState()" icon="el-icon-download"/>
       </div>
       <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
           figure 图形
         </template>
-        <div id="figure" style="overflow-y: scroll;width: 220px;height: 200px;">
+        <div id="figure" style="overflow-y: scroll;width: 220px;height: 200px;" contenteditable="false">
         <div
             :class="commonClassName"
             @click="addControl(1)"
             class="controls-item controls-text"
         >
-          <img src="../assets/rectangle.png">
+          <img src="../assets/rectangle.png" alt="">
           <p class="icon-name">矩形</p>
         </div>
         <div
             :class="commonClassName"
-            class="controls-item controls-date"
-            @click="addControl(2)"
+            @click="addControl(6)"
+            class="controls-item controls-text"
         >
-          <img src="../assets/round-rectangle.png">
+          <img src="../assets/round-rectangle.png" alt="">
           <p class="icon-name">圆角矩形</p>
         </div>
         <div
             :class="commonClassName"
-            class="controls-item controls-select"
-            @click="addControl(3)"
+            class="controls-item controls-text"
+            @click="addControl(7)"
         >
-          <img src="../assets/triangle.png">
+          <img src="../assets/triangle.png" alt="">
           <p class="icon-name">三角形</p>
         </div>
         <div
             :class="commonClassName"
             class="controls-item controls-select"
-            @click="addControl(3)"
+            @click="addControl(8)"
         >
-          <img src="../assets/circle.png">
+          <img src="../assets/circle.png" alt="">
           <p class="icon-name">圆形</p>
         </div>
         <div
@@ -49,7 +50,7 @@
             class="controls-item controls-select"
             @click="addControl(3)"
         >
-          <img src="../assets/line.png">
+          <img src="../assets/line.png" alt="">
           <p class="icon-name">直线</p>
         </div>
         <div
@@ -57,7 +58,7 @@
             class="controls-item controls-select"
             @click="addControl(3)"
         >
-          <img src="../assets/rhombus.png">
+          <img src="../assets/rhombus.png" alt="">
           <p class="icon-name">菱形</p>
         </div>
         <div
@@ -65,7 +66,7 @@
             class="controls-item controls-select"
             @click="addControl(3)"
         >
-          <img src="../assets/hexagon.png">
+          <img src="../assets/hexagon.png" alt="">
           <p class="icon-name">六边形</p>
         </div>
         <div
@@ -73,7 +74,7 @@
             class="controls-item controls-select"
             @click="addControl(3)"
         >
-          <img src="../assets/octagon.png">
+          <img src="../assets/octagon.png" alt="">
           <p class="icon-name">八边形</p>
         </div>
         <div
@@ -81,7 +82,7 @@
             class="controls-item controls-select"
             @click="addControl(3)"
         >
-          <img src="../assets/cube.png">
+          <img src="../assets/cube.png" alt="">
           <p class="icon-name">正方体</p>
         </div>
         <div
@@ -89,7 +90,7 @@
             class="controls-item controls-select"
             @click="addControl(3)"
         >
-          <img src="../assets/black-triangle.png">
+          <img src="../assets/black-triangle.png" alt="">
           <p class="icon-name">实心三角箭头</p>
         </div>
         </div>
@@ -109,7 +110,7 @@
                     @click="addControl(1)"
                     class="controls-item controls-text"
                 >
-                  <img src="../assets/ok.png">
+                  <img src="../assets/ok.png" alt="">
                   <p class="icon-name">确定</p>
                 </div>
                 <div
@@ -117,7 +118,7 @@
                     @click="addControl(1)"
                     class="controls-item controls-text"
                 >
-                  <img src="../assets/cancel.png">
+                  <img src="../assets/cancel.png" alt="">
                   <p class="icon-name">取消</p>
                 </div>
                 <div
@@ -125,7 +126,7 @@
                     class="controls-item controls-date"
                     @click="addControl(2)"
                 >
-                  <img src="../assets/correct.png">
+                  <img src="../assets/correct.png" alt="">
                   <p class="icon-name">勾</p>
                 </div>
                 <div
@@ -133,7 +134,7 @@
                     class="controls-item controls-date"
                     @click="addControl(2)"
                 >
-                  <img src="../assets/error.png">
+                  <img src="../assets/error.png" alt="">
                   <p class="icon-name">叉</p>
                 </div>
                 <div
@@ -141,7 +142,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/plus.png">
+                  <img src="../assets/plus.png" alt="">
                   <p class="icon-name">添加</p>
                 </div>
                 <div
@@ -149,7 +150,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/share.png">
+                  <img src="../assets/share.png" alt="">
                   <p class="icon-name">分享</p>
                 </div>
                 <div
@@ -157,7 +158,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/edit.png">
+                  <img src="../assets/edit.png" alt="">
                   <p class="icon-name">编辑</p>
                 </div>
                 <div
@@ -165,7 +166,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/trash.png">
+                  <img src="../assets/trash.png" alt="">
                   <p class="icon-name">删除</p>
                 </div>
                 <div
@@ -173,7 +174,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/refresh.png">
+                  <img src="../assets/refresh.png" alt="">
                   <p class="icon-name">刷新</p>
                 </div>
                 <div
@@ -181,7 +182,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/setting.png">
+                  <img src="../assets/setting.png" alt="">
                   <p class="icon-name">设置</p>
                 </div>
                 <div
@@ -189,7 +190,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/clock.png">
+                  <img src="../assets/clock.png" alt="">
                   <p class="icon-name">时钟</p>
                 </div>
                 <div
@@ -197,7 +198,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/about.png">
+                  <img src="../assets/about.png" alt="">
                   <p class="icon-name">关于</p>
                 </div>
                 <div
@@ -205,7 +206,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/menu.png">
+                  <img src="../assets/menu.png" alt="">
                   <p class="icon-name">菜单</p>
                 </div>
                 <div
@@ -213,7 +214,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/home.png">
+                  <img src="../assets/home.png" alt="">
                   <p class="icon-name">家</p>
                 </div>
                 <div
@@ -221,7 +222,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/info.png">
+                  <img src="../assets/info.png" alt="">
                   <p class="icon-name">信息</p>
                 </div>
                 <div
@@ -229,7 +230,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/search.png">
+                  <img src="../assets/search.png" alt="">
                   <p class="icon-name">搜索</p>
                 </div>
                 </div>
@@ -244,7 +245,7 @@
                     @click="addControl(1)"
                     class="controls-item controls-text"
                 >
-                  <img src="../assets/document.png">
+                  <img src="../assets/document.png" alt="">
                   <p class="icon-name">文档</p>
                 </div>
                 <div
@@ -252,7 +253,7 @@
                     @click="addControl(1)"
                     class="controls-item controls-text"
                 >
-                  <img src="../assets/file.png">
+                  <img src="../assets/file.png" alt="">
                   <p class="icon-name">文件</p>
                 </div>
                 <div
@@ -260,7 +261,7 @@
                     class="controls-item controls-date"
                     @click="addControl(2)"
                 >
-                  <img src="../assets/directory.png">
+                  <img src="../assets/directory.png" alt="">
                   <p class="icon-name">文件夹</p>
                 </div>
                 <div
@@ -268,7 +269,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/unlock.png">
+                  <img src="../assets/unlock.png" alt="">
                   <p class="icon-name">解锁</p>
                 </div>
                 <div
@@ -276,7 +277,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/lock.png">
+                  <img src="../assets/lock.png" alt="">
                   <p class="icon-name">锁定</p>
                 </div>
                 <div
@@ -284,7 +285,7 @@
                     class="controls-item controls-select"
                     @click="addControl(3)"
                 >
-                  <img src="../assets/unavailable.png">
+                  <img src="../assets/unavailable.png" alt="">
                   <p class="icon-name">禁止</p>
                 </div>
               </div>
@@ -301,7 +302,7 @@
                 @click="addControl(1)"
                 class="controls-item controls-text"
             >
-              <img src="../assets/bar-diagram.png">
+              <img src="../assets/bar-diagram.png" alt="">
               <p class="icon-name">条形图</p>
             </div>
             <div
@@ -309,7 +310,7 @@
                 class="controls-item controls-date"
                 @click="addControl(2)"
             >
-              <img src="../assets/line-diagram.png">
+              <img src="../assets/line-diagram.png" alt="">
               <p class="icon-name">折线图</p>
             </div>
             <div
@@ -317,7 +318,7 @@
                 class="controls-item controls-select"
                 @click="addControl(3)"
             >
-              <img src="../assets/area-diagram.png">
+              <img src="../assets/area-diagram.png" alt="">
               <p class="icon-name">面积图</p>
             </div>
             <div
@@ -325,7 +326,7 @@
                 class="controls-item controls-select"
                 @click="addControl(3)"
             >
-              <img src="../assets/tree-diagram.png">
+              <img src="../assets/tree-diagram.png" alt="">
               <p class="icon-name">树状图</p>
             </div>
             <div
@@ -333,7 +334,7 @@
                 class="controls-item controls-select"
                 @click="addControl(3)"
             >
-              <img src="../assets/pie-diagram.png">
+              <img src="../assets/pie-diagram.png" alt="">
               <p class="icon-name">饼状图</p>
             </div>
           </div>
@@ -348,7 +349,7 @@
                 class="controls-item controls-date"
                 @click="addControl(2)"
             >
-              <img src="../assets/picture.png">
+              <img src="../assets/picture.png" alt="">
               <p class="icon-name">图片</p>
             </div>
             <div
@@ -356,7 +357,7 @@
                 class="controls-item controls-date"
                 @click="addControl(2)"
             >
-              <img src="../assets/music.png">
+              <img src="../assets/music.png" alt="">
               <p class="icon-name">音乐</p>
             </div>
             <div
@@ -364,7 +365,7 @@
                 class="controls-item controls-select"
                 @click="addControl(3)"
             >
-              <img src="../assets/video.png">
+              <img src="../assets/video.png" alt="">
               <p class="icon-name">视频</p>
             </div>
           </div>
@@ -520,6 +521,14 @@ export default {
           className = 'lq-draggable-rr';
           handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
+        case 'tri':
+          className = 'lq-draggable-tri';
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
+          break;
+        case 'rotundity':
+          className = 'lq-draggable-rot';
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
+          break;  
         default:
           break;
       }
@@ -706,12 +715,37 @@ export default {
           name: '圆角矩形',
           fontsSize: 10,
           signatory: 0 // 签署方默认甲方
+        },
+        7: {
+          customId: Date.now(),
+          width: 80,
+          height: 80,
+          x: 200,
+          y: 380,
+          type: 'tri', // 控件类型 圆角矩形
+          name: '三角形',
+          fontsSize: 10,
+          signatory: 0 // 签署方默认甲方
+        },
+        8: {
+          customId: Date.now(),
+          width: 80,
+          height: 30,
+          x: 200,
+          y: 380,
+          type: 'rot', // 控件类型 圆角矩形
+          name: '圆形',
+          fontsSize: 10,
+          signatory: 0 // 签署方默认甲方
         }
       };
       this.controlsArr.push(controlObjMap[type]);
       this.setControlActive(controlObjMap[type].customId);
     },
     // 手动设置刚才添加的控件为选中状态
+    saveState() {
+      console.log(this.controlsArr);
+    },
     setControlActive(customId) {
       this.$nextTick(() => {
         // console.log(this.$refs[customId][0]);
@@ -810,7 +844,7 @@ export default {
 .drag-wrap {
   box-shadow:2px 2px 10px #909090;
   border-radius: 5px;
-  margin-left: 0px;
+  margin-left: 0;
   width: 1370px;
   height: 100%;
   border: solid 1px #000000;
@@ -845,7 +879,7 @@ export default {
   .lq-draggable-sign,
   .lq-draggable-select {
     border: dashed 1px #000;
-    background-image:url('../assets/mainBk.png');
+    //background-image:url('../assets/mainBk.png');
     background-size: 100% 100%;
     background-position: center center;
   }
@@ -863,6 +897,21 @@ export default {
       }
     }
   }
+  .lq-draggable-rr {
+    border: dashed 1px #000;
+    border-radius: 50px;
+  }
+  .lq-draggable-tri {
+    background-image: url("../assets/triangle.png");
+    background-position: center center;
+    background-size: 100% 100%;
+  }
+  .lg-draggable-rot {
+    width: 30px;
+    height: 30px;
+    border: dashed 1px #000;
+    border-radius:50%;
+  }
   .lq-active-class {
     border-color: rgb(14, 74, 238);
     .seal-inner {
@@ -871,10 +920,6 @@ export default {
         border-color: rgb(14, 74, 238);
       }
     }
-  }
-  .lq-draggable-rr {
-    border: dashed 1px #000;
-    border-radius: 50px;
   }
 }
 .set-wrap {
