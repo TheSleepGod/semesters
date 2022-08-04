@@ -7,7 +7,7 @@ const user = {
         }
     },
     getters: {
-        getUser: function (state) {
+        getUser: function(state) {
             if (!state.user) {
                 state.user = JSON.parse(localStorage.getItem(key))
             }

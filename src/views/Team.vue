@@ -85,6 +85,7 @@
 
 <script>
 import topBar from "@/components/topBar";
+import qs from "qs";
 export default {
   components:{
     topBar
@@ -195,14 +196,28 @@ export default {
       this.newTeamVisible = true;
     },
     createNewTeam(name){
-      this.$message.success("成功创建团队 "+name);
-      this.newTeamVisible = false;
-      this.newTeamName = "";
+      let params = {
+        user_id: 1,
+        teamname: name,
+      };
+      this.$axios
+          .post("http://43.138.22.20:8000/api/user/newproject", qs.stringify(params))
+          .then((res) => {
+            console.log("服务器:" + res + "  团队" + name + "创建成功");
+            this.$message.error("创建团队失败 "+name);
+            // this.$message.success("成功创建团队 "+name);
+            this.newTeamVisible = false;
+            this.newTeamName = "";
+          })
+          .catch((error) => {
+            this.$message.error("创建团队失败 "+name);
+            console.log(error);
+          });
     }
   },
   mounted() {
     this.showAdded()
-  }
+  },
 }
 </script>
 

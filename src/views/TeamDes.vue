@@ -10,9 +10,9 @@
           </div>
           <div class = "right-head-identity-box">
             <div class="right-head-identity-mes" style="width:40%;">身份</div>
-            <div class="right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='成员'" style="background-color:darkolivegreen;">成 员</div>
-            <div class="right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='管理员'" style="background-color:darkblue;">管理员</div>
-            <div class="right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='创建者'" style="background-color:black;color:gold">创建者</div>
+            <div class="right-head-identity-mes right-head-identity-mes-idy" v-if="teamPeople[nowLogin].identity === '普通成员'" style="background-color:darkolivegreen;">成 员</div>
+            <div class="right-head-identity-mes right-head-identity-mes-idy" v-if="teamPeople[nowLogin].identity === '管理员'" style="background-color:darkblue;">管理员</div>
+            <div class="right-head-identity-mes right-head-identity-mes-idy" v-if="teamPeople[nowLogin].identity === '创建者'" style="background-color:black;color:gold">创建者</div>
           </div>
         </div>
         <div class = "right-head-mes-box">
@@ -22,38 +22,48 @@
           </span>
         </div>
         <div class="right-head-invite" @click="showInvitePanel">
-          <img id="right-head-invite-icon" src="../assets/bell.png"/>
+          <img id="right-head-invite-icon" src="../assets/bell.png" alt=""/>
           <div> 摇人</div>
         </div>
       </div>
       <hr style="margin:0;background-color:black;height:1px;border:none; background-image: linear-gradient(to right, #333, #333, #ccc);width: 80%" />
       <div class = "right-people-boxes-container">
-        <div class = "right-people-mes-box" v-for="(people,index) in teamPeople" @mouseover="clickCome(people)" @mouseleave="clickLeave(people)">
+        <div class = "right-people-mes-box" v-for="(people,index) in teamPeople" @mouseover="clickCome(index)" @mouseleave="clickLeave(index)" :id = index>
           <div class = "rpm-left">
             <div>
               <img class = "rpm-left-icon" src="../assets/icon.jpg" alt="">
             </div>
             <div>
-              <span class = "font-1 rmp-left-id">TheSleepGod</span>
+              <span class = "font-1 rmp-left-id">{{ people.user_name }}</span>
             </div>
-            <img class = "rpm-per-icon" src = "../assets/permissions/Owner.png" v-if = "people.permission === 2"
+            <img class = "rpm-per-icon" src = "../assets/permissions/Owner.png" v-if = "people.identity === '创建者'"
                  alt="创建者" title="创建者">
-            <img class = "rpm-per-icon" src = "../assets/permissions/Manger.png" v-if = "people.permission === 1"
+            <img class = "rpm-per-icon" src = "../assets/permissions/Manger.png" v-if = "people.identity === '管理员'"
                  alt="管理员" title="管理员">
-            <img class = "rpm-per-icon" src = "../assets/permissions/Person.png" v-if = "people.permission === 0"
+            <img class = "rpm-per-icon" src = "../assets/permissions/Person.png" v-if = "people.identity === '普通成员'"
                  alt="成员" title="成员">
           </div>
           <div class = "rpm-right">
             <ul style="text-align: left; margin-left: -20px; margin-top: 25px">
               <li style="margin-bottom: 10px;">电话: {{people.tel}}</li>
-              <li style="margin-bottom: 10px;">邮箱：{{people.email}}</li>
-              <li style="margin-bottom: 10px;">真实姓名：{{people.name}}</li>
+              <li style="margin-bottom: 10px;">邮箱：{{people.mail}}</li>
+              <li style="margin-bottom: 10px;">真实姓名：{{people.real_name}}</li>
             </ul>
           </div>
-          <div class="rpm-foot" v-if="people.isHover">
-            <div class="rpm-del-whole" v-if="people.permission===2" @click="del(people)">解 散</div>
-            <div class="rpm-changePer-leftHalf" v-if="people.permission!==2" @click="changePer(people)">修 改 权 限</div>
-            <div class="rpm-del-rightHalf" v-if="people.permission!==2" @click="del(people)">删 除</div>
+          <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '创建者'">
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">解 散</div>
+            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
+            <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
+          </div>
+          <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '管理员'">
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">退 出</div>
+            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
+            <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
+          </div>
+          <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '普通成员'">
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">退 出</div>
+<!--            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>-->
+<!--            <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>-->
           </div>
         </div>
       </div>    
@@ -70,6 +80,7 @@
 <script>
 import TeamLeft from '../components/ProjectLeft';
 import TopBar from "@/components/topBar";
+import qs from "qs";
 export default {
   name: "TeamDes",
   components: {
@@ -85,67 +96,74 @@ export default {
     let teamPeople = [
         {
           tel: "15536833281",
-          email: "1634504737@qq.com",
-          name: "hhw",
-          permission: 1,
-          isHover: false,
+          mail: "1634504737@qq.com",
+          real_name: "hhw",
+          identity: "管理员",
+          user_name: 1,
         },
       {
         tel: "15536833281",
-        email: "1634504737@qq.com",
-        name: "hhw",
-        permission: 0,
-        isHover: false,
+        mail: "1634504737@qq.com",
+        real_name: "hhw",
+        identity: "创建者",
+        user_name: 1,
       },
       {
         tel: "15536833281",
-        email: "1634504737@qq.com",
-        name: "hhw",
-        permission: 2,
-        isHover: false,
+        mail: "1634504737@qq.com",
+        real_name: "hhw",
+        identity: "成员",
+        user_name: 1,
       },
-      {
-        tel: "114514",
-        email: "11012138@qq.com",
-        name: "killer",
-        permission: 0,
-        isHover: false,
-      },
-      {
-        tel: "214904777899",
-        email: "62531122222@qq.com",
-        name: "zzx",
-        permission: 0,
-        isHover: false,
-      }
     ]
     let changePerM = -1;
+    let isHover = [false,false,false,false,false,false,false,false,false,false,false];
+    let nowLogin = 2;
     return {
       inviteName: "",
       invitePanelVisible: false,
       teamMes,
       teamPeople,
       changePerM,
+      isHover,
+      nowLogin,
     }
   },
   methods: {
-    clickCome: function (people) {
-      people.isHover = true
+    clickCome: function (index) {
+      this.isHover.splice(index, 1, true);
     },
-    clickLeave: function (people) {
-      people.isHover = false
+    clickLeave: function (index) {
+      this.isHover.splice(index, 1, false);
     },
     del: function(people) {
       let r=confirm("确认删除吗");
       if (r===true)
       {
-        alert("You pressed OK! del " + people.name);
+        let todo ={
+          user_id : '1',
+          team_id : '3',
+          del_user_id : '2',
+        };
+        this.$axios({
+          method : 'post',
+          url : 'http://43.138.22.20:8000/api/user/deletemember',
+          data : qs.stringify(todo)
+        }).then((res) =>{
+          console.log(res);
+          let ans = res.data;
+          if(ans.errno===0){
+            alert("You pressed OK! del " + people.name);
+          }
+          else {
+            alert("del default ! !");
+          }
+        })
       }
       else
       {
         alert("You pressed Cancel!");
       }
-
     },
     changePer:function (people) {
       this.changePerM = people.name;
@@ -160,11 +178,64 @@ export default {
       },300);
     },
     inviteMember(name){
+      let todo = {
+        user_id : '3',
+        team_id : '3',
+        new_user_id : '8'
+      }
+      this.$axios({
+        method : 'post',
+        url:'http://43.138.22.20:8000/api/user/invitemember',
+        data : qs.stringify(todo),
+      }).then((res) =>{
+        console.log(res);
+        let ans=res.data;
+        if(ans.errno===0){
+          this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
+          this.invitePanelVisible = false;
+          this.inviteName = "";
+        }
+        else {
+          alert("邀请失败!!!");
+        }
+      })
       this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
       this.invitePanelVisible = false;
       this.inviteName = "";
+    },
+    getTeamMessage() {
+      let params = {
+        team_id: 3,
+      };
+      this.$axios
+          .post("http://43.138.22.20:8000/api/user/checkteam", qs.stringify(params))
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    getTeamNumber() {
+      let params = {
+        team_id: 3,
+      };
+      this.$axios
+          .post("http://43.138.22.20:8000/api/user/check_team_user", qs.stringify(params))
+          .then((res) => {
+            console.log(res.data);
+            this.teamPeople = res.data.data;
+            console.log(this.teamPeople);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     }
   },
+  mounted() {
+    this.getTeamMessage();
+    this.getTeamNumber();
+  }
 }
 </script>
 
