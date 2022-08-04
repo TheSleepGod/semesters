@@ -10,7 +10,7 @@
     <el-tabs v-model="activeName" style="width: 76%;margin-left: 12%">
       <el-tab-pane label="团队项目" name="first">
         <div class="cards-container" style="margin-top: 10px">
-          <div class="projectsCard" id="commonPrCard" v-for="item in projectsList" :key="item.data" v-if="item.isRecycled===false"
+          <div class="projectsCard" id="commonPrCard" v-for="item in projectsList" :key="item.data" v-if="item.isRecycled===0"
                @click="gotoProject(item)" @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
             <div class="projectsCardFoot">
               <span class="projectsNameSpan">{{item.name}}</span>
@@ -32,7 +32,7 @@
       </el-tab-pane>
       <el-tab-pane label="项目回收站" name="second">
         <div class="cards-container" style="margin-top: 10px">
-          <div class="projectsCard" id="recyclePrCard" v-for="item in tmpProjectsList" :key="item.data" v-if="item.isRecycled!==false"
+          <div class="projectsCard" id="recyclePrCard" v-for="item in projectsList" :key="item.data" v-if="item.isRecycled!==0"
                @click="gotoProject(item)" @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
             <div class="projectsCardFoot">
               <span class="projectsNameSpan">{{item.name}}</span>
@@ -191,11 +191,36 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success("已移除项目："+item.name)
+        this.recycle(item)
       })
     },
+    recycle(project){
+      this.$axios.post(
+          "http://43.138.22.20:8000/api/user/deleteproject",
+          qs.stringify({
+            project_id: project.id
+          })).then((res)=>{
+            if(res.data.errno===0){
+              this.$message.success("已将项目 "+project.name+" 移入回收站");
+              this.getTeamProjects();
+            } else this.$notify.error(res.data.msg)
+          }).catch((error)=>{
+            console.log(error)
+          })
+    },
     recover(item){
-      this.$message.success("已恢复项目："+item.name)
+      this.$axios.post(
+          "http://43.138.22.20:8000/api/user/reproject",
+          qs.stringify({
+            project_id: item.id,
+          })).then((res)=>{
+            if(res.data.errno===0){
+              this.$message.success("已恢复项目："+item.name)
+              this.getTeamProjects()
+            } else this.$notify.error(res.data.msg)
+          }).catch((error)=>{
+            console.log(error)
+          })
     },
     confirmDelete(item){
       this.$confirm("将彻底删除该项目且无法恢复，是否继续?",'警告',{
@@ -204,8 +229,22 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success("已彻底删除项目："+item.name)
+        this.delete(item)
       })
+    },
+    delete(project){
+      this.$axios.post(
+          "http://43.138.22.20:8000/api/user/delete_project_recycle",
+          qs.stringify({
+            project_id: project.id,
+          })).then((res)=>{
+            if(res.data.errno===0){
+              this.getTeamProjects();
+              this.$message.success("已彻底删除项目 "+project.name)
+            } else this.$notify.error(res.data.msg)
+          }).catch((error)=>{
+            console.log(error)
+          })
     },
     createProject(){
       this.$axios.post(
@@ -239,9 +278,9 @@ export default {
             let array = res.data.data;
             for(let i in array){
               this.projectsList.push({
-                id:array[i].project_id,
-                name:array[i].project_name,
-                isRecycled: false,
+                id: array[i].project_id,
+                name: array[i].project_name,
+                isRecycled: array[i].recycle,
                 isHover: false,
               });
             }
