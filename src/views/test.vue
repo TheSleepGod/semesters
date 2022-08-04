@@ -28,6 +28,7 @@ import vdr from 'vue-draggable-resizable-gorkys'
 import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
 import html2canvas from "html2canvas";
 import qs from "qs";
+import axios from "axios";
 export default {
   components: {vdr},
   data: function () {
@@ -86,6 +87,24 @@ export default {
       a.download = '首页截图'
       a.click()
     },
+    login: function () {
+      axios({
+        url: '/user_web/login',
+        method: 'post',
+        params: {
+          'username': 1,
+          'password': 1,
+        }
+      }).then((ret) => {
+        if (ret.data.errno === 0) {
+          this.$message.success("登录成功");
+          this.$router.push('/team');
+        } else {
+          alert(ret.data.msg);
+          this.$message.error("登录失败");
+        }
+      })
+    },
     test: function () {
       // let params = {
       //   user_id: 0,
@@ -100,13 +119,13 @@ export default {
       //     .catch((error) => {
       //       console.log(error);
       //     });
-      var params = {
+      let params = {
         user_id: 1,
         project_name: 1,
         team_id: 1,
       };
       this.$axios
-          .post("/user/newproject", qs.stringify(params))
+          .post("http://43.138.22.20:8000/api/user/newproject", qs.stringify(params))
           .then((res) => {
             console.log(res);
           })
