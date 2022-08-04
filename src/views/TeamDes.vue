@@ -1,26 +1,29 @@
 <template>
   <div class = "box-body">
-    <!-- 顶部栏（占位-->
-    <div style="height: 100px"></div>
-    <TeamLeft></TeamLeft>
+    <TopBar/>
+    <TeamLeft/>
     <div class = "right-box">
-      <div class = "right-head-box">
+      <div class = "right-head-box font-1">
         <div style="width: 100%;height: 60px">
           <div class = "right-head-name-box">
-            <span class = "font-1 right-head-teamName">{{teamMes.teamName}}</span>
+            <span class = "right-head-teamName">{{teamMes.teamName}}</span>
           </div>
           <div class = "right-head-identity-box">
-            <div class="font-1 right-head-identity-mes" style="width:40%;">身份</div>
-            <div class="font-1 right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='成员'" style="background-color:darkolivegreen;">成 员</div>
-            <div class="font-1 right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='管理员'" style="background-color:darkblue;">管理员</div>
-            <div class="font-1 right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='创建者'" style="background-color:black;color:gold">创建者</div>
+            <div class="right-head-identity-mes" style="width:40%;">身份</div>
+            <div class="right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='成员'" style="background-color:darkolivegreen;">成 员</div>
+            <div class="right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='管理员'" style="background-color:darkblue;">管理员</div>
+            <div class="right-head-identity-mes right-head-identity-mes-idy" v-if="teamMes.myIdentity==='创建者'" style="background-color:black;color:gold">创建者</div>
           </div>
         </div>
         <div class = "right-head-mes-box">
-          <span class="font-1 right-head-mes">
+          <span class="right-head-mes">
             <i class="el-icon-s-grid"></i>
             {{teamMes.teamNumber}}人&nbsp;·&nbsp;{{teamMes.teamWorks}}项目
           </span>
+        </div>
+        <div class="right-head-invite" @click="showInvitePanel">
+          <img id="right-head-invite-icon" src="../assets/bell.png"/>
+          <div> 摇人</div>
         </div>
       </div>
       <hr style="margin:0;background-color:black;height:1px;border:none; background-image: linear-gradient(to right, #333, #333, #ccc);width: 80%" />
@@ -55,15 +58,22 @@
         </div>
       </div>    
     </div>
+
+    <el-dialog title="邀请新成员" :visible.sync="invitePanelVisible" style="width:60%;margin-left: 20%">
+      <el-input v-model="inviteName" placeholder="请输入被邀请者的用户名" maxlength="20" show-word-limit>
+        <el-button slot="append" @click="inviteMember(inviteName)">确认</el-button>
+      </el-input>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import TeamLeft from '../components/ProjectLeft'
+import TeamLeft from '../components/ProjectLeft';
+import TopBar from "@/components/topBar";
 export default {
   name: "TeamDes",
   components: {
-    TeamLeft
+    TeamLeft,TopBar
   },
   data() {
     let teamMes = {
@@ -111,6 +121,8 @@ export default {
     ]
     let changePerM = -1;
     return {
+      inviteName: "",
+      invitePanelVisible: false,
       teamMes,
       teamPeople,
       changePerM,
@@ -137,6 +149,20 @@ export default {
     },
     changePer:function (people) {
       this.changePerM = people.name;
+    },
+    showInvitePanel(){
+      let bell = document.getElementById("right-head-invite-icon");
+      bell.style.height="45px";
+      bell.style.width="45px";
+      setTimeout(()=>{
+        bell.style="";
+        this.invitePanelVisible = true;
+      },300);
+    },
+    inviteMember(name){
+      this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
+      this.invitePanelVisible = false;
+      this.inviteName = "";
     }
   },
 }
@@ -186,8 +212,7 @@ export default {
 }
 .right-head-mes {
   position: relative;
-  float: left;
-  margin-top: 10px;
+  top: 8px;
 }
 .right-head-identity-box {
   position: relative;
@@ -286,7 +311,7 @@ export default {
   transition: all 0.5s;
 }
 .rpm-del-whole:hover{
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+  text-shadow: 0 0 2px #fff, 0 0 4px #fff;
 }
 .rpm-changePer-leftHalf{
   display: inline-block;
@@ -299,7 +324,7 @@ export default {
   transition: all 0.5s;
 }
 .rpm-changePer-leftHalf:hover{
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+  text-shadow: 0 0 2px #fff, 0 0 4px #fff;
 }
 .rpm-del-rightHalf {
   display: inline-block;
@@ -312,7 +337,7 @@ export default {
   transition: all 0.25s;
 }
 .rpm-del-rightHalf:hover{
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+  text-shadow: 0 0 2px #fff, 0 0 4px #fff;
 }
 .rpm-per-icon {
   height: 30px;
@@ -344,5 +369,34 @@ export default {
   32%{transform: rotate(35deg)}
   100%{transform: rotate(35deg)}
 }
-
+.right-head-invite{
+  margin-top: -40px;
+  width: 80px;
+  font-size: 22px;
+  margin-left: 80%;
+  transition: all 0.25s;
+}
+.right-head-invite:hover{
+  background-color: whitesmoke;
+  border-radius: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+#right-head-invite-icon{
+  width: 25px;
+  height: 25px;
+  transition: all 0.25s;
+}
+.right-head-invite:hover #right-head-invite-icon{
+  width: 35px;
+  height: 35px;
+  animation: bell-everShake 0.4s infinite linear;
+}
+@keyframes bell-everShake {
+  0%{transform: rotate(0)}
+  25%{transform: rotate(-45deg)}
+  50%{transform: rotate(0)}
+  75%{transform: rotate(45deg)}
+  100%{transform: rotate(0)}
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button  size="mini" title="生成图片" @click="toImage()" icon="el-icon-download"></el-button>
+    <el-button  size="mini" title="生成图片" @click="test()" icon="el-icon-download"></el-button>
   <div style="height: 600px; width: 1000px; border: 1px solid red; position: relative;" ref="imageToFile">
     <vdr :w="100" :h="100" v-on:dragging="onDrag" v-on:resizing="onResize" :parent="true" >
       <p>Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
@@ -27,6 +27,7 @@
 import vdr from 'vue-draggable-resizable-gorkys'
 import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
 import html2canvas from "html2canvas";
+import qs from "qs";
 export default {
   components: {vdr},
   data: function () {
@@ -85,6 +86,34 @@ export default {
       a.download = '首页截图'
       a.click()
     },
+    test: function () {
+      // let params = {
+      //   user_id: 0,
+      //   project_name: "test",
+      //   team_id: 1,
+      // };
+      // this.$axios
+      //     .post("/user/newproject", qs.stringify(params))
+      //     .then((res) => {
+      //       console.log(res);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
+      var params = {
+        user_id: 1,
+        project_name: 1,
+        team_id: 1,
+      };
+      this.$axios
+          .post("/user/newproject", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
   }
 }
 </script>

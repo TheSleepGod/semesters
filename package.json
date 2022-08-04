@@ -12,6 +12,7 @@
   "dependencies": {
     "@wangeditor/editor": "^5.1.14",
     "@wangeditor/editor-for-vue": "^1.0.2",
+    "axios": "^0.27.2",
     "chalk": "^5.0.1",
     "core-js": "^3.24.1",
     "element-ui": "^2.15.9",
@@ -23,6 +24,7 @@
     "lodash": "^4.17.21",
     "node-sass": "^7.0.1",
     "ora": "^6.1.2",
+    "qs": "^6.11.0",
     "sass-loader": "^13.0.2",
     "showdown": "^2.1.0",
     "sortablejs": "^1.15.0",

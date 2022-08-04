@@ -2,20 +2,20 @@
   <div>
     <div class="top_head">
       <div class="top_head_left">
-          <i class="el-icon-arrow-left"></i>
-          <div class="go_back">
-              返回
-          </div>
-          <div class="item_name">
-              {{itemName}}
-          </div>
-          <div class="item_member" v-for="item in itemMembers" :title="item.name">
-              <img class="member_picture" :src="item.img" alt=""/>
-          </div>
+        <i class="el-icon-arrow-left" style="cursor: pointer" @click="goBack"></i>
+        <div class="go_back" style="cursor: pointer" @click="goBack">
+            返回
+        </div>
+        <div class="item_name">
+            {{itemName}}
+        </div>
+        <div class="item_member" v-for="item in itemMembers" :title="item.name">
+            <img class="member_picture" :src="item.img" alt=""/>
+        </div>
       </div>
       <div class="top_head_middle">
           <router-link to="/editWord/word">文档</router-link>
-          <router-link to="/editWord/design" >设计图</router-link>
+          <router-link to="/editWord/design" >原型图</router-link>
           <router-link to="/editWord/UML">绘制UML图</router-link>
       </div>
     </div>
@@ -34,6 +34,15 @@ export default {
         {img:require("../assets/logo.png"),name:"member2"}
       ],
     }
+  },
+  methods: {
+    goBack() {
+      this.$router.back()
+    }
+  },
+  mounted() {
+    //this.$router.push('./editWord/word')
+    this.goBack();
   }
 }
 </script>
@@ -67,6 +76,7 @@ a{
   color: #eef0f4;
   background: #283142;
   line-height: 50px;
+  caret-color: transparent;
 }
 
 .top_head_left {

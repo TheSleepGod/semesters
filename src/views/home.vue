@@ -1,8 +1,10 @@
 <template>
   <div id="all">
-    <div id="topBar" style="background-color: white;height: 80px;margin: -8px;padding: 0;border: 1px solid #EEEEEE;text-align:center">
-      <span><img src="../assets/logo.svg" height="80px" style="margin-left: 0;position: relative;float: left" alt=""></span>
-      <span><el-button type="danger" @click="outerVisible = true" style="margin-left: 0;position: relative;float: right;top: 20px;right: 20px" round>登录/注册</el-button></span>
+    <div id="topBar-login">
+      <div class="webLogo-box">
+        <img src="../assets/moshulogo.png" class="webLogo" alt="">
+      </div>
+      <span><el-button type="danger" @click="outerVisible = true" style="margin-left: 0;position: relative;float: right;top: 10px;right: 20px" round>登录/注册</el-button></span>
     </div>
     <div id="main">
       <div class="name">团队项目管理</div>
@@ -50,7 +52,7 @@
         </span>
       </el-dialog>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" style="margin-right: 70px">登 录</el-button>
+        <el-button type="primary" style="margin-right: 70px" @click="login">登 录</el-button>
 <!--        <el-button @click="outerVisible = false">取 消</el-button>-->
 <!--        <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>-->
         <a id="toRegister" @click="innerVisible = true">还未注册？点这里去注册</a>
@@ -119,19 +121,38 @@ export default {
         verifyCode: [{required: true, message: '请输入验证码', trigger: 'blur'}]
       },
     };
+  },
+  methods:{
+    login(){
+      this.$router.push('/team');
+    }
   }
 }
 </script>
 
 <style scoped>
-
+#topBar-login{
+  background-color: white;
+  height: 70px;
+  padding: 0;
+  text-align:center;
+}
+.webLogo-box{
+  float: left;
+  height: 70px;
+  width: 100px;
+  margin-left: 10px;
+}
+.webLogo{
+  margin-top: 2px;
+  height: 60px;
+}
 #main{
   background-image:url('../assets/mainBk.png');
   background-size: 100% 100%;
   background-position: center center;
   width: 100%;
   height: 710px;
-  margin-top: 10px;
   /*background-color: #42b983;*/
 }
 
