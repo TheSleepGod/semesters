@@ -164,7 +164,6 @@ export default {
       {
         alert("You pressed Cancel!");
       }
-
     },
     changePer:function (people) {
       this.changePerM = people.name;
