@@ -42,7 +42,6 @@ export default {
   },
   mounted() {
     //this.$router.push('./editWord/word')
-    this.goBack();
   }
 }
 </script>
