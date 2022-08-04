@@ -64,6 +64,8 @@
 import TeamLeft from "@/components/ProjectLeft";
 import TopBar from "@/components/topBar";
 import qs from "qs";
+import topBar from "@/components/topBar";
+import axios from "axios";
 export default {
   components: {
     TeamLeft,TopBar
@@ -71,6 +73,7 @@ export default {
   name: "ProjectsView",
   data(){
     return{
+      username: "",
       userId: 1,
       newProjectVisible: false,
       iconVisible: false,
@@ -150,10 +153,26 @@ export default {
       ]
     }
   },
+  created() {
+    this.getNowUser()
+  },
   mounted() {
     this.getTeamProjects()
   },
   methods:{
+    getNowUser() {
+      this.$axios.post(
+        'http://101.42.160.94:8000/api/user_web/get_user',
+      ).then((ret) => {
+        if (ret.data.errno === 0) {
+          console.log(ret.data.username);
+          this.username = ret.data.username;
+        } else {
+          console.log("ERROR!");
+          alert(ret.data.msg);
+        }
+      })
+    },
     beClose(){this.newProjectVisible=false;this.renameVisible=false},
     showCreateProject(){this.newProjectVisible=true},
     showRename(item){
@@ -274,7 +293,7 @@ export default {
             team_id: this.team.teamId,
           }))
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             let array = res.data.data;
             for(let i in array){
               this.projectsList.push({
