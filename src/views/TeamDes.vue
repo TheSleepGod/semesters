@@ -18,7 +18,7 @@
         <div class = "right-head-mes-box">
           <span class="right-head-mes">
             <i class="el-icon-s-grid"></i>
-            {{teamMes.teamNumber}}人&nbsp;·&nbsp;{{teamMes.teamWorks}}项目
+            团队简介:{{teamMes.team_intro}}
           </span>
         </div>
         <div class="right-head-invite" @click="showInvitePanel">
@@ -92,30 +92,9 @@ export default {
       teamName: "啊对对队",
       teamNumber: 6,
       teamWorks: 9,
+      team_intro:'',
     };
-    let teamPeople = [
-        {
-          tel: "15536833281",
-          mail: "1634504737@qq.com",
-          real_name: "hhw",
-          identity: "管理员",
-          user_name: 1,
-        },
-      {
-        tel: "15536833281",
-        mail: "1634504737@qq.com",
-        real_name: "hhw",
-        identity: "创建者",
-        user_name: 1,
-      },
-      {
-        tel: "15536833281",
-        mail: "1634504737@qq.com",
-        real_name: "hhw",
-        identity: "成员",
-        user_name: 1,
-      },
-    ]
+    let teamPeople = [];
     let changePerM = -1;
     let isHover = [false,false,false,false,false,false,false,false,false,false,false];
     let nowLogin = 2;
@@ -152,7 +131,7 @@ export default {
           url : 'http://43.138.22.20:8000/api/user/deletemember',
           data : qs.stringify(todo)
         }).then((res) =>{
-          console.log(res);
+          //console.log(res);
           let ans = res.data;
           if(ans.errno===0){
             alert("You pressed OK! del " + people.name);
@@ -190,7 +169,7 @@ export default {
         url:'http://43.138.22.20:8000/api/user/invitemember',
         data : qs.stringify(todo),
       }).then((res) =>{
-        console.log(res);
+        //console.log(res);
         let ans=res.data;
         if(ans.errno===0){
           this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
@@ -212,12 +191,18 @@ export default {
       this.$axios
           .post("http://43.138.22.20:8000/api/user/checkteam", qs.stringify(params))
           .then((res) => {
-            console.log(res.data);
+            //console.log(res.data);
+            let ans=res.data;
+            if(ans.errno===0){
+              this.teamMes.teamName=ans.data.name;
+              this.teamMes.team_intro=ans.data.introduction;
+            }
           })
           .catch((error) => {
             console.log(error);
           });
     },
+
     getTeamNumber() {
       let params = {
         team_id: this.team_id,
@@ -225,18 +210,14 @@ export default {
       this.$axios
           .post("http://43.138.22.20:8000/api/user/check_team_user", qs.stringify(params))
           .then((res) => {
-            console.log(res.data);
+            //console.log(res.data);
             this.teamPeople = res.data.data;
-            console.log(this.teamPeople);
+            //console.log(this.teamPeople);
           })
           .catch((error) => {
             console.log(error);
           });
     }
-  },
-  mounted() {
-    this.getTeamMessage();
-    this.getTeamNumber();
   },
   created() {
     this.$axios({
@@ -245,8 +226,15 @@ export default {
     }).then((res) =>{
       console.log(res);
       this.user_id=res.data.data;
+      for(let i in this.teamPeople){
+        if(this.user_id==this.teamPeople[i].user_id){
+          this.teamMes.myIdentity=this.teamPeople[i].identity;
+        }
+      }
       console.log(this.user_id);
     })
+    this.getTeamMessage();
+    this.getTeamNumber();
   }
 }
 </script>

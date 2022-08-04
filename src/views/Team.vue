@@ -147,9 +147,9 @@ export default {
       this.$axios({
         method : 'post',
         url : 'http://101.42.160.94:8000/api/user_web/update_user',
-        data : qs.stringify(toSend)
+        data : JSON.stringify(toSend)
       }).then((res) =>{
-        console.log(res);
+        //console.log(res);
         let ans = res.data;
         if(ans.errno===0){
           this.$message({
@@ -179,7 +179,7 @@ export default {
         url : 'http://43.138.22.20:8000/api/user/newteam',
         data : qs.stringify(toSend)
       }).then((res) =>{
-        console.log(res);
+        //console.log(res);
         let ans=res.data;
         if(ans.errno === 0){
           alert("创建成功！！！");
@@ -204,10 +204,10 @@ export default {
         url : 'http://43.138.22.20:8000/api/user/check_user_team',
         data : qs.stringify(toSend)
       }).then((res) =>{
-        console.log(res);
+        //console.log(res);
         let ans = res.data;
         let rec =res.data.data;
-        console.log(rec);
+        //console.log(rec);
         if(ans.errno==0){
           for(let i in rec){
             that.addedTeam.push({
@@ -232,7 +232,7 @@ export default {
         url : 'http://43.138.22.20:8000/api/user/check_user_create_team',
         data : qs.stringify(toSend)
       }).then((res) =>{
-        console.log(res);
+        //console.log(res);
         let ans =res.data;
         let rec =ans.data;
         if(ans.errno==0){
