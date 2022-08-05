@@ -19,19 +19,19 @@
         <div class="left-changeMesForm">
           <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">昵称</span>
-            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" />
+            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" disabled="true" style="cursor:not-allowed"/>
           </div>
           <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">邮箱</span>
-            <input type="text" placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" />
+            <input type="text" placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" disabled="true" style="cursor:not-allowed"/>
           </div>
           <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">真实姓名</span>
-            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" />
+            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" v-model="newName"/>
           </div>
           <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">电话</span>
-            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" />
+            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" v-model="newPhone"/>
           </div>
           <div style="height: 50px;">
             <button class="changeMesForm-btn" style="margin-left: 20%;" @click="changeOk">保存</button>
@@ -85,7 +85,6 @@
 <script>
 import topBar from "@/components/topBar";
 import qs from "qs";
-import axios from "axios";
 export default {
   components:{
     topBar
@@ -98,6 +97,8 @@ export default {
     return {
       username: '',
       newTeamName: "",
+      newName:'',
+      newPhone:'',
       user_id:1,
       newTeamVisible: false,
       createdTeam,
@@ -139,15 +140,25 @@ export default {
     },
     changeOk: function() { //修改个人资料
       let toSend = {
-
+        new_phone : this.newPhone,
+        new_name : this.newName
       };
       this.$axios({
         method : 'post',
-        url : 'http://',
-        data : qs.stringify(toSend)
+        url : 'http://101.42.160.94:8000/api/user_web/update_user',
+        data : JSON.stringify(toSend)
       }).then((res) =>{
-        console.log(res);
+        //console.log(res);
         let ans = res.data;
+        if(ans.errno===0){
+          this.$message({
+            message: '修改成功！！！',
+            type: 'success'
+          });
+        }
+        else {
+          this.$message.error('修改失败！！！');
+        }
       })
       this.closeChangeMesForm();
     },
@@ -167,97 +178,83 @@ export default {
         url : 'http://43.138.22.20:8000/api/user/newteam',
         data : qs.stringify(toSend)
       }).then((res) =>{
-        console.log(res);
+        //console.log(res);
         let ans=res.data;
         if(ans.errno === 0){
           alert("创建成功！！！");
+          this.newTeamVisible = false;
+          this.newTeamName = "";
+          this.getAddedTeam();
+          this.getCreatedTeam();
         }
         else {
           alert("创建失败！！！");
         }
       })
     },
-    // getNowUser() {
-    //   console.log(111)
-    //   let con = {};
-    //   console.log(this.username);
-    //   axios({
-    //     url: 'http://101.42.160.94:8000/api/user_web/get_user',
-    //     method: 'post',
-    //     data: JSON.stringify(con),
-    //   }).then((ret) => {
-    //     if (ret.data.errno === 0) {
-    //       console.log(ret.data.data.username);
-    //       this.username = ret.data.data.username;
-    //     } else {
-    //       console.log("ERROR!");
-    //       alert(ret.data.msg);
-    //     }
-    //   })
-    // },
-    getNowUser() {
-      axios({
-        url: 'http://101.42.160.94:8000/api/user_web/get_user',
-        method: 'post',
-        params: {
+    getAddedTeam(){
+      this.addedTeam = [];
+      let toSend = {
+        user_id: this.user_id
+      }
+      let that = this;
+      this.$axios({
+        method : 'post',
+        url : 'http://43.138.22.20:8000/api/user/check_user_team',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        //console.log(res);
+        let ans = res.data;
+        let rec =res.data.data;
+        console.log(rec);
+        if(ans.errno===0){
+          for(let i in rec){
+            that.addedTeam.push({
+              id : rec[i].team_id,
+              teamName: rec[i].name,
+              teamNumber: rec[i].count
+            });
+          }
         }
-      }).then((ret) => {
-        console.log(ret);
+        else {
+          alert("页面加载错误 ! ! !");
+        }
       })
     },
+    getCreatedTeam(){
+      this.createdTeam = [];
+      let toSend = {
+        user_id: this.user_id
+      }
+      this.$axios({
+        method : 'post',
+        url : 'http://43.138.22.20:8000/api/user/check_user_create_team',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        //console.log(res);
+        let ans =res.data;
+        let rec =ans.data;
+        if(ans.errno===0){
+          for(let i in rec){
+            this.createdTeam.push({
+              id : rec[i].team_id,
+              teamName: rec[i].name,
+              teamNumber: rec[i].count
+            })
+          }
+        }
+        else {
+          alert("页面加载错误 ! ! !");
+        }
+      })
+    }
   },
   mounted() {
     this.showAdded();
   },
   created() {
-    this.getNowUser();
-    let toSend = {
-      user_id: this.user_id
-    }
-    let that = this;
-    this.$axios({
-      method : 'post',
-      url : 'http://43.138.22.20:8000/api/user/check_user_team',
-      data : qs.stringify(toSend)
-    }).then((res) =>{
-      console.log(res);
-      var ans = res.data;
-      var rec =res.data.data;
-      console.log(rec);
-      if(ans.errno==0){
-        for(let i in rec){
-            that.addedTeam.push({
-                id : rec[i].team_id,
-                teamName: rec[i].name,
-                teamNumber: rec[i].count
-            });
-        }
-      }
-      else {
-        alert("页面加载错误 ! ! !");
-      }
-    })
-    this.$axios({
-      method : 'post',
-      url : 'http://',
-      data : qs.stringify(toSend)
-    }).then((res) =>{
-      console.log(res);
-      let ans =res.data;
-      let rec =ans.data;
-      if(ans.errno==0){
-        for(let i in rec){
-          this.addedTeam.push({
-            id : rec[i].team_id,
-            teamName: rec[i].name,
-            teamNumber: rec[i].count
-          })
-        }
-      }
-      else {
-        alert("页面加载错误 ! ! !");
-      }
-    })
+    this.getAddedTeam();
+    this.getCreatedTeam();
   }
 }
 </script>
@@ -323,7 +320,6 @@ export default {
   width: 75%;
 }
 .right-head-box {
-
 }
 .right-head-title{
   font-size: 28px;
@@ -471,9 +467,3 @@ export default {
   transition: all 0.75s;
 }
 </style>
-
-
-
-
-
-
