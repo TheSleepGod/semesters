@@ -17,7 +17,7 @@
           <el-input v-model="loginForm.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password"></el-input>
+          <el-input v-model="loginForm.password" show-password></el-input>
         </el-form-item>
       </el-form>
       <el-dialog
@@ -158,7 +158,7 @@ export default {
           this.$message.success("登录成功");
           this.$router.push('/team');
         } else {
-          alert(ret.data.msg);
+          this.$notify.error(ret.data.msg);
           this.$message.error("登录失败");
         }
       })
@@ -197,7 +197,7 @@ export default {
         if (ret.data.errno === 0) {
           this.$message.success("发送成功");
         } else {
-          alert(ret.data.msg);
+          this.$notify.error(ret.data.msg);
           this.$message.error("发送失败");
         }
       })

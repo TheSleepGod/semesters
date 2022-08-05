@@ -18,7 +18,8 @@
         <div class = "right-head-mes-box">
           <span class="right-head-mes">
             <i class="el-icon-s-grid"></i>
-            团队简介:{{teamMes.team_intro}}
+<!--            团队人数：{{teamPeople.size}} 人<el-divider direction="vertical"/>-->
+            团队简介：{{teamMes.team_intro}}
           </span>
         </div>
         <div class="right-head-invite" @click="showInvitePanel">
@@ -92,9 +93,11 @@ export default {
       teamName: "",
       teamNumber: 6,
       teamWorks: 9,
-      team_intro:'',
+      team_intro:'这个团队很懒，什么也没有留下~',
     };
-    let teamPeople = [];
+    let teamPeople = [{
+      identity: '',
+    }];
     let changePerM = -1;
     let isHover = [false,false,false,false,false,false,false,false,false,false,false];
     let nowLogin = 0;
@@ -135,16 +138,10 @@ export default {
           console.log(res);
           let ans = res.data;
           if(ans.errno===0){
-            alert("You pressed OK! del " + people.name);
+            this.$message.success("You pressed OK! del " + people.name);
           }
-          else {
-            alert("del default ! !");
-          }
+          else this.$notify.error(ans.msg)
         })
-      }
-      else
-      {
-        alert("You pressed Cancel!");
       }
     },
     changePer:function (people) {
@@ -177,13 +174,8 @@ export default {
           this.invitePanelVisible = false;
           this.inviteName = "";
         }
-        else {
-          alert("邀请失败!!!");
-        }
+        else this.$notify.error("邀请失败;"+ans.msg)
       })
-      this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
-      this.invitePanelVisible = false;
-      this.inviteName = "";
     },
     getTeamMessage() {
       let params = {

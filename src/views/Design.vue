@@ -1,11 +1,12 @@
 <!-- drag-test -->
 <template>
   <div class="drag-test" style="margin-top: 50px" contenteditable="false">
+    <topBar/>
     <div class="controls-list" contenteditable="false">
       <div style="display: inline-grid;margin-left: 25px;margin-top:15px;margin-bottom: 15px;font-size: 20px">组件栏</div>
       <div style="display: inline-grid;float: right;margin-top: 15px">
         <el-button  size="mini" title="生成图片" circle @click="toImage()" icon="el-icon-download"/>
-        <el-button  size="mini" title="保存" circle @click="saveState()" icon="el-icon-download"/>
+        <!--        <el-button  size="mini" title="保存" circle @click="saveState()" icon="el-icon-download"/>-->
       </div>
       <el-collapse accordion>
         <el-collapse-item>
@@ -264,7 +265,7 @@
                   <img src="../assets/search.png" alt="">
                   <p class="icon-name">搜索</p>
                 </div>
-                </div>
+              </div>
             </el-collapse-item>
             <el-collapse-item>
               <template slot="title">
@@ -423,8 +424,8 @@
           :y="item.y"
           :isActive="true"
           :isResizable="true"
-          @resizestop="onResizstop"
-          @dragstop="onDragstop"
+          @resizestop="onResizeStop"
+          @dragstop="onDragStop"
           @activated="onActivated"
           @clicked="clickHandle"
       >
@@ -443,6 +444,41 @@
         </div>
       </vue-draggable-resizable>
     </div>
+    <div class="set-wrap">
+      <div class="control-set-item">
+        <p class="title">X</p>
+        <el-input
+            size="mini"
+            v-model="inputX"
+            @change="setX()"
+        ></el-input>
+      </div>
+      <div class="control-set-item">
+        <p class="title">Y</p>
+        <el-input
+            size="mini"
+            v-model="inputY"
+            @change="setY()"
+        ></el-input>
+      </div>
+      <div class="control-set-item">
+        <p class="title">Height</p>
+        <el-input
+            size="mini"
+            v-model="inputHeight"
+            @change="setHeight()"
+        ></el-input>
+      </div>
+      <div class="control-set-item">
+        <p class="title">Width</p>
+        <el-input
+            size="mini"
+            v-model="inputWidth"
+            @change="setWidth()"
+        ></el-input>
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -455,6 +491,12 @@ export default {
   components: { VueDraggableResizable },
   data() {
     return {
+
+      inputHeight: '',
+      inputWidth: '',
+      inputX: '',
+      inputY: '',
+
       activedId: '', // 编辑实例的id
       activedType: '', // 编辑实例的类型
       commonClassName: 'target', // 确保点击其它非控件元素时，已激活的控件不失去焦点,作为单选高亮判定标准
@@ -462,57 +504,6 @@ export default {
       controlsArr: [
         // 所有控件数组
       ],
-      fontSizeOptions: [
-        {
-          label: '初号',
-          value: 0
-        },
-        {
-          label: '小初',
-          value: 1
-        },
-        {
-          label: '一号',
-          value: 2
-        },
-        {
-          label: '小一',
-          value: 3
-        },
-        {
-          label: '二号',
-          value: 4
-        },
-        {
-          label: '小二',
-          value: 5
-        },
-        {
-          label: '三号',
-          value: 6
-        },
-        {
-          label: '小三',
-          value: 7
-        },
-        {
-          label: '四号',
-          value: 8
-        },
-        {
-          label: '小四',
-          value: 9
-        },
-        {
-          label: '五号',
-          value: 10
-        },
-        {
-          label: '小五',
-          value: 11
-        }
-      ],
-      signatoryOptions: [],
       textVal: '',
       fontSizeValue: 10, // 默认5号 14px
       signatory: 0, // 默认甲方
@@ -645,26 +636,41 @@ export default {
     onActivated(customId) {
       // console.log(customId);
       // 点击 赋值
-      this.activedId && this.setVal(this.textVal);
       this.activedId = customId;
       let editIndex = this.getEditIndex();
       this.activedType = this.controlsArr[editIndex].type;
-      this.textVal = this.controlsArr[editIndex].name; // 设置文本名称
-      this.signatory = this.controlsArr[editIndex].signatory; // 设置签署方
-      // 设置签字号
-      if (['text', 'date', 'select'].includes(this.activedType)) {
-        this.fontSizeValue = this.controlsArr[editIndex].fontsSize;
-      } else {
-        this.fontSizeValue = 10;
-      }
+      this.inputX = this.controlsArr[editIndex].x;
+      this.inputY = this.controlsArr[editIndex].y;
+      this.inputWidth = this.controlsArr[editIndex].width;
+      this.inputHeight = this.controlsArr[editIndex].height;
+    },
+    setHeight() {
+      let editIndex = this.getEditIndex();
+      this.controlsArr[editIndex].height = this.inputHeight;
+    },
+    setWidth() {
+      let editIndex = this.getEditIndex();
+      this.controlsArr[editIndex].width = this.inputWidth;
+    },
+    setX() {
+      let editIndex = this.getEditIndex();
+      this.controlsArr[editIndex].x = this.inputX;
+    },
+    setY() {
+      let editIndex = this.getEditIndex();
+      this.controlsArr[editIndex].y = this.inputY;
     },
     // 缩放结束
-    onResizstop(left, top, width, height, customId) {
-      // console.log(left, top, width, height, customId);
+    onResizeStop(left, top, width, height, customId) {
+      this.inputHeight = height;
+      this.inputWidth = width;
+      this.inputX = left;
+      this.inputY = top;
     },
     // 拖动结束
-    onDragstop(left, top, customId) {
-      // console.log(left, top, customId);
+    onDragStop(left, top, customId) {
+      this.inputX = left;
+      this.inputY = top;
     },
     // 文本编辑完成
     // textChange(val) {
@@ -699,6 +705,7 @@ export default {
           height: 30,
           x: x,
           y: y,
+          className: 'lq-draggable-text',
           type: 'text', // 控件类型
           rotation: 0,
         },
@@ -853,7 +860,7 @@ export default {
       // 如果是在网页中可以直接创建一个 a 标签直接下载
       let a = document.createElement('a')
       a.href = url
-      a.download = '首页截图'
+      a.download = '原型图'
       a.click()
       console.log("图片生成成功")
     },
@@ -877,7 +884,7 @@ export default {
     border: solid 1px #000000;
     box-shadow:2px 2px 10px #909090;
     border-radius: 5px;
-    width: 220px;
+    width: 250px;
     padding: 0 10px;
     //border-right: solid 1px rgb(105, 103, 103);
     margin-right: 10px;
@@ -902,7 +909,7 @@ export default {
   box-shadow:2px 2px 10px #909090;
   border-radius: 5px;
   margin-left: 0;
-  width: 1370px;
+  width: 1300px;
   height: 100%;
   border: solid 1px #000000;
   position: relative;
@@ -998,9 +1005,12 @@ export default {
   }
 }
 .set-wrap {
-  width: 230px;
+  box-shadow:2px 2px 10px #909090;
+  border-radius: 5px;
+  width: 180px;
   padding: 0 10px;
-  border-left: solid 1px rgb(105, 103, 103);
+  border: solid 1px #000000;
+  margin-left: 10px;
   .control-set-item {
     margin-bottom: 20px;
     .title {
