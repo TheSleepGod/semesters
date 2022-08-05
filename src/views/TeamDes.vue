@@ -18,7 +18,8 @@
         <div class = "right-head-mes-box">
           <span class="right-head-mes">
             <i class="el-icon-s-grid"></i>
-            团队简介:{{teamMes.team_intro}}
+<!--            团队人数：{{teamPeople.size}} 人<el-divider direction="vertical"/>-->
+            团队简介：{{teamMes.team_intro}}
           </span>
         </div>
         <div class="right-head-invite" @click="showInvitePanel">
@@ -92,7 +93,7 @@ export default {
       teamName: "",
       teamNumber: 6,
       teamWorks: 9,
-      team_intro:'',
+      team_intro:'这个团队很懒，什么也没有留下~',
     };
     let teamPeople = [];
     let changePerM = -1;
