@@ -48,85 +48,85 @@
             </div>
           </div>
         </el-collapse-item>
-        <el-collapse-item>
-          <template slot="title">
-            figure 图形
-          </template>
-          <div id="figure" style="overflow-y: scroll;width: 220px;height: 200px;" contenteditable="false">
-            <div
-                :class="commonClassName"
-                @click="addControl(1)"
-                class="controls-item controls-text"
-            >
-              <img src="../assets/rectangle.png" alt="">
-              <p class="icon-name">矩形</p>
-            </div>
-            <div
-                :class="commonClassName"
-                @click="addControl(6)"
-                class="controls-item controls-text"
-            >
-              <img src="../assets/round-rectangle.png" alt="">
-              <p class="icon-name">圆角矩形</p>
-            </div>
-            <div
-                :class="commonClassName"
-                class="controls-item controls-text"
-                @click="addControl(7)"
-            >
-              <img src="../assets/triangle.png" alt="">
-              <p class="icon-name">三角形</p>
-            </div>
-            <div
-                :class="commonClassName"
-                class="controls-item controls-select"
-                @click="addControl(3)"
-            >
-              <img src="../assets/line.png" alt="">
-              <p class="icon-name">直线</p>
-            </div>
-            <div
-                :class="commonClassName"
-                class="controls-item controls-select"
-                @click="addControl(8)"
-            >
-              <img src="../assets/rhombus.png" alt="">
-              <p class="icon-name">菱形</p>
-            </div>
-            <div
-                :class="commonClassName"
-                class="controls-item controls-select"
-                @click="addControl(3)"
-            >
-              <img src="../assets/hexagon.png" alt="">
-              <p class="icon-name">六边形</p>
-            </div>
-            <div
-                :class="commonClassName"
-                class="controls-item controls-select"
-                @click="addControl(3)"
-            >
-              <img src="../assets/octagon.png" alt="">
-              <p class="icon-name">八边形</p>
-            </div>
-            <div
-                :class="commonClassName"
-                class="controls-item controls-select"
-                @click="addControl(3)"
-            >
-              <img src="../assets/cube.png" alt="">
-              <p class="icon-name">正方体</p>
-            </div>
-            <div
-                :class="commonClassName"
-                class="controls-item controls-select"
-                @click="addControl(3)"
-            >
-              <img src="../assets/black-triangle.png" alt="">
-              <p class="icon-name">实心三角箭头</p>
-            </div>
-          </div>
-        </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          figure 图形
+        </template>
+        <div id="figure" style="overflow-y: scroll;width: 220px;height: 200px;" contenteditable="false">
+        <div
+            :class="commonClassName"
+            @click="addControl(1)"
+            class="controls-item controls-text"
+        >
+          <img src="../assets/rectangle.png" alt="">
+          <p class="icon-name">矩形</p>
+        </div>
+        <div
+            :class="commonClassName"
+            @click="addControl(6)"
+            class="controls-item controls-text"
+        >
+          <img src="../assets/round-rectangle.png" alt="">
+          <p class="icon-name">圆角矩形</p>
+        </div>
+        <div
+            :class="commonClassName"
+            class="controls-item controls-text"
+            @click="addControl(7)"
+        >
+          <img src="../assets/triangle.png" alt="">
+          <p class="icon-name">三角形</p>
+        </div>
+        <div
+            :class="commonClassName"
+            class="controls-item controls-select"
+            @click="addControl(11)"
+        >
+          <img src="../assets/line.png" alt="">
+          <p class="icon-name">直线</p>
+        </div>
+          <div
+              :class="commonClassName"
+              class="controls-item controls-select"
+              @click="addControl(9)"
+          >
+          <img src="../assets/rhombus.png" alt="">
+          <p class="icon-name">菱形</p>
+        </div>
+        <div
+            :class="commonClassName"
+            class="controls-item controls-select"
+            @click="addControl(10)"
+        >
+          <img src="../assets/button-use.png" alt="" style="height: 60px; width: 60px;" >
+          <p class="icon-name">按钮</p>
+        </div>
+        <div
+            :class="commonClassName"
+            class="controls-item controls-select"
+            @click="addControl(10)"
+        >
+          <img src="../assets/octagon.png" alt="">
+          <p class="icon-name">八边形</p>
+        </div>
+        <div
+            :class="commonClassName"
+            class="controls-item controls-select"
+            @click="addControl(3)"
+        >
+          <img src="../assets/cube.png" alt="">
+          <p class="icon-name">正方体</p>
+        </div>
+        <div
+            :class="commonClassName"
+            class="controls-item controls-select"
+            @click="addControl(3)"
+        >
+          <img src="../assets/black-triangle.png" alt="">
+          <p class="icon-name">实心三角箭头</p>
+        </div>
+        </div>
+      </el-collapse-item>
         <el-collapse-item>
           <template slot="title">
             icon 图标
@@ -429,6 +429,7 @@
           @activated="onActivated"
           @clicked="clickHandle"
       >
+        <span v-if = "item.type === 'button'" style="top: 10px; position: center">按钮</span>
         <div :class="commonClassName" class="inner-container" v-if = "false">
           {{ filterSignatory(item.signatory)
           }}<span class="name">({{ item.name }})</span>
@@ -554,6 +555,14 @@ export default {
           className = 'lq-draggable-rhombus';
           handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
+        case 'button':
+          className = 'lq-draggable-button';
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
+          break;
+        case 'line':
+          className = 'lq-draggable-line'
+          handles = ['mr', 'ml'];
+          break;   
         default:
           break;
       }
@@ -698,10 +707,7 @@ export default {
           y: y,
           className: 'lq-draggable-text',
           type: 'text', // 控件类型
-          handles: ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'],
-          name: '文本框',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
+          rotation: 0,
         },
         2: {
           customId: Date.now(),
@@ -710,8 +716,7 @@ export default {
           x: 0,
           y: 140,
           type: 'seal', // 控件类型
-          name: '印章',
-          signatory: 0 // 签署方默认甲方
+          rotation: 0,
         },
         3: {
           customId: Date.now(),
@@ -720,8 +725,7 @@ export default {
           x: 0,
           y: 260,
           type: 'sign', // 控件类型
-          name: '签名',
-          signatory: 0 // 签署方默认甲方
+          rotation: 0,
         },
         4: {
           customId: Date.now(),
@@ -730,9 +734,7 @@ export default {
           x: 0,
           y: 380,
           type: 'date', // 控件类型
-          name: '日期',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
+          rotation: 0,
         },
         5: {
           customId: Date.now(),
@@ -741,9 +743,7 @@ export default {
           x: 200,
           y: 380,
           type: 'select', // 控件类型
-          name: '选项',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
+          rotation: 0,
         },
         6: {
           customId: Date.now(),
@@ -752,9 +752,7 @@ export default {
           x: 200,
           y: 380,
           type: 'rr', // 控件类型 圆角矩形
-          name: '圆角矩形',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
+          rotation: 0,
         },
         7: {
           customId: Date.now(),
@@ -762,10 +760,8 @@ export default {
           height: 80,
           x: 200,
           y: 380,
-          type: 'tri', // 控件类型 三角形
-          name: '三角形',
-          fontsSize: 10,
-          signatory: 0,
+          type: 'tri', // 控件类型 圆角矩形
+          rotation: 180,
         },
         8: {
           customId: Date.now(),
@@ -773,10 +769,8 @@ export default {
           height: 80,
           x: 200,
           y: 380,
-          type: 'circle', // 控件类型 圆形
-          name: '圆形',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
+          type: 'rot', // 控件类型 圆角矩形
+          rotation: 0,
         },
         9: {
           customId: Date.now(),
@@ -785,9 +779,25 @@ export default {
           x: 200,
           y: 380,
           type: 'rhombus', // 控件类型 菱形
-          name: '菱形',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
+          rotation: 0,
+        },
+        10: {
+          customId: Date.now(),
+          width: 60,
+          height: 30,
+          x: 200,
+          y: 380,
+          type: 'button', // 控件类型 菱形
+          rotation: 0,
+        },
+        11: {
+          customId: Date.now(),
+          width: 30,
+          height: 0,
+          x: 200,
+          y: 380,
+          type: 'line', // 控件类型 直线
+          rotation: 0,
         }
       };
       this.controlsArr.push(controlObjMap[type]);
@@ -859,6 +869,9 @@ export default {
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
+.rote {
+  transform: rotate(90deg);
+}
 .drag-test {
   display: flex;
   justify-content: space-between;
@@ -895,7 +908,7 @@ export default {
 .drag-wrap {
   box-shadow:2px 2px 10px #909090;
   border-radius: 5px;
-  margin-left: 0px;
+  margin-left: 0;
   width: 1300px;
   height: 100%;
   border: solid 1px #000000;
@@ -966,6 +979,20 @@ export default {
     background-image: url("../assets/model/model-triangle.png");
     background-position: center center;
     background-size: 100% 100%;
+    transform: rotate(90deg);
+  }
+  .lq-draggable-button {
+    background: #0997F7;
+    cursor:pointer;
+    border-radius: 5px;
+  }
+  .lq-draggable-line {
+    width: 0;
+    height: 100px;
+    border-top: 1px solid #1795bb;
+  }
+  .lq-draggable-button:hover {
+    background: #1795bb;
   }
   .lq-active-class {
     border-color: rgb(14, 74, 238);
