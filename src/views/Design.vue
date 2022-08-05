@@ -690,12 +690,7 @@ export default {
           height: 30,
           x: x,
           y: y,
-          className: 'lq-draggable-text',
           type: 'text', // 控件类型
-          handles: ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'],
-          name: '文本框',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         },
         2: {
           customId: Date.now(),
@@ -704,8 +699,6 @@ export default {
           x: 0,
           y: 140,
           type: 'seal', // 控件类型
-          name: '印章',
-          signatory: 0 // 签署方默认甲方
         },
         3: {
           customId: Date.now(),
@@ -714,8 +707,6 @@ export default {
           x: 0,
           y: 260,
           type: 'sign', // 控件类型
-          name: '签名',
-          signatory: 0 // 签署方默认甲方
         },
         4: {
           customId: Date.now(),
@@ -724,9 +715,6 @@ export default {
           x: 0,
           y: 380,
           type: 'date', // 控件类型
-          name: '日期',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         },
         5: {
           customId: Date.now(),
@@ -735,9 +723,6 @@ export default {
           x: 200,
           y: 380,
           type: 'select', // 控件类型
-          name: '选项',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         },
         6: {
           customId: Date.now(),
@@ -746,9 +731,6 @@ export default {
           x: 200,
           y: 380,
           type: 'rr', // 控件类型 圆角矩形
-          name: '圆角矩形',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         },
         7: {
           customId: Date.now(),
@@ -756,10 +738,7 @@ export default {
           height: 80,
           x: 200,
           y: 380,
-          type: 'tri', // 控件类型 三角形
-          name: '三角形',
-          fontsSize: 10,
-          signatory: 0,
+          type: 'tri', // 控件类型 圆角矩形
         },
         8: {
           customId: Date.now(),
@@ -767,10 +746,7 @@ export default {
           height: 80,
           x: 200,
           y: 380,
-          type: 'circle', // 控件类型 圆形
-          name: '圆形',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
+          type: 'rot', // 控件类型 圆角矩形
         },
         9: {
           customId: Date.now(),
@@ -779,9 +755,6 @@ export default {
           x: 200,
           y: 380,
           type: 'rhombus', // 控件类型 菱形
-          name: '菱形',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         }
       };
       this.controlsArr.push(controlObjMap[type]);
