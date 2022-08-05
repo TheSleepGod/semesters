@@ -2,8 +2,8 @@
   <div>
     <div class="top_head">
       <div class="top_head_left">
-        <i class="el-icon-arrow-left" style="cursor: pointer" @click="goBack"></i>
-        <div class="go_back" style="cursor: pointer" @click="goBack">
+        <i class="el-icon-arrow-left" style="cursor: pointer" @click="goBackToProjects"></i>
+        <div class="go_back" style="cursor: pointer" @click="goBackToProjects">
             返回
         </div>
         <div class="item_name">
@@ -33,17 +33,26 @@ export default {
         {img:require("../assets/logo.png"),name:"member1"},
         {img:require("../assets/logo.png"),name:"member2"}
       ],
+      nowTeamId: 1,
+      nowTeamName: '',
       nowProjectId: 1,
       nowProjectName: 1,
     }
   },
   methods: {
-    goBack() {
-      this.$router.back()
+    goBackToProjects() {
+      this.$router.push({
+        path: '/projects',
+        query:{
+          teamName: this.nowTeamName,
+          teamId: this.nowTeamId
+        }
+      })
     }
   },
   mounted() {
-    //this.$router.push('./editWord/word')
+    this.nowTeamId = this.$route.query.teamId;
+    this.nowTeamName = this.$route.query.teamName;
     this.nowProjectId = this.$route.query.projectId;
     this.nowProjectName = this.$route.query.projectName;
   }

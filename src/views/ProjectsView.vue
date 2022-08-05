@@ -184,7 +184,15 @@ export default {
     showIcon(item){item.isHover=true},
     hideIcon(item){item.isHover=false},
     gotoProject(item){
-      this.$router.push({path:'/editWord',query:{projectName:item.name,projectId:item.id}})
+      this.$router.push({
+        path:'/editWord',
+        query:{
+          teamName:this.$route.query.teamName,
+          teamId:this.$route.query.teamId,
+          projectName:item.name,
+          projectId:item.id
+        }
+      })
     },
     rename(){
       this.$axios.post(
