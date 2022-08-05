@@ -135,16 +135,10 @@ export default {
           console.log(res);
           let ans = res.data;
           if(ans.errno===0){
-            alert("You pressed OK! del " + people.name);
+            this.$message.success("You pressed OK! del " + people.name);
           }
-          else {
-            alert("del default ! !");
-          }
+          else this.$notify.error(ans.msg)
         })
-      }
-      else
-      {
-        alert("You pressed Cancel!");
       }
     },
     changePer:function (people) {
@@ -177,12 +171,8 @@ export default {
           this.invitePanelVisible = false;
           this.inviteName = "";
         }
-        else {
-          alert("邀请失败!!!");
-        }
+        else this.$notify.error("邀请失败;"+ans.msg)
       })
-      this.invitePanelVisible = false;
-      this.inviteName = "";
     },
     getTeamMessage() {
       let params = {
