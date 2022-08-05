@@ -96,11 +96,11 @@ export default {
     let addedTeam = [];
     let allTeam = addedTeam;
     return {
-      username: 'TheSleepGod',
+      username: '',
       newTeamName: "",
       newName:'',
       newPhone:'',
-      user_id:1,
+      user_id:10,
       newTeamVisible: false,
       createdTeam,
       addedTeam,
@@ -113,12 +113,12 @@ export default {
       this.$router.push({path:'/projects',query:{teamName:team.teamName,teamId:team.id}})
     },
     showCreated() {
-      this.allTeam = this.createdTeam;
+      this.getCreatedTeam()
       document.getElementById("created-team-btn").style.borderBottom = "4px solid lightblue";
       document.getElementById("added-team-btn").style.borderBottom = "0px solid white";
     },
     showAdded() {
-      this.allTeam = this.addedTeam;
+      this.getAddedTeam()
       document.getElementById("added-team-btn").style.borderBottom = "4px solid lightblue";
       document.getElementById("created-team-btn").style.borderBottom = "0px solid white";
     },
@@ -182,15 +182,12 @@ export default {
         //console.log(res);
         let ans=res.data;
         if(ans.errno === 0){
-          alert("创建成功！！！");
+          this.$message.success("创建成功！");
           this.newTeamVisible = false;
           this.newTeamName = "";
-          this.getAddedTeam();
-          this.getCreatedTeam();
+          this.showAdded()
         }
-        else {
-          alert("创建失败！！！");
-        }
+        else this.$notify.error(ans.msg)
       })
     },
     getAddedTeam(){
@@ -216,10 +213,9 @@ export default {
               teamNumber: rec[i].count
             });
           }
+          this.allTeam = this.addedTeam;
         }
-        else {
-          alert("页面加载错误 ! ! !");
-        }
+        else this.$notify.error(ans.msg)
       })
     },
     getCreatedTeam(){
@@ -243,10 +239,9 @@ export default {
               teamNumber: rec[i].count
             })
           }
+          this.allTeam = this.createdTeam;
         }
-        else {
-          alert("页面加载错误 ! ! !");
-        }
+        else this.$notify.error(ans.msg)
       })
     },
     getNowUser() {
@@ -266,15 +261,13 @@ export default {
           this.$notify.error(ret.data.msg);
         }
         console.log(this.user_id);
-        setTimeout(()=>{
-          this.getAddedTeam();
-          this.getCreatedTeam();
-        },300)
       })
     },
   },
   mounted() {
-    this.showAdded();
+    setTimeout(()=>{
+      this.showAdded();
+    },500)
   },
   created() {
     this.getNowUser();

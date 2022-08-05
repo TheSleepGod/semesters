@@ -181,7 +181,6 @@ export default {
           alert("邀请失败!!!");
         }
       })
-      this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
       this.invitePanelVisible = false;
       this.inviteName = "";
     },
