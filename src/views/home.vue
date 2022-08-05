@@ -63,7 +63,7 @@
 
 <script>
 import axios from "axios";
-import qs from "qs";
+import qs from "qs"
 
 export default {
   name: "home",
@@ -140,13 +140,21 @@ export default {
       })
     },
     login: function () {
-      this.$axios.post(
-        'http://101.42.160.94:8000/api/user_web/login',
-        qs.stringify({
-          username: this.loginForm.username,
-          password: this.loginForm.password
-        })).then((ret) => {
+      let con = {
+        username:this.loginForm.username,
+        password:this.loginForm.password
+      };
+      console.log(con);
+      axios({
+        url: 'http://101.42.160.94:8000/api/user_web/login',
+        method: 'post',
+        data: qs.stringify(con),
+      }).then((ret) => {
+        console.log(ret);
         if (ret.data.errno === 0) {
+          console.log(ret);
+          console.log(ret.data.data.authorization);
+          localStorage.setItem('Token',ret.data.data.authorization);
           this.$message.success("登录成功");
           this.$router.push('/team');
         } else {

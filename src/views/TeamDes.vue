@@ -1,7 +1,7 @@
 <template>
   <div class = "box-body">
-    <TopBar/>
-    <TeamLeft/>
+    <TopBar :username="username"/>
+    <TeamLeft :team_id="team_id" />
     <div class = "right-box">
       <div class = "right-head-box font-1">
         <div style="width: 100%;height: 60px">
@@ -70,7 +70,7 @@
     </div>
 
     <el-dialog title="邀请新成员" :visible.sync="invitePanelVisible" style="width:60%;margin-left: 20%">
-      <el-input v-model="inviteName" placeholder="请输入被邀请者的用户名" maxlength="20" show-word-limit>
+      <el-input v-model="inviteName" placeholder="请输入被邀请者的用户id" maxlength="20" show-word-limit>
         <el-button slot="append" @click="inviteMember(inviteName)">确认</el-button>
       </el-input>
     </el-dialog>
@@ -89,7 +89,7 @@ export default {
   data() {
     let teamMes = {
       myIdentity: "创建者",
-      teamName: "啊对对队",
+      teamName: "",
       teamNumber: 6,
       teamWorks: 9,
       team_intro:'',
@@ -99,6 +99,7 @@ export default {
     let isHover = [false,false,false,false,false,false,false,false,false,false,false];
     let nowLogin = 2;
     return {
+      username:'',
       inviteName: "",
       invitePanelVisible: false,
       team_id:3,
@@ -122,16 +123,16 @@ export default {
       if (r===true)
       {
         let todo ={
-          user_id : '1',
+          user_id : this.user_id,
           team_id : this.team_id,
-          del_user_id : '2',
+          del_user_id : people.user_id,
         };
         this.$axios({
           method : 'post',
           url : 'http://43.138.22.20:8000/api/user/deletemember',
           data : qs.stringify(todo)
         }).then((res) =>{
-          //console.log(res);
+          console.log(res);
           let ans = res.data;
           if(ans.errno===0){
             alert("You pressed OK! del " + people.name);
@@ -160,9 +161,9 @@ export default {
     },
     inviteMember(name){
       let todo = {
-        user_id : '3',
+        user_id : this.user_id,
         team_id : this.team_id,
-        new_user_id : '8'
+        new_user_id : this.inviteName,
       }
       this.$axios({
         method : 'post',
@@ -222,12 +223,16 @@ export default {
   created() {
     this.$axios({
       method:'post',
-      url: 'http://101.42.160.94:8000/api/user_web/get_user'
+      url: 'http://101.42.160.94:8000/api/user_web/get_user',
+      headers:{
+        'Authorization':localStorage.getItem('Token'),
+      },
     }).then((res) =>{
       console.log(res);
-      this.user_id=res.data.data;
+      this.user_id=res.data.data.user_id;
+      this.username=res.data.data.username;
       for(let i in this.teamPeople){
-        if(this.user_id==this.teamPeople[i].user_id){
+        if(this.user_id===this.teamPeople[i].user_id){
           this.teamMes.myIdentity=this.teamPeople[i].identity;
         }
       }
