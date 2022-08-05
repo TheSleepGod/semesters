@@ -1,6 +1,7 @@
 <!-- drag-test -->
 <template>
   <div class="drag-test" style="margin-top: 50px" contenteditable="false">
+    <topBar/>
     <div class="controls-list" contenteditable="false">
       <div style="display: inline-grid;margin-left: 25px;margin-top:15px;margin-bottom: 15px;font-size: 20px">组件栏</div>
       <div style="display: inline-grid;float: right;margin-top: 15px">
