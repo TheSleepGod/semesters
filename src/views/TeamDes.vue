@@ -95,7 +95,9 @@ export default {
       teamWorks: 9,
       team_intro:'这个团队很懒，什么也没有留下~',
     };
-    let teamPeople = [];
+    let teamPeople = [{
+      identity: '',
+    }];
     let changePerM = -1;
     let isHover = [false,false,false,false,false,false,false,false,false,false,false];
     let nowLogin = 0;
