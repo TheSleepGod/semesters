@@ -8,7 +8,8 @@
         </div>
         <div class = "left-message-box" style="margin-top: 10px">
           <div class = "left-id-box">
-            <span class = "font-1" style="font-size: 26px;width: 100%">TheSleepGod</span>
+            <span class = "font-1" style="font-size: 26px;width: 100% ;margin-right: 30px">{{ username }}</span>
+            <span class="font-1" style="font-size: 14px;width: 100%">id:{{user_id}}</span>
           </div>
           <div style="margin-top: 20px">
             <button class ="left-changeMes-btn" @click="showChangeMesForm">编辑资料</button>
@@ -96,7 +97,7 @@ export default {
     let addedTeam = [];
     let allTeam = addedTeam;
     return {
-      username: '',
+      username: 'TheSleepGod',
       newTeamName: "",
       newName:'',
       newPhone:'',
@@ -208,7 +209,7 @@ export default {
         let ans = res.data;
         let rec =res.data.data;
         //console.log(rec);
-        if(ans.errno==0){
+        if(ans.errno===0){
           for(let i in rec){
             that.addedTeam.push({
               id : rec[i].team_id,

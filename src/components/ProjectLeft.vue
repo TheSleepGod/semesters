@@ -17,6 +17,7 @@
 <script>
 export default {
   name: "TeamDes",
+  props:['team_id'],
   data(){
     return{
 
@@ -24,15 +25,15 @@ export default {
   },
   methods: {
     gotoTeamOne(){
-      this.$router.push({path:'/teamOne'});
+      this.$router.push({path:'/teamOne',query:{teamId: this.team_id}});
     },
     gotoTeamProjects() {
-      this.$router.push({path:'/projects'});
+      this.$router.push({path:'/projects',query:{teamId: this.team_id}});
     },
     gotoTeams(){
       this.$router.push({path:'/team'});
     },
-  }
+  },
 }
 </script>
 

@@ -25,9 +25,10 @@ import axios from "axios";
 
 export default {
   name: "topBar",
+  props:['username'],
   data(){
     return{
-      username: 'lsc1111',
+      //username: 'lsc1111',
     }
   },
   methods:{

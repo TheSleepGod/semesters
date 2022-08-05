@@ -63,7 +63,7 @@
 
 <script>
 import axios from "axios";
-
+import qs from "qs"
 export default {
   name: "home",
   data() {
@@ -126,16 +126,21 @@ export default {
   },
   methods:{
     login: function () {
-      let con = {};
-      con['username'] = this.loginForm.username;
-      con['password'] = this.loginForm.password;
+      let con = {
+        username:this.loginForm.username,
+        password:this.loginForm.password
+      };
       console.log(con);
       axios({
         url: 'http://101.42.160.94:8000/api/user_web/login',
         method: 'post',
-        data: JSON.stringify(con),
+        data: qs.stringify(con),
       }).then((ret) => {
+        console.log(ret);
         if (ret.data.errno === 0) {
+          console.log(ret);
+          console.log(ret.data.data.authorization);
+          localStorage.setItem('Token',ret.data.data.authorization);
           this.$message.success("登录成功");
           this.$router.push('/team');
         } else {
