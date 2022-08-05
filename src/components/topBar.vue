@@ -65,6 +65,9 @@ export default {
       axios({
         url: 'http://101.42.160.94:8000/api/user_web/logout',
         method: 'post',
+        headers:{
+          'Authorization':localStorage.getItem('Token'),
+        },
       }).then((ret) => {
         if (ret.data.errno === 0) {
           this.$message.success("退出成功");
