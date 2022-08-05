@@ -1,7 +1,7 @@
 <template>
   <div style="margin-left: -10px;margin-top: -10px;">
-    <TopBar/>
-    <TeamLeft/>
+    <TopBar :username="username"/>
+    <TeamLeft :team_id="team.teamId" :team_name="team.teamName"/>
     <!-- 页头-->
     <div style="height: 35px;">
       <div style="width: 45%;font-size: 26px;float: right">{{team.teamName}}的项目</div>
@@ -163,12 +163,18 @@ export default {
   },
   methods:{
     getNowUser() {
-      this.$axios.post(
-        'http://101.42.160.94:8000/api/user_web/get_user',
+      this.$axios({
+        method : 'post',
+        url : 'http://101.42.160.94:8000/api/user_web/get_user',
+        headers:{
+          'Authorization':localStorage.getItem('Token'),
+        }
+      }
       ).then((ret) => {
         if (ret.data.errno === 0) {
           console.log(ret.data.data);
-          this.username = ret.data.username;
+          this.username = ret.data.data.username;
+          this.userId=ret.data.data.user_id;
         } else {
           this.$notify.error(ret.data.msg);
         }

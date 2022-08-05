@@ -17,7 +17,7 @@
 <script>
 export default {
   name: "TeamDes",
-  props:['team_id'],
+  props:['team_id','team_name'],
   data(){
     return{
 
@@ -25,10 +25,10 @@ export default {
   },
   methods: {
     gotoTeamOne(){
-      this.$router.push({path:'/teamOne',query:{teamId: this.team_id}});
+      this.$router.push({path:'/teamOne',query:{teamId: this.team_id,teamName:this.team_name}});
     },
     gotoTeamProjects() {
-      this.$router.push({path:'/projects',query:{teamId: this.team_id}});
+      this.$router.push({path:'/projects',query:{teamId: this.team_id,teamName:this.team_name}});
     },
     gotoTeams(){
       this.$router.push({path:'/team'});

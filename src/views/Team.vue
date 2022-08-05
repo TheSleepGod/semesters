@@ -185,6 +185,8 @@ export default {
           alert("创建成功！！！");
           this.newTeamVisible = false;
           this.newTeamName = "";
+          this.getAddedTeam();
+          this.getCreatedTeam();
         }
         else {
           alert("创建失败！！！");
@@ -249,24 +251,33 @@ export default {
     },
     getNowUser() {
       this.$axios({
-        method:'post',
-        url: 'http://101.42.160.94:8000/api/user_web/get_user',
-        headers:{
-          'Authorization':localStorage.getItem('Token'),
-        },
-      }).then((res) =>{
-        console.log(res);
-        this.username=res.data.data.username;
+            method : 'post',
+            url : 'http://101.42.160.94:8000/api/user_web/get_user',
+            headers:{
+              'Authorization':localStorage.getItem('Token'),
+            }
+          }
+      ).then((ret) => {
+        if (ret.data.errno === 0) {
+          console.log(ret.data.data);
+          this.username = ret.data.data.username;
+          this.user_id=ret.data.data.user_id;
+        } else {
+          this.$notify.error(ret.data.msg);
+        }
+        console.log(this.user_id);
+        setTimeout(()=>{
+          this.getAddedTeam();
+          this.getCreatedTeam();
+        },300)
       })
-    }
+    },
   },
   mounted() {
     this.showAdded();
   },
   created() {
     this.getNowUser();
-    this.getAddedTeam();
-    this.getCreatedTeam();
   }
 }
 </script>
