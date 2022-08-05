@@ -1,7 +1,7 @@
 <template>
   <div id="all">
     <div id="topBar-login">
-      <div class="webLogo-box">
+      <div class="webLogo-box" @click="getNowUser">
         <img src="../assets/moshulogo.png" class="webLogo" alt="">
       </div>
       <span><el-button type="danger" @click="outerVisible = true" style="margin-left: 0;position: relative;float: right;top: 10px;right: 20px" round>登录/注册</el-button></span>
@@ -63,6 +63,7 @@
 
 <script>
 import axios from "axios";
+import qs from "qs";
 
 export default {
   name: "home",
@@ -96,6 +97,7 @@ export default {
       callback(new Error("邮箱格式：xx@xx.xx，只含数字、大小写字母、下划线、横杠"));
     };
     return {
+      username: '',
       innerVisible: false,
       outerVisible: false,
       loginForm: {
@@ -125,16 +127,25 @@ export default {
     };
   },
   methods:{
+    getNowUser() {
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/get_user',
+      ).then((ret) => {
+        if (ret.data.errno === 0) {
+          console.log(ret.data.data);
+          this.username = ret.data.username;
+        } else {
+          this.$notify.error(ret.data.msg);
+        }
+      })
+    },
     login: function () {
-      let con = {};
-      con['username'] = this.loginForm.username;
-      con['password'] = this.loginForm.password;
-      console.log(con);
-      axios({
-        url: 'http://101.42.160.94:8000/api/user_web/login',
-        method: 'post',
-        data: JSON.stringify(con),
-      }).then((ret) => {
+      this.$axios.post(
+        'http://101.42.160.94:8000/api/user_web/login',
+        qs.stringify({
+          username: this.loginForm.username,
+          password: this.loginForm.password
+        })).then((ret) => {
         if (ret.data.errno === 0) {
           this.$message.success("登录成功");
           this.$router.push('/team');
