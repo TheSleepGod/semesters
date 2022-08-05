@@ -139,6 +139,7 @@ export default {
           let ans = res.data;
           if(ans.errno===0){
             this.$message.success("You pressed OK! del " + people.name);
+            this.getTeamMember();
           }
           else this.$notify.error(ans.msg)
         })
@@ -173,6 +174,7 @@ export default {
           this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
           this.invitePanelVisible = false;
           this.inviteName = "";
+          this.getTeamMember();
         }
         else this.$notify.error("邀请失败;"+ans.msg)
       })
@@ -196,7 +198,7 @@ export default {
           });
     },
 
-    getTeamNumber() {
+    getTeamMember() {
       let params = {
         team_id: this.team_id,
       };
@@ -210,32 +212,35 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-    }
+    },
+    getNowUser(){
+      this.$axios({
+        method:'post',
+        url: 'http://101.42.160.94:8000/api/user_web/get_user',
+        headers:{
+          'Authorization':localStorage.getItem('Token'),
+        },
+      }).then((res) =>{
+        console.log(res);
+        this.user_id=0;
+        this.user_id=res.data.data.user_id;
+        this.username=res.data.data.username;
+        for(let i in this.teamPeople){
+          if(this.user_id===this.teamPeople[i].user_id){
+            this.teamMes.myIdentity=this.teamPeople[i].identity;
+            this.nowLogin=i;
+          }
+        }
+        console.log(this.user_id);
+      })
+    },
   },
   created() {
-    this.$axios({
-      method:'post',
-      url: 'http://101.42.160.94:8000/api/user_web/get_user',
-      headers:{
-        'Authorization':localStorage.getItem('Token'),
-      },
-    }).then((res) =>{
-      console.log(res);
-      this.user_id=0;
-      this.user_id=res.data.data.user_id;
-      this.username=res.data.data.username;
-      for(let i in this.teamPeople){
-        if(this.user_id===this.teamPeople[i].user_id){
-          this.teamMes.myIdentity=this.teamPeople[i].identity;
-          this.nowLogin=i;
-        }
-      }
-      console.log(this.user_id);
-    })
+    this.getNowUser()
     this.team_id = this.$route.query.teamId;
     this.teamMes.teamName = this.$route.query.teamName;
     this.getTeamMessage();
-    this.getTeamNumber();
+    this.getTeamMember();
   }
 }
 </script>
