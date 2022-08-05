@@ -79,7 +79,7 @@
         <div
             :class="commonClassName"
             class="controls-item controls-select"
-            @click="addControl(3)"
+            @click="addControl(11)"
         >
           <img src="../assets/line.png" alt="">
           <p class="icon-name">直线</p>
@@ -87,7 +87,7 @@
           <div
               :class="commonClassName"
               class="controls-item controls-select"
-              @click="addControl(8)"
+              @click="addControl(9)"
           >
           <img src="../assets/rhombus.png" alt="">
           <p class="icon-name">菱形</p>
@@ -95,15 +95,15 @@
         <div
             :class="commonClassName"
             class="controls-item controls-select"
-            @click="addControl(3)"
+            @click="addControl(10)"
         >
-          <img src="../assets/hexagon.png" alt="">
-          <p class="icon-name">六边形</p>
+          <img src="../assets/button-use.png" alt="" style="height: 60px; width: 60px;" >
+          <p class="icon-name">按钮</p>
         </div>
         <div
             :class="commonClassName"
             class="controls-item controls-select"
-            @click="addControl(3)"
+            @click="addControl(10)"
         >
           <img src="../assets/octagon.png" alt="">
           <p class="icon-name">八边形</p>
@@ -428,6 +428,7 @@
           @activated="onActivated"
           @clicked="clickHandle"
       >
+        <span v-if = "item.type === 'button'" style="top: 10px; position: center">按钮</span>
         <div :class="commonClassName" class="inner-container" v-if = "false">
           {{ filterSignatory(item.signatory)
           }}<span class="name">({{ item.name }})</span>
@@ -563,6 +564,14 @@ export default {
           className = 'lq-draggable-rhombus';
           handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
+        case 'button':
+          className = 'lq-draggable-button';
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
+          break;
+        case 'line':
+          className = 'lq-draggable-line'
+          handles = ['mr', 'ml'];
+          break;   
         default:
           break;
       }
@@ -691,6 +700,7 @@ export default {
           x: x,
           y: y,
           type: 'text', // 控件类型
+          rotation: 0,
         },
         2: {
           customId: Date.now(),
@@ -699,6 +709,7 @@ export default {
           x: 0,
           y: 140,
           type: 'seal', // 控件类型
+          rotation: 0,
         },
         3: {
           customId: Date.now(),
@@ -707,6 +718,7 @@ export default {
           x: 0,
           y: 260,
           type: 'sign', // 控件类型
+          rotation: 0,
         },
         4: {
           customId: Date.now(),
@@ -715,6 +727,7 @@ export default {
           x: 0,
           y: 380,
           type: 'date', // 控件类型
+          rotation: 0,
         },
         5: {
           customId: Date.now(),
@@ -723,6 +736,7 @@ export default {
           x: 200,
           y: 380,
           type: 'select', // 控件类型
+          rotation: 0,
         },
         6: {
           customId: Date.now(),
@@ -731,6 +745,7 @@ export default {
           x: 200,
           y: 380,
           type: 'rr', // 控件类型 圆角矩形
+          rotation: 0,
         },
         7: {
           customId: Date.now(),
@@ -739,6 +754,7 @@ export default {
           x: 200,
           y: 380,
           type: 'tri', // 控件类型 圆角矩形
+          rotation: 180,
         },
         8: {
           customId: Date.now(),
@@ -747,6 +763,7 @@ export default {
           x: 200,
           y: 380,
           type: 'rot', // 控件类型 圆角矩形
+          rotation: 0,
         },
         9: {
           customId: Date.now(),
@@ -755,6 +772,25 @@ export default {
           x: 200,
           y: 380,
           type: 'rhombus', // 控件类型 菱形
+          rotation: 0,
+        },
+        10: {
+          customId: Date.now(),
+          width: 60,
+          height: 30,
+          x: 200,
+          y: 380,
+          type: 'button', // 控件类型 菱形
+          rotation: 0,
+        },
+        11: {
+          customId: Date.now(),
+          width: 30,
+          height: 0,
+          x: 200,
+          y: 380,
+          type: 'line', // 控件类型 直线
+          rotation: 0,
         }
       };
       this.controlsArr.push(controlObjMap[type]);
@@ -826,6 +862,9 @@ export default {
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
+.rote {
+  transform: rotate(90deg);
+}
 .drag-test {
   display: flex;
   justify-content: space-between;
@@ -933,6 +972,20 @@ export default {
     background-image: url("../assets/model/model-triangle.png");
     background-position: center center;
     background-size: 100% 100%;
+    transform: rotate(90deg);
+  }
+  .lq-draggable-button {
+    background: #0997F7;
+    cursor:pointer;
+    border-radius: 5px;
+  }
+  .lq-draggable-line {
+    width: 0;
+    height: 100px;
+    border-top: 1px solid #1795bb;
+  }
+  .lq-draggable-button:hover {
+    background: #1795bb;
   }
   .lq-active-class {
     border-color: rgb(14, 74, 238);
