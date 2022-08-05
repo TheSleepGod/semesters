@@ -1,7 +1,7 @@
 <template>
   <div class = "box-body">
     <TopBar :username="username"/>
-    <TeamLeft :team_id="team_id" />
+    <TeamLeft :team_id="team_id" :team_name="teamMes.teamName"/>
     <div class = "right-box">
       <div class = "right-head-box font-1">
         <div style="width: 100%;height: 60px">
@@ -88,7 +88,7 @@ export default {
   },
   data() {
     let teamMes = {
-      myIdentity: "创建者",
+      myIdentity: "",
       teamName: "",
       teamNumber: 6,
       teamWorks: 9,
@@ -97,7 +97,7 @@ export default {
     let teamPeople = [];
     let changePerM = -1;
     let isHover = [false,false,false,false,false,false,false,false,false,false,false];
-    let nowLogin = 2;
+    let nowLogin = 0;
     return {
       username:'',
       inviteName: "",
@@ -229,15 +229,19 @@ export default {
       },
     }).then((res) =>{
       console.log(res);
+      this.user_id=0;
       this.user_id=res.data.data.user_id;
       this.username=res.data.data.username;
       for(let i in this.teamPeople){
         if(this.user_id===this.teamPeople[i].user_id){
           this.teamMes.myIdentity=this.teamPeople[i].identity;
+          this.nowLogin=i;
         }
       }
       console.log(this.user_id);
     })
+    this.team_id = this.$route.query.teamId;
+    this.teamMes.teamName = this.$route.query.teamName;
     this.getTeamMessage();
     this.getTeamNumber();
   }
