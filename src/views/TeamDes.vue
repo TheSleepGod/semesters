@@ -52,17 +52,17 @@
             </ul>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '创建者'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">解 散</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="dissolve">解 散</div>
             <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
             <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '管理员'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">退 出</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
             <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
             <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '普通成员'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">退 出</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
 <!--            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>-->
 <!--            <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>-->
           </div>
@@ -146,7 +146,59 @@ export default {
       }
     },
     changePer:function (people) {
-      this.changePerM = people.name;
+  /*    this.changePerM = people.name;
+      let toSend={
+        user_id: this.user_id,
+        team_id: this.team_id,
+        new_user_id: people.user_id
+      }
+      this.$axios({
+        method:'post',
+        url : 'http://43.138.22.20:8000/api/user/setadmin',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        let ans =res.data;
+        if(ans.errno===0){
+          this.$message.success(
+            "You have change his permission!!"
+          )
+        }
+        else this.$notify.error(ans.msg);
+      })
+
+   */
+    },
+    //todo : dissolve team
+    dissolve(){
+      let toSend={
+
+      }
+      this.$axios({
+        method : 'post',
+        url : 'http://',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        let ans =res.data;
+        if(ans.errno===0){
+          this.$router.push('/team');
+        }
+      })
+    },
+    //todo:exit team
+    exit(people){
+      let toSend={
+
+      };
+      this.$axios({
+        method : 'post',
+        url : 'http://',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        let ans = res.data;
+        if(ans.errno===0){
+          this.$router.push('/team');
+        }
+      })
     },
     showInvitePanel(){
       let bell = document.getElementById("right-head-invite-icon");
