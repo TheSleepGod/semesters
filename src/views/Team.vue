@@ -320,7 +320,6 @@ export default {
   width: 75%;
 }
 .right-head-box {
-
 }
 .right-head-title{
   font-size: 28px;
@@ -468,9 +467,3 @@ export default {
   transition: all 0.75s;
 }
 </style>
-
-
-
-
-
-

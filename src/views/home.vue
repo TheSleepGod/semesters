@@ -4,6 +4,8 @@
       <div class="webLogo-box">
         <img src="../assets/moshulogo.png" class="webLogo" alt="">
       </div>
+      {{loginForm.username}}
+      <span><el-button type="danger" @click="getNowUser()" style="margin-left: 0;position: relative;float: right;top: 10px;right: 20px" round>test</el-button></span>
       <span><el-button type="danger" @click="outerVisible = true" style="margin-left: 0;position: relative;float: right;top: 10px;right: 20px" round>登录/注册</el-button></span>
     </div>
     <div id="main">
@@ -63,6 +65,7 @@
 
 <script>
 import axios from "axios";
+import qs from "qs";
 
 export default {
   name: "home",
@@ -96,6 +99,7 @@ export default {
       callback(new Error("邮箱格式：xx@xx.xx，只含数字、大小写字母、下划线、横杠"));
     };
     return {
+      username: '',
       innerVisible: false,
       outerVisible: false,
       loginForm: {
@@ -133,7 +137,7 @@ export default {
       axios({
         url: 'http://101.42.160.94:8000/api/user_web/login',
         method: 'post',
-        data: JSON.stringify(con),
+        data: qs.stringify(con),
       }).then((ret) => {
         if (ret.data.errno === 0) {
           this.$message.success("登录成功");
@@ -142,6 +146,16 @@ export default {
           alert(ret.data.msg);
           this.$message.error("登录失败");
         }
+      })
+    },
+    getNowUser() {
+      axios({
+        url: 'http://101.42.160.94:8000/api/user_web/get_user',
+        method: 'post',
+        params: {
+        }
+      }).then((ret) => {
+        console.log(ret.data);
       })
     },
     register: function () {
