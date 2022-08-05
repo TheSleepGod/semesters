@@ -154,8 +154,7 @@ export default {
     }
   },
   created() {
-    this.team.teamName = this.$route.query.teamName
-    this.team.teamId = this.$route.query.teamId
+    this.getNowUser()
   },
   mounted() {
     this.team.teamId = this.$route.query.teamId;
@@ -168,11 +167,10 @@ export default {
         'http://101.42.160.94:8000/api/user_web/get_user',
       ).then((ret) => {
         if (ret.data.errno === 0) {
-          console.log(ret.data.username);
+          console.log(ret.data.data);
           this.username = ret.data.username;
         } else {
-          console.log("ERROR!");
-          alert(ret.data.msg);
+          this.$notify.error(ret.data.msg);
         }
       })
     },
@@ -186,7 +184,15 @@ export default {
     showIcon(item){item.isHover=true},
     hideIcon(item){item.isHover=false},
     gotoProject(item){
-      this.$router.push({path:'/editWord',query:{projectName:item.name,projectId:item.id}})
+      this.$router.push({
+        path:'/editWord',
+        query:{
+          teamName:this.$route.query.teamName,
+          teamId:this.$route.query.teamId,
+          projectName:item.name,
+          projectId:item.id
+        }
+      })
     },
     rename(){
       this.$axios.post(

@@ -86,7 +86,6 @@
 <script>
 import topBar from "@/components/topBar";
 import qs from "qs";
-import axios from "axios";
 export default {
   components:{
     topBar
@@ -322,7 +321,6 @@ export default {
   width: 75%;
 }
 .right-head-box {
-
 }
 .right-head-title{
   font-size: 28px;
@@ -470,9 +468,3 @@ export default {
   transition: all 0.75s;
 }
 </style>
-
-
-
-
-
-

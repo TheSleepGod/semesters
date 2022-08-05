@@ -38,7 +38,7 @@ export default {
           this.$router.push("/team");
           break;
         case "logout":
-          this.exit();
+          this.logout();
           this.$router.push("/");
           break;
       }
@@ -61,15 +61,10 @@ export default {
         }
       })
     },
-    exit: function () {
-      let con = {};
-      con['username'] = this.username;
-      console.log(con);
+    logout: function () {
       axios({
-        //TODO
-        url: 'http://101.42.160.94:8000/api/user_web/get_user',
+        url: 'http://101.42.160.94:8000/api/user_web/logout',
         method: 'post',
-        // data: JSON.stringify(con),
       }).then((ret) => {
         if (ret.data.errno === 0) {
           this.$message.success("退出成功");

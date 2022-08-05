@@ -8,6 +8,45 @@
         <el-button  size="mini" title="保存" circle @click="saveState()" icon="el-icon-download"/>
       </div>
       <el-collapse accordion>
+        <el-collapse-item>
+          <template slot="title">
+            popular 常用
+          </template>
+          <div id="popular" style="overflow-y: scroll;width: 220px;height: 200px;" contenteditable="false">
+            <div
+                :class="commonClassName"
+                @click="addControl(1)"
+                class="controls-item controls-text"
+            >
+              <img src="../assets/text-box.png" alt="">
+              <p class="icon-name">文本框</p>
+            </div>
+            <div
+                :class="commonClassName"
+                @click="addControl(6)"
+                class="controls-item controls-text"
+            >
+              <img src="../assets/button.png" alt="">
+              <p class="icon-name">按钮</p>
+            </div>
+            <div
+                :class="commonClassName"
+                class="controls-item controls-text"
+                @click="addControl(7)"
+            >
+              <img src="../assets/dropdown-list.png" alt="">
+              <p class="icon-name">下拉菜单</p>
+            </div>
+            <div
+                :class="commonClassName"
+                class="controls-item controls-select"
+                @click="addControl(8)"
+            >
+              <img src="../assets/form.png" alt="">
+              <p class="icon-name">表格</p>
+            </div>
+          </div>
+        </el-collapse-item>
       <el-collapse-item>
         <template slot="title">
           figure 图形
@@ -40,24 +79,16 @@
         <div
             :class="commonClassName"
             class="controls-item controls-select"
-            @click="addControl(8)"
-        >
-          <img src="../assets/circle.png" alt="">
-          <p class="icon-name">圆形</p>
-        </div>
-        <div
-            :class="commonClassName"
-            class="controls-item controls-select"
             @click="addControl(3)"
         >
           <img src="../assets/line.png" alt="">
           <p class="icon-name">直线</p>
         </div>
-        <div
-            :class="commonClassName"
-            class="controls-item controls-select"
-            @click="addControl(3)"
-        >
+          <div
+              :class="commonClassName"
+              class="controls-item controls-select"
+              @click="addControl(8)"
+          >
           <img src="../assets/rhombus.png" alt="">
           <p class="icon-name">菱形</p>
         </div>
@@ -379,8 +410,7 @@
           :key="item.customId"
           :ref="item.customId"
           :custom-id="item.customId"
-          :h="item.fontsSize | filterFonstSizeToHeight(item)"
-          :minWidth="200"
+          :h="item.height"
           :w="item.width"
           :parentH="600"
           :parentW="800"
@@ -525,10 +555,14 @@ export default {
           className = 'lq-draggable-tri';
           handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
           break;
-        case 'rotundity':
-          className = 'lq-draggable-rot';
+        case 'circle':
+          className = 'lq-draggable-circle';
           handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
-          break;  
+          break;
+        case 'rhombus':
+          className = 'lq-draggable-rhombus';
+          handles = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
+          break;
         default:
           break;
       }
@@ -656,12 +690,7 @@ export default {
           height: 30,
           x: x,
           y: y,
-          className: 'lq-draggable-text',
           type: 'text', // 控件类型
-          handles: ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'],
-          name: '文本框',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         },
         2: {
           customId: Date.now(),
@@ -670,8 +699,6 @@ export default {
           x: 0,
           y: 140,
           type: 'seal', // 控件类型
-          name: '印章',
-          signatory: 0 // 签署方默认甲方
         },
         3: {
           customId: Date.now(),
@@ -680,8 +707,6 @@ export default {
           x: 0,
           y: 260,
           type: 'sign', // 控件类型
-          name: '签名',
-          signatory: 0 // 签署方默认甲方
         },
         4: {
           customId: Date.now(),
@@ -690,9 +715,6 @@ export default {
           x: 0,
           y: 380,
           type: 'date', // 控件类型
-          name: '日期',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         },
         5: {
           customId: Date.now(),
@@ -701,9 +723,6 @@ export default {
           x: 200,
           y: 380,
           type: 'select', // 控件类型
-          name: '选项',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         },
         6: {
           customId: Date.now(),
@@ -712,9 +731,6 @@ export default {
           x: 200,
           y: 380,
           type: 'rr', // 控件类型 圆角矩形
-          name: '圆角矩形',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         },
         7: {
           customId: Date.now(),
@@ -723,20 +739,22 @@ export default {
           x: 200,
           y: 380,
           type: 'tri', // 控件类型 圆角矩形
-          name: '三角形',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
         },
         8: {
           customId: Date.now(),
           width: 80,
-          height: 30,
+          height: 80,
           x: 200,
           y: 380,
           type: 'rot', // 控件类型 圆角矩形
-          name: '圆形',
-          fontsSize: 10,
-          signatory: 0 // 签署方默认甲方
+        },
+        9: {
+          customId: Date.now(),
+          width: 80,
+          height: 80,
+          x: 200,
+          y: 380,
+          type: 'rhombus', // 控件类型 菱形
         }
       };
       this.controlsArr.push(controlObjMap[type]);
@@ -897,20 +915,24 @@ export default {
       }
     }
   }
+  .lg-draggable-circle {
+    background-image: url("../assets/model/model-triangle.png");
+    background-position: center center;
+    background-size: 100% 100%;
+  }
+  .lq-draggable-rhombus{
+    background-image: url("../assets/model/model-triangle.png");
+    background-position: center center;
+    background-size: 100% 100%;
+  }
   .lq-draggable-rr {
     border: dashed 1px #000;
     border-radius: 50px;
   }
   .lq-draggable-tri {
-    background-image: url("../assets/triangle.png");
+    background-image: url("../assets/model/model-triangle.png");
     background-position: center center;
     background-size: 100% 100%;
-  }
-  .lg-draggable-rot {
-    width: 30px;
-    height: 30px;
-    border: dashed 1px #000;
-    border-radius:50%;
   }
   .lq-active-class {
     border-color: rgb(14, 74, 238);
@@ -939,36 +961,36 @@ export default {
 }
 </style>
 <style lang="scss">
-.lq-active-class {
-  .handle.handle-mr {
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    margin-top: -10px;
-  }
-  .handle-mr::before {
-    content: ' ';
-    width: 0;
-    height: 0;
-    border-top: 7px transparent solid;
-    border-bottom: 7px transparent solid;
-    border-right: 6px solid rgb(122, 121, 121);
-    position: absolute;
-    left: 2px;
-    top: 2px;
-  }
-  .handle-mr::after {
-    content: ' ';
-    width: 0;
-    height: 0;
-    border-top: 7px transparent solid;
-    border-bottom: 7px transparent solid;
-    border-left: 6px solid rgb(122, 121, 121);
-    position: absolute;
-    right: 2px;
-    top: 2px;
-  }
-}
+//.lq-active-class {
+//  .handle.handle-mr {
+//    border-radius: 50%;
+//    width: 20px;
+//    height: 20px;
+//    margin-top: -10px;
+//  }
+//  .handle-mr::before {
+//    content: ' ';
+//    width: 0;
+//    height: 0;
+//    border-top: 7px transparent solid;
+//    border-bottom: 7px transparent solid;
+//    border-right: 6px solid rgb(122, 121, 121);
+//    position: absolute;
+//    left: 2px;
+//    top: 2px;
+//  }
+//  .handle-mr::after {
+//    content: ' ';
+//    width: 0;
+//    height: 0;
+//    border-top: 7px transparent solid;
+//    border-bottom: 7px transparent solid;
+//    border-left: 6px solid rgb(122, 121, 121);
+//    position: absolute;
+//    right: 2px;
+//    top: 2px;
+//  }
+//}
 
 .icon-name{
   margin-top: -37px;

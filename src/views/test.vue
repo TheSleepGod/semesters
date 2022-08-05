@@ -17,6 +17,11 @@ export default {
       element.contentEditable = 'true';
     }
   },
+  mounted() {
+    window.onbeforeunload = function (e) {
+      //TODO: logout
+    };
+  }
 }
 </script>
 
