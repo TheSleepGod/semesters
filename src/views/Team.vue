@@ -176,12 +176,41 @@ export default {
           alert("创建失败！！！");
         }
       })
-    }
+    },
+    // getNowUser() {
+    //   console.log(111)
+    //   let con = {};
+    //   console.log(this.username);
+    //   axios({
+    //     url: 'http://101.42.160.94:8000/api/user_web/get_user',
+    //     method: 'post',
+    //     data: JSON.stringify(con),
+    //   }).then((ret) => {
+    //     if (ret.data.errno === 0) {
+    //       console.log(ret.data.data.username);
+    //       this.username = ret.data.data.username;
+    //     } else {
+    //       console.log("ERROR!");
+    //       alert(ret.data.msg);
+    //     }
+    //   })
+    // },
+    getNowUser() {
+      axios({
+        url: 'http://101.42.160.94:8000/api/user_web/get_user',
+        method: 'post',
+        params: {
+        }
+      }).then((ret) => {
+        console.log(ret);
+      })
+    },
   },
   mounted() {
     this.showAdded();
   },
   created() {
+    this.getNowUser();
     let toSend = {
       user_id: this.user_id
     }
