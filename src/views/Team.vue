@@ -1,6 +1,6 @@
 <template>
   <div class="box-body">
-    <topBar/>
+    <topBar :username="username"/>
     <div class="left">
       <div id="showCase1" v-if="!isChanging">
         <div class = "left-head-box">
@@ -185,8 +185,6 @@ export default {
           alert("创建成功！！！");
           this.newTeamVisible = false;
           this.newTeamName = "";
-          this.getAddedTeam();
-          this.getCreatedTeam();
         }
         else {
           alert("创建失败！！！");
@@ -248,12 +246,25 @@ export default {
           alert("页面加载错误 ! ! !");
         }
       })
+    },
+    getNowUser() {
+      this.$axios({
+        method:'post',
+        url: 'http://101.42.160.94:8000/api/user_web/get_user',
+        headers:{
+          'Authorization':localStorage.getItem('Token'),
+        },
+      }).then((res) =>{
+        console.log(res);
+        this.username=res.data.data.username;
+      })
     }
   },
   mounted() {
     this.showAdded();
   },
   created() {
+    this.getNowUser();
     this.getAddedTeam();
     this.getCreatedTeam();
   }
