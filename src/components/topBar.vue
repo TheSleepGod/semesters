@@ -85,6 +85,7 @@ export default {
 #topBar{
   height: 70px;
   width: 100%;
+  border-bottom: 2px black groove;
 }
 .webLogo-box{
   float: left;
