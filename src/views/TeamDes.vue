@@ -18,7 +18,8 @@
         <div class = "right-head-mes-box">
           <span class="right-head-mes">
             <i class="el-icon-s-grid"></i>
-            团队简介:{{teamMes.team_intro}}
+<!--            团队人数：{{teamPeople.size}} 人<el-divider direction="vertical"/>-->
+            团队简介：{{teamMes.team_intro}}
           </span>
         </div>
         <div class="right-head-invite" @click="showInvitePanel">
@@ -51,17 +52,17 @@
             </ul>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '创建者'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">解 散</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="dissolve">解 散</div>
             <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
             <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '管理员'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">退 出</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
             <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
             <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '普通成员'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">退 出</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
 <!--            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>-->
 <!--            <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>-->
           </div>
@@ -92,9 +93,11 @@ export default {
       teamName: "",
       teamNumber: 6,
       teamWorks: 9,
-      team_intro:'',
+      team_intro:'这个团队很懒，什么也没有留下~',
     };
-    let teamPeople = [];
+    let teamPeople = [{
+      identity: '',
+    }];
     let changePerM = -1;
     let isHover = [false,false,false,false,false,false,false,false,false,false,false];
     let nowLogin = 0;
@@ -135,20 +138,66 @@ export default {
           console.log(res);
           let ans = res.data;
           if(ans.errno===0){
-            alert("You pressed OK! del " + people.name);
+            this.$message.success("You pressed OK! del " + people.name);
           }
-          else {
-            alert("del default ! !");
-          }
+          else this.$notify.error(ans.msg)
         })
-      }
-      else
-      {
-        alert("You pressed Cancel!");
       }
     },
     changePer:function (people) {
-      this.changePerM = people.name;
+  /*    this.changePerM = people.name;
+      let toSend={
+        user_id: this.user_id,
+        team_id: this.team_id,
+        new_user_id: people.user_id
+      }
+      this.$axios({
+        method:'post',
+        url : 'http://43.138.22.20:8000/api/user/setadmin',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        let ans =res.data;
+        if(ans.errno===0){
+          this.$message.success(
+            "You have change his permission!!"
+          )
+        }
+        else this.$notify.error(ans.msg);
+      })
+
+   */
+    },
+    //todo : dissolve team
+    dissolve(){
+      let toSend={
+
+      }
+      this.$axios({
+        method : 'post',
+        url : 'http://',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        let ans =res.data;
+        if(ans.errno===0){
+          this.$router.push('/team');
+        }
+      })
+    },
+    //todo:exit team
+    exit(people){
+      let toSend={
+
+      };
+      this.$axios({
+        method : 'post',
+        url : 'http://',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        let ans = res.data;
+        if(ans.errno===0){
+          this.$router.push('/team');
+        }
+      })
     },
     showInvitePanel(){
       let bell = document.getElementById("right-head-invite-icon");
@@ -177,9 +226,7 @@ export default {
           this.invitePanelVisible = false;
           this.inviteName = "";
         }
-        else {
-          alert("邀请失败!!!");
-        }
+        else this.$notify.error("邀请失败;"+ans.msg)
       })
     },
     getTeamMessage() {
