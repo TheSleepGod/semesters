@@ -74,6 +74,7 @@ export default {
       }).then((ret) => {
         if (ret.data.errno === 0) {
           this.$message.success("退出成功");
+          localStorage.clear();
         } else {
           alert(ret.data.msg);
           this.$message.error("退出失败");

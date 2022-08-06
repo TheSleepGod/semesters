@@ -58,8 +58,8 @@
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '管理员'">
             <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
-            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
-            <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
+            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin && teamPeople[index].identity=='普通成员'" @click="changePer(people)">修 改 权 限</div>
+            <div class="rpm-del-rightHalf" v-if="index !== nowLogin && teamPeople[index].identity=='普通成员'" @click="del(people)">删 除</div>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '普通成员'">
             <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
@@ -146,7 +146,7 @@ export default {
       }
     },
     changePer:function (people) {
-  /*    this.changePerM = people.name;
+      this.changePerM = people.name;
       let toSend={
         user_id: this.user_id,
         team_id: this.team_id,
@@ -162,20 +162,20 @@ export default {
           this.$message.success(
             "You have change his permission!!"
           )
+          this.getTeamMember();
         }
         else this.$notify.error(ans.msg);
       })
-
-   */
     },
     //todo : dissolve team
     dissolve(){
       let toSend={
-
+        user_id:this.user_id,
+        team_id:this.team_id
       }
       this.$axios({
         method : 'post',
-        url : 'http://',
+        url : 'http://43.138.22.20:8000/api/user/quit_team',
         data : qs.stringify(toSend)
       }).then((res) =>{
         let ans =res.data;
@@ -187,11 +187,12 @@ export default {
     //todo:exit team
     exit(people){
       let toSend={
-
+        user_id:this.user_id,
+        team_id:this.team_id
       };
       this.$axios({
         method : 'post',
-        url : 'http://',
+        url : 'http://43.138.22.20:8000/api/user/quit_team',
         data : qs.stringify(toSend)
       }).then((res) =>{
         let ans = res.data;
