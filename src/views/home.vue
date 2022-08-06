@@ -97,7 +97,6 @@ export default {
       callback(new Error("邮箱格式：xx@xx.xx，只含数字、大小写字母、下划线、横杠"));
     };
     return {
-      username: '',
       innerVisible: false,
       outerVisible: false,
       loginForm: {
@@ -128,15 +127,20 @@ export default {
   },
   methods:{
     getNowUser() {
-      this.$axios.post(
-          'http://101.42.160.94:8000/api/user_web/get_user',
+      this.$axios({
+            method : 'post',
+            url : 'http://101.42.160.94:8000/api/user_web/get_user',
+            headers:{
+              'Authorization':localStorage.getItem('Token'),
+            }
+          }
       ).then((ret) => {
         if (ret.data.errno === 0) {
           console.log(ret.data.data);
-          this.username = ret.data.username;
-        } else {
-          this.$notify.error(ret.data.msg);
-        }
+          this.$notify.info('已登录,正在跳转...')
+          setTimeout(()=>{this.$router.push('/team');},500)
+        } else this.$notify.error(ret.data.msg);
+        console.log(this.user_id);
       })
     },
     login: function () {
@@ -202,6 +206,9 @@ export default {
         }
       })
     },
+  },
+  created() {
+    this.getNowUser();
   }
 }
 </script>
