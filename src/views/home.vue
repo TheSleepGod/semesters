@@ -1,10 +1,13 @@
 <template>
   <div id="all">
     <div id="topBar-login">
-      <div class="webLogo-box" @click="getNowUser">
-        <img src="../assets/moshulogo.png" class="webLogo" alt="">
+      <div class="webLogo-box">
+        <img class="webLogo" src="../assets/ink_black.png" alt=""/>
       </div>
-      <span><el-button type="danger" @click="outerVisible = true" style="margin-left: 0;position: relative;float: right;top: 10px;right: 20px" round>登录/注册</el-button></span>
+      <div class="logo-font-box">
+        <div style="padding-top: 10px;">墨书</div>
+      </div>
+      <div><el-button type="danger" @click="outerVisible = true" style="position: absolute;float: right;right: 10px;top:10px" round>登录/注册</el-button></div>
     </div>
     <div id="main">
       <div class="name">团队项目管理</div>
@@ -137,8 +140,8 @@ export default {
       ).then((ret) => {
         if (ret.data.errno === 0) {
           console.log(ret.data.data);
-          this.$notify.info('已登录,正在跳转...')
-          setTimeout(()=>{this.$router.push('/team');},500)
+          this.$notify.info('已检测到登录信息,即将跳转...')
+          // setTimeout(()=>{this.$router.push('/team');},500)
         } else this.$notify.error(ret.data.msg);
         console.log(this.user_id);
       })
@@ -215,20 +218,25 @@ export default {
 
 <style scoped>
 #topBar-login{
+  position: relative;
+  display: flex;
   background-color: white;
   height: 70px;
   padding: 0;
-  text-align:center;
 }
 .webLogo-box{
   float: left;
   height: 70px;
-  width: 100px;
-  margin-left: 10px;
+  width: 70px;
 }
 .webLogo{
   margin-top: 2px;
   height: 60px;
+}
+.logo-font-box{
+  display: table-cell;
+  width: 70px;
+  font-size: 30px;
 }
 #main{
   background-image:url('../assets/mainBk.png');
