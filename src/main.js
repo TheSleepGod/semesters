@@ -23,7 +23,12 @@ Vue.component('vdr', vdr)
 
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios;
-
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
+})
 Vue.config.productionTip = false
 new Vue({
   router,
