@@ -141,7 +141,7 @@ export default {
         if (ret.data.errno === 0) {
           console.log(ret.data.data);
           this.$notify.info('已检测到登录信息,即将跳转...')
-          // setTimeout(()=>{this.$router.push('/team');},500)
+          setTimeout(()=>{this.$router.push('/team');},500)
         } else this.$notify.error(ret.data.msg);
         console.log(this.user_id);
       })

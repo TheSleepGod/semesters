@@ -52,14 +52,14 @@
             </ul>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '创建者'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="dissolve">解 散</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="showDissolveConfirm">解 散</div>
             <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
             <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '管理员'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
-            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin && teamPeople[index].identity=='普通成员'" @click="changePer(people)">修 改 权 限</div>
-            <div class="rpm-del-rightHalf" v-if="index !== nowLogin && teamPeople[index].identity=='普通成员'" @click="del(people)">删 除</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit()">退 出</div>
+            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin && teamPeople[index].identity==='普通成员'" @click="changePer(people)">修 改 权 限</div>
+            <div class="rpm-del-rightHalf" v-if="index !== nowLogin && teamPeople[index].identity==='普通成员'" @click="del(people)">删 除</div>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '普通成员'">
             <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
@@ -96,9 +96,13 @@ export default {
       team_intro:'这个团队很懒，什么也没有留下~',
     };
     let teamPeople = [{
+      user_id: '',
+      user_name: '',
+      real_name: '',
+      mail: '',
       identity: '',
+      tel: '',
     }];
-    let changePerM = -1;
     let isHover = [false,false,false,false,false,false,false,false,false,false,false];
     let nowLogin = 0;
     return {
@@ -109,7 +113,6 @@ export default {
       user_id:1,
       teamMes,
       teamPeople,
-      changePerM,
       isHover,
       nowLogin,
     }
@@ -146,7 +149,8 @@ export default {
       }
     },
     changePer:function (people) {
-      this.changePerM = people.name;
+      let changeFlag = 0;
+      if(people.identity==='管理员')changeFlag = 1;
       let toSend={
         user_id: this.user_id,
         team_id: this.team_id,
@@ -159,15 +163,23 @@ export default {
       }).then((res) =>{
         let ans =res.data;
         if(ans.errno===0){
-          this.$message.success(
-            "You have change his permission!!"
-          )
+          if(changeFlag===0) this.$notify.success(people.user_name+"的身份权限已变更为：管理员")
+          else this.$notify.success(people.user_name+"的权限等级已变更为：普通成员")
           this.getTeamMember();
         }
         else this.$notify.error(ans.msg);
       })
     },
-    //todo : dissolve team
+    showDissolveConfirm(){
+      this.$confirm('将解散团队, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        confirmButtonClass:'warning'
+      }).then(() => {
+        this.dissolve()
+      })
+    },
     dissolve(){
       let toSend={
         user_id:this.user_id,
@@ -180,12 +192,12 @@ export default {
       }).then((res) =>{
         let ans =res.data;
         if(ans.errno===0){
+          this.$notify.info("团队 "+this.teamMes.teamName+" 已解散")
           this.$router.push('/team');
         }
       })
     },
-    //todo:exit team
-    exit(people){
+    exit(){
       let toSend={
         user_id:this.user_id,
         team_id:this.team_id
@@ -197,6 +209,7 @@ export default {
       }).then((res) =>{
         let ans = res.data;
         if(ans.errno===0){
+          this.$notify.info("已退出团队 "+this.teamMes.teamName)
           this.$router.push('/team');
         }
       })
