@@ -324,7 +324,7 @@ export default {
 .right-box {
   position: relative;
   padding: 0;
-  left: 60px;
+  left: 160px;
 }
 .right-head-box {
   position: relative;
@@ -516,7 +516,7 @@ export default {
   margin-top: -40px;
   width: 80px;
   font-size: 22px;
-  margin-left: 80%;
+  margin-left: 72%;
   transition: all 0.25s;
 }
 .right-head-invite:hover{

@@ -46,10 +46,10 @@ export default {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
 }
 .left-box {
-  position: relative;
+  position: fixed;
   float: left;
-  top: 30px;
-  height: 500px;
+  top: 120px;
+  height: 450px;
   width: 100px;
   padding: 0;
 }
