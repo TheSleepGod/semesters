@@ -1,17 +1,18 @@
 <template>
   <div class = "left-box">
-      <div class = "left-project-one" title="查看项目" @click="gotoTeamProjects">
-        <img class = "left-project-one-img" src="../assets/teamProjects1.png" alt=""/>
-<!--        <span class="font-1 left-project-one-mes">项目</span>-->
-      </div>
-      <div class = "left-project-one" title="查看成员" @click="gotoTeamOne">
-        <img class = "left-project-one-img" src="../assets/teamMembers1.png" alt=""/>
-<!--        <span class="font-1 left-project-one-mes">成员</span>-->
-      </div>
-      <div class="left-project-one" title="返回团队" @click="gotoTeams">
-        <img class="left-project-one-img" src="../assets/goBack.png" alt=""/>
-      </div>
+    <div class = "left-project-one" title="团队项目" @click="gotoTeamProjects">
+      <img class = "left-project-one-img" src="../assets/teamProjects1.png" alt=""/>
     </div>
+    <div class = "left-project-one" title="文档总览" @click="gotoTeamDoc">
+      <img class = "left-project-one-img" src="../assets/teamDoc.png" alt=""/>
+    </div>
+    <div class = "left-project-one" title="管理成员" @click="gotoTeamOne">
+      <img class = "left-project-one-img" src="../assets/teamMembers1.png" alt=""/>
+    </div>
+    <div class="left-project-one" title="返回团队中心" @click="gotoTeams">
+      <img class="left-project-one-img" src="../assets/goBack.png" alt=""/>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -24,6 +25,9 @@ export default {
     }
   },
   methods: {
+    gotoTeamDoc(){
+      this.$router.push({path:'/teamDoc',query:{teamId: this.team_id,teamName:this.team_name}});
+    },
     gotoTeamOne(){
       this.$router.push({path:'/teamOne',query:{teamId: this.team_id,teamName:this.team_name}});
     },
@@ -44,7 +48,7 @@ export default {
 .left-box {
   position: relative;
   float: left;
-  top: 60px;
+  top: 30px;
   height: 500px;
   width: 100px;
   padding: 0;
