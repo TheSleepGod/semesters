@@ -278,8 +278,6 @@ export default {
 <style scoped>
 .box-body {
   padding: 0;
-  margin-left: -10px;
-  margin-top: -10px;
   overflow: hidden;
 }
 .left {

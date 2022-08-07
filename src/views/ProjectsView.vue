@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left: -10px;margin-top: -10px;">
+  <div>
     <TopBar :username="username"/>
     <TeamLeft :team_id="team.teamId" :team_name="team.teamName"/>
     <!-- 页头-->

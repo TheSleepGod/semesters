@@ -26,8 +26,6 @@ export default {
   padding: 0;
   width: 1600px;
   height: 800px;
-  margin-left: -10px;
-  margin-top: -10px;
   overflow: hidden;
   background: #0997F7;
 }
