@@ -191,7 +191,7 @@ export default {
     hideIcon(item){item.isHover=false},
     gotoProject(item){
       this.$router.push({
-        path:'/editWord',
+        path:'/editWord/word',
         query:{
           teamName:this.$route.query.teamName,
           teamId:this.$route.query.teamId,

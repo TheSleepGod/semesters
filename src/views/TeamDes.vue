@@ -52,17 +52,17 @@
             </ul>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '创建者'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">解 散</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="showDissolveConfirm">解 散</div>
             <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
             <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '管理员'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">退 出</div>
-            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
-            <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit()">退 出</div>
+            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin && teamPeople[index].identity==='普通成员'" @click="changePer(people)">修 改 权 限</div>
+            <div class="rpm-del-rightHalf" v-if="index !== nowLogin && teamPeople[index].identity==='普通成员'" @click="del(people)">删 除</div>
           </div>
           <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '普通成员'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="del(people)">退 出</div>
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
 <!--            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>-->
 <!--            <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>-->
           </div>
@@ -96,9 +96,13 @@ export default {
       team_intro:'这个团队很懒，什么也没有留下~',
     };
     let teamPeople = [{
+      user_id: '',
+      user_name: '',
+      real_name: '',
+      mail: '',
       identity: '',
+      tel: '',
     }];
-    let changePerM = -1;
     let isHover = [false,false,false,false,false,false,false,false,false,false,false];
     let nowLogin = 0;
     return {
@@ -109,7 +113,6 @@ export default {
       user_id:1,
       teamMes,
       teamPeople,
-      changePerM,
       isHover,
       nowLogin,
     }
@@ -139,13 +142,77 @@ export default {
           let ans = res.data;
           if(ans.errno===0){
             this.$message.success("You pressed OK! del " + people.name);
+            this.getTeamMember();
           }
           else this.$notify.error(ans.msg)
         })
       }
     },
     changePer:function (people) {
-      this.changePerM = people.name;
+      let changeFlag = 0;
+      if(people.identity==='管理员')changeFlag = 1;
+      let toSend={
+        user_id: this.user_id,
+        team_id: this.team_id,
+        new_user_id: people.user_id
+      }
+      this.$axios({
+        method:'post',
+        url : 'http://43.138.22.20:8000/api/user/setadmin',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        let ans =res.data;
+        if(ans.errno===0){
+          if(changeFlag===0) this.$notify.success(people.user_name+"的身份权限已变更为：管理员")
+          else this.$notify.success(people.user_name+"的权限等级已变更为：普通成员")
+          this.getTeamMember();
+        }
+        else this.$notify.error(ans.msg);
+      })
+    },
+    showDissolveConfirm(){
+      this.$confirm('将解散团队, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        confirmButtonClass:'warning'
+      }).then(() => {
+        this.dissolve()
+      })
+    },
+    dissolve(){
+      let toSend={
+        user_id:this.user_id,
+        team_id:this.team_id
+      }
+      this.$axios({
+        method : 'post',
+        url : 'http://43.138.22.20:8000/api/user/quit_team',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        let ans =res.data;
+        if(ans.errno===0){
+          this.$notify.info("团队 "+this.teamMes.teamName+" 已解散")
+          this.$router.push('/team');
+        }
+      })
+    },
+    exit(){
+      let toSend={
+        user_id:this.user_id,
+        team_id:this.team_id
+      };
+      this.$axios({
+        method : 'post',
+        url : 'http://43.138.22.20:8000/api/user/quit_team',
+        data : qs.stringify(toSend)
+      }).then((res) =>{
+        let ans = res.data;
+        if(ans.errno===0){
+          this.$notify.info("已退出团队 "+this.teamMes.teamName)
+          this.$router.push('/team');
+        }
+      })
     },
     showInvitePanel(){
       let bell = document.getElementById("right-head-invite-icon");
@@ -173,6 +240,7 @@ export default {
           this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
           this.invitePanelVisible = false;
           this.inviteName = "";
+          this.getTeamMember();
         }
         else this.$notify.error("邀请失败;"+ans.msg)
       })
@@ -196,7 +264,7 @@ export default {
           });
     },
 
-    getTeamNumber() {
+    getTeamMember() {
       let params = {
         team_id: this.team_id,
       };
@@ -210,32 +278,35 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-    }
+    },
+    getNowUser(){
+      this.$axios({
+        method:'post',
+        url: 'http://101.42.160.94:8000/api/user_web/get_user',
+        headers:{
+          'Authorization':localStorage.getItem('Token'),
+        },
+      }).then((res) =>{
+        console.log(res);
+        this.user_id=0;
+        this.user_id=res.data.data.user_id;
+        this.username=res.data.data.username;
+        for(let i in this.teamPeople){
+          if(this.user_id===this.teamPeople[i].user_id){
+            this.teamMes.myIdentity=this.teamPeople[i].identity;
+            this.nowLogin=i;
+          }
+        }
+        console.log(this.user_id);
+      })
+    },
   },
   created() {
-    this.$axios({
-      method:'post',
-      url: 'http://101.42.160.94:8000/api/user_web/get_user',
-      headers:{
-        'Authorization':localStorage.getItem('Token'),
-      },
-    }).then((res) =>{
-      console.log(res);
-      this.user_id=0;
-      this.user_id=res.data.data.user_id;
-      this.username=res.data.data.username;
-      for(let i in this.teamPeople){
-        if(this.user_id===this.teamPeople[i].user_id){
-          this.teamMes.myIdentity=this.teamPeople[i].identity;
-          this.nowLogin=i;
-        }
-      }
-      console.log(this.user_id);
-    })
+    this.getNowUser()
     this.team_id = this.$route.query.teamId;
     this.teamMes.teamName = this.$route.query.teamName;
     this.getTeamMessage();
-    this.getTeamNumber();
+    this.getTeamMember();
   }
 }
 </script>
