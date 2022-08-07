@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Word from "@/views/Word";
 import Design from "@/views/Design";
 import Drawio from "@/views/Drawio";
+import Design2 from "@/views/Design2";
 
 Vue.use(VueRouter)
 
@@ -64,6 +65,10 @@ const routes = [
       {
         path: 'UML',
         component: Drawio
+      },
+      {
+        path:'design2',
+        component: Design2
       }
     ]
   },
