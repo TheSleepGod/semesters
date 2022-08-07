@@ -42,7 +42,6 @@ export default {
           break;
         case "logout":
           this.logout();
-          this.$router.push("/");
           break;
       }
     },
@@ -75,6 +74,7 @@ export default {
         if (ret.data.errno === 0) {
           this.$message.success("退出成功");
           localStorage.clear();
+          this.$router.push("/");
         } else {
           alert(ret.data.msg);
           this.$message.error("退出失败");
