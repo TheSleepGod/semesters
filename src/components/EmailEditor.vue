@@ -49,21 +49,25 @@ export default {
       if (this.appearance) {
         options.appearance = this.appearance;
       }
-
+/*
       if (this.locale) {
         options.locale = this.locale;
       }
+
+ */
 
       /* global unlayer */
       this.editor = unlayer.createEditor({
         ...options,
         id: this.id,
         displayMode: 'email',
+        locale:'ZH-CN',
         source: {
           name: pkg.name,
           version: pkg.version,
         },
       });
+
 
       this.$emit('load');
 
