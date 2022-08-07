@@ -10,7 +10,7 @@
         <div id="example">
         <div class="container">
           <div id="bar">
-            <h1>Vue Email Editor</h1>
+            <h1 style="margin-left: 60px">{{this.name}}</h1>
 
             <button v-on:click="saveDesign">Save Design</button>
             <button v-on:click="exportHtml">Export HTML</button>
@@ -33,6 +33,11 @@ export default {
   name: 'exampleView',
   components: {
     EmailEditor
+  },
+  data(){
+    return{
+      name:'设计图1',
+    }
   },
   methods: {
     // called when the editor is created
@@ -68,6 +73,10 @@ html, body {
   padding: 0;
   height: 100%;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+ .el-main  {
+   padding: 0px !important;
 }
 
 #example {
@@ -117,7 +126,5 @@ html, body {
 .main_area{
   border: 1px solid black;
 }
-.el-main{
-  padding: 0px;
-}
+
 </style>

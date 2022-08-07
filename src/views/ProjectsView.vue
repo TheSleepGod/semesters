@@ -384,6 +384,7 @@ export default {
             team_id: this.team.teamId,
           }))
           .then((res) => {
+            console.log(res);
             let array = res.data.data;
             for(let i in array){
               this.projectsList.push({
