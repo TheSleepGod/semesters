@@ -270,7 +270,29 @@ export default {
       }
     },
     searchProject(){
-      console.log(this.searchProectName)
+      this.$axios.post(
+          "http://43.138.22.20:8000/api/user/search_project",
+          qs.stringify({
+            content: this.searchProectName,
+            team_id: this.team.teamId
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.projectsList = [];
+          let array = res.data.data;
+          for(let i in array){
+            this.projectsList.push({
+              id: array[i].project_id,
+              name: array[i].project_name,
+              time: array[i].create_time,
+              isRecycled: array[i].recycle,
+              isHover: false,
+            });
+          }
+        } else this.$notify.error(res.data.msg)
+      }).catch((error)=>{
+        console.log(error)
+      })
     },
     copy(item){
       this.$notify.success("已生成项目副本：副本-"+item.name);
@@ -377,6 +399,7 @@ export default {
           })
     },
     getTeamProjects(){
+      this.searchProectName = '';
       this.projectsList = [];
       this.$axios.post(
           "http://43.138.22.20:8000/api/user/check_team_project",
