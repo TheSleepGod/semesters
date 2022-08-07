@@ -26,7 +26,7 @@
     <el-tabs v-model="activeName" style="width: 76%;margin-left: 12%">
       <el-tab-pane label="团队项目" name="first">
         <div class="cards-container" style="margin-top: 10px">
-          <div class="projectsCard" id="commonPrCard" v-for="item in tmpProjectsList" :key="item.data" v-if="item.isRecycled===0"
+          <div class="projectsCard" id="commonPrCard" v-for="item in projectsList" :key="item.data" v-if="item.isRecycled===0"
                @click="gotoProject(item)" @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
             <div class="projectsCardFoot">
               <span class="projectsNameSpan">{{item.name}}</span>
