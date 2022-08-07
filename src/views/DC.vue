@@ -1,7 +1,7 @@
 <template>
   <div class = "body-box">
-    <topBar/>
-    <ProjectLeft/>
+    <top-bar :username="username"></top-bar>
+    <TeamLeft :team_id="team.teamId" :team_name="team.teamName"/>
     <div class = "multi-level-lists-box" @mouseover="comeDocument" @mouseleave="leaveDocument">
       <div class = "document-center">
         <transition name="slide-fade">
@@ -56,12 +56,12 @@
 </template>
 
 <script>
-import ProjectLeft from "../components/ProjectLeft";
+import TeamLeft from "../components/ProjectLeft";
 import topBar from "../components/topBar"
 export default {
   name: "DC",
   components: {
-    ProjectLeft,
+    TeamLeft,
     topBar,
   },
   data() {
@@ -113,6 +113,11 @@ export default {
       threeChoose,
       teamList,
       projectList,
+      username:'',
+      team:{
+        teamId:0,
+        teamName:'',
+      }
     }
   },
   methods: {
@@ -126,7 +131,30 @@ export default {
       this.oneChoose = true;
       this.twoChoose = false;
       this.threeChoose = false;
-    }
+    },
+    getNowUser() {
+      this.$axios({
+            method : 'post',
+            url : 'http://101.42.160.94:8000/api/user_web/get_user',
+            headers:{
+              'Authorization':localStorage.getItem('Token'),
+            }
+          }
+      ).then((ret) => {
+        if (ret.data.errno === 0) {
+          console.log(ret.data.data);
+          this.username = ret.data.data.username;
+          this.userId=ret.data.data.user_id;
+        } else {
+          this.$notify.error(ret.data.msg);
+        }
+      })
+    },
+  },
+  created() {
+    this.team.teamId = this.$route.query.teamId;
+    this.team.teamName = this.$route.query.teamName;
+    this.getNowUser();
   }
 }
 </script>
@@ -143,13 +171,7 @@ export default {
   transform: translateX(10px);
   opacity: 0;
 }
-.body-box {
-  width: 1698px;
-  height: 800px;
-  margin-left: -10px;
-  margin-top: -10px;
-  text-align: right;
-}
+
 .multi-level-lists-box {
   height: 700px;
   background: #0997F7;

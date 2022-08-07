@@ -75,11 +75,11 @@ export default {
         if (ret.data.errno === 0) {
           this.$message.success("退出成功");
           localStorage.clear();
-          this.$router.push("/");
+          this.$router.push("/80");
         } else if(ret.data.errno===4001){
           localStorage.clear();
           this.$message.error("用户已下线");
-          this.$router.push("/");
+          this.$router.push("/80");
         }
           else {
           alert(ret.data.msg);
