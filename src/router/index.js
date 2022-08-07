@@ -20,9 +20,6 @@ const routes = [
   //   component: HomeView
   // },
   {
-    
-  }, 
-  {
     path: '/80',
     name: 'home',
     component: () => import(/* webpackChunkName: "about" */ '../views/home.vue'),
@@ -89,6 +86,11 @@ const routes = [
     path: '/test2',
     name: 'test2',
     component: () => import("../views/test2")
+  },
+  {
+    path: '/teamDoc',
+    name: 'documentCenter',
+    component: () => import(/* webpackChunkName: "about" */ '../views/DC.vue'),
   }
 ]
 
