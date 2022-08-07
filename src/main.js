@@ -8,6 +8,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 import vdr from 'vue-draggable-resizable-gorkys'
+
 import qs from "qs"
 Vue.use(qs)
 // 导入默认样式
