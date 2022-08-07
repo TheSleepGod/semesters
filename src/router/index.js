@@ -92,7 +92,11 @@ const routes = [
     name: 'test3',
     component: () => import("../views/Example")
   },
-
+  {
+    path: '/teamDoc',
+    name: 'documentCenter',
+    component: () => import(/* webpackChunkName: "about" */ '../views/DC.vue'),
+  }
 ]
 
 const router = new VueRouter({
