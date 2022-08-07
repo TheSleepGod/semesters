@@ -138,12 +138,13 @@ export default {
             }
           }
       ).then((ret) => {
+        console.log(ret);
         if (ret.data.errno === 0) {
-          console.log(ret.data.data);
+          //console.log(ret.data.data);
           this.$notify.info('已检测到登录信息,即将跳转...')
-          // setTimeout(()=>{this.$router.push('/team');},500)
+          //setTimeout(()=>{this.$router.push('/team');},2000)
         } else this.$notify.error(ret.data.msg);
-        console.log(this.user_id);
+        //console.log(this.user_id);
       })
     },
     login: function () {
@@ -151,16 +152,16 @@ export default {
         username:this.loginForm.username,
         password:this.loginForm.password
       };
-      console.log(con);
+      //console.log(con);
       axios({
         url: 'http://101.42.160.94:8000/api/user_web/login',
         method: 'post',
         data: qs.stringify(con),
       }).then((ret) => {
-        console.log(ret);
+        //console.log(ret);
         if (ret.data.errno === 0) {
-          console.log(ret);
-          console.log(ret.data.data.authorization);
+          //console.log(ret);
+          //console.log(ret.data.data.authorization);
           localStorage.setItem('Token',ret.data.data.authorization);
           this.$message.success("登录成功");
           this.$router.push('/team');
@@ -178,7 +179,7 @@ export default {
       con['email'] = this.createUserForm.email;
       con['code'] = this.createUserForm.verifyCode;
       con['username'] = this.createUserForm.username;
-      console.log(con);
+      //console.log(con);
       axios({
         url: 'http://101.42.160.94:8000/api/user_web/register',
         method: 'post',
@@ -195,7 +196,7 @@ export default {
     verify: function () {
       let con = {};
       con['email'] = this.createUserForm.email;
-      console.log(con);
+      //console.log(con);
       axios({
         url: 'http://101.42.160.94:8000/api/user_web/check_mail',
         method: 'post',

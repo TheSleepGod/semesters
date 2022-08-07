@@ -42,7 +42,6 @@ export default {
           break;
         case "logout":
           this.logout();
-          this.$router.push("/");
           break;
       }
     },
@@ -72,10 +71,17 @@ export default {
           'Authorization':localStorage.getItem('Token'),
         },
       }).then((ret) => {
+        console.log(ret);
         if (ret.data.errno === 0) {
           this.$message.success("退出成功");
           localStorage.clear();
-        } else {
+          this.$router.push("/");
+        } else if(ret.data.errno===4001){
+          localStorage.clear();
+          this.$message.error("用户已下线");
+          this.$router.push("/");
+        }
+          else {
           alert(ret.data.msg);
           this.$message.error("退出失败");
         }
