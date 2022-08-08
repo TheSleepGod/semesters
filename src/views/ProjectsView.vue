@@ -3,8 +3,8 @@
     <TopBar :username="username"/>
     <TeamLeft :team_id="team.teamId" :team_name="team.teamName"/>
     <!-- 页头-->
-    <div style="height: 40px;width: 76%;margin-left: 12%;overflow: hidden">
-      <div style="font-size: 26px;float: left;text-align: left;">{{team.teamName}}的团队项目</div>
+    <div class="head-box">
+      <div class="head-font">{{team.teamName}} - 项目中心</div>
       <div class="tools">
         <div class="search-box">
           <el-input v-model="searchProectName" placeholder="请输入要搜索的项目名称" clearable size="mini" @input="searchProject"/>
@@ -429,13 +429,25 @@ export default {
 </script>
 
 <style scoped>
+.head-box{
+  width: 76%;
+  margin-left: 12%;
+  overflow: hidden;
+  height: 60px;
+  line-height: 60px
+}
+.head-font{
+  font-size: 28px;
+  float: left;
+  text-align: left;
+}
 .tools{
   position: absolute;
   line-height: 40px;
   display: flex;
   right: 12%;
   height: 40px;
-  top: 125px;
+  top: 145px;
   z-index: 20;
 }
 .search-box{
@@ -534,12 +546,12 @@ export default {
 }
 #newPrCard:hover #prPlusSpan{
   font-size: 28px;
-  transform: translateX(270%) translateY(50%) rotate(810deg);
+  transform: translateX(220%) translateY(50%) rotate(810deg);
   color: deepskyblue;
 }
 #newPrCard:hover #newPrNameSpan{
   font-size: 17px;
   color: deepskyblue;
-  transform: translateX(35%) translateY(-50%);
+  transform: translateX(32%) translateY(-50%);
 }
 </style>

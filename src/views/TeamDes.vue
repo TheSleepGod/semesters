@@ -72,7 +72,7 @@
 
     <el-dialog title="邀请新成员" :visible.sync="invitePanelVisible" style="width:60%;margin-left: 20%">
       <el-input v-model="inviteName" placeholder="请输入被邀请者的用户id" maxlength="20" show-word-limit>
-        <el-button slot="append" @click="inviteMember(inviteName)">确认</el-button>
+        <el-button slot="append" @click="inviteMember">确认</el-button>
       </el-input>
     </el-dialog>
   </div>
@@ -141,7 +141,7 @@ export default {
           console.log(res);
           let ans = res.data;
           if(ans.errno===0){
-            this.$message.success("You pressed OK! del " + people.name);
+            this.$notify.success("已删除成员 " + people.user_name);
             this.getTeamMember();
           }
           else this.$notify.error(ans.msg)
@@ -223,7 +223,7 @@ export default {
         this.invitePanelVisible = true;
       },300);
     },
-    inviteMember(name){
+    inviteMember(){
       let todo = {
         user_id : this.user_id,
         team_id : this.team_id,
@@ -237,7 +237,7 @@ export default {
         //console.log(res);
         let ans=res.data;
         if(ans.errno===0){
-          this.$message.success("成功邀请成员 "+name+" 加入团队 "+this.teamMes.teamName);
+          this.$message.success("邀请成功");
           this.invitePanelVisible = false;
           this.inviteName = "";
           this.getTeamMember();
@@ -326,8 +326,9 @@ export default {
 }
 .right-head-box {
   position: relative;
+  width: 80%;
   height: 100px;
-  left: 30px;
+  padding-left: 20px;
 }
 .right-head-teamName {
   position: relative;
@@ -381,6 +382,7 @@ export default {
   transition: all 0.25s;
 }
 .right-people-boxes-container {
+  width: 80%;
   margin-top: 20px;
   position: relative;
   flex-wrap: wrap;
@@ -514,7 +516,7 @@ export default {
   margin-top: -40px;
   width: 80px;
   font-size: 22px;
-  margin-left: 72%;
+  float: right;
   transition: all 0.25s;
 }
 .right-head-invite:hover{

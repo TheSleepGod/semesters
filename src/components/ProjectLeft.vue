@@ -1,9 +1,9 @@
 <template>
   <div class = "left-box">
-    <div class = "left-project-one" title="团队项目" @click="gotoTeamProjects">
+    <div class = "left-project-one" title="项目中心" @click="gotoTeamProjects">
       <img class = "left-project-one-img" src="../assets/teamProjects1.png" alt=""/>
     </div>
-    <div class = "left-project-one" title="文档总览" @click="gotoTeamDoc">
+    <div class = "left-project-one" title="文档中心" @click="gotoTeamDoc">
       <img class = "left-project-one-img" src="../assets/teamDoc.png" alt=""/>
     </div>
     <div class = "left-project-one" title="管理成员" @click="gotoTeamOne">
@@ -48,7 +48,7 @@ export default {
 .left-box {
   position: fixed;
   float: left;
-  top: 120px;
+  top: 17%;
   height: 450px;
   width: 100px;
   padding: 0;

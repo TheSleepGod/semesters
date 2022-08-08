@@ -188,6 +188,7 @@ export default {
       }).then((ret) => {
         if (ret.data.errno === 0) {
           this.$message.success("注册成功");
+          this.innerVisible = false;
         } else {
           alert(ret.data.msg);
           this.$message.error("登录失败");
