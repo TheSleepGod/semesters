@@ -23,11 +23,41 @@ Vue.component('vue-draggable-resizable', VueDraggableResizable)
 Vue.component('vdr', vdr)
 
 Vue.prototype.$axios = axios;
+
+
+let isLogin = false;
+
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
   }
-  next()
+  if(to.path ==="/80") {
+     next();
+  } 
+  else {
+    isLogin = false;
+    setTimeout(()=> {},1000);
+
+      axios({
+              method : 'post',
+              url : 'http://101.42.160.94:8000/api/user_web/get_user',
+              headers:{
+                  'Authorization':localStorage.getItem('Token'),
+              }
+          }
+      ).then((ret) => {
+          console.log(ret);
+          if(ret.data.errno === 0) {
+              isLogin = true;
+              console.log(isLogin + "1");
+          }
+          console.log(isLogin + "2");
+          //console.log(this.user_id);
+          console.log(isLogin + "3");
+          isLogin ? next(): next("/80");
+      })
+  }
+  next();
 })
 Vue.config.productionTip = false
 new Vue({
@@ -37,3 +67,5 @@ new Vue({
   el: '#app',
   render: h => h(App)
 }).$mount('#app')
+
+
