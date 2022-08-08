@@ -165,6 +165,7 @@ export default {
           localStorage.clear();
           localStorage.setItem('Token',ret.data.data.authorization);
           this.$message.success("登录成功");
+          console.log("我要跳转啦");
           this.$router.push('/team');
         } else {
           this.$notify.error(ret.data.msg);
@@ -188,6 +189,7 @@ export default {
       }).then((ret) => {
         if (ret.data.errno === 0) {
           this.$message.success("注册成功");
+          this.innerVisible = false;
         } else {
           alert(ret.data.msg);
           this.$message.error("登录失败");
