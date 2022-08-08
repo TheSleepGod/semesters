@@ -10,6 +10,7 @@
     "daydayup": "npm run build && npm run test"
   },
   "dependencies": {
+    "@nuxtjs/vuetify": "^1.12.3",
     "@vue/runtime-core": "^3.2.37",
     "@vue/runtime-dom": "^3.2.37",
     "@wangeditor/editor": "^5.1.14",
@@ -41,6 +42,7 @@
     "vue-draggable-resizable-gorkys": "^2.4.8",
     "vue-router": "^3.5.1",
     "vuedraggable": "^2.24.3",
+    "vuetify": "^2.6.8",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
