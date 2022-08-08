@@ -14,7 +14,7 @@
                 <img src="../assets/DocumentCenter/choose-one.png" alt="" class = "document-right-img"/>
               </div>
               <div class = "document-right-span-box">
-                <span class = "document-right-span font-1">文档中心</span>
+                <span class = "document-right-span font-1">项目文档</span>
               </div>
             </div>  
           </div>
@@ -28,18 +28,20 @@
     </div>
 
     
-    <el-collapse accordion style="width: 300px;">
+    <el-collapse accordion style="width: 200px; position: relative; float: left; left: 100px;">
       <el-collapse-item style="">
-        <div slot="title" style=" width: 150px; text-align: center">
+        <div slot="title" style=" width: 200px; text-align: center" >
           <div class = "document-team-box">
-            文档中心
+            <span class="document-team">项目文档</span>
           </div>  
         </div>
         <el-collapse accordion>
           <div v-for="(team,index) in teamList">
             <el-collapse-item>
               <div slot="title" class = "team-name">
-                {{team.teamName}}
+                <div class = "team-name-box font-1 ">
+                  <span class="document-team">{{team.teamName}}</span>
+                </div>  
               </div>
               <div v-for="project in projectList" style="text-align: left">
                 <div class = "project-name font-1">
@@ -248,9 +250,24 @@ export default {
 .document-team-box {
   cursor: pointer;
   caret-color: transparent;
+  width: 140px;
+  height: 40px;
+  border-radius: 10px;
+  position: relative;
+  float: left;
+  left: 30px;
+  text-align: center;
+}
+.document-team-box:hover {
+  background: #cccccc;
+}
+.document-team {
+  position: relative;
+  display: block;
+  top: -2px;
 }
 .project-name {
-  width: 150px;
+  width: 200px;
   height: 50px;
   text-align: center;
   font-size: 16px;
@@ -262,16 +279,35 @@ export default {
   background: #1795bb;
 }
 .team-name {
-  width: 150px;
+  width: 200px;
   height: 50px;
   text-align: center;
-  font-size: 13px;
+  font-size: 16px;
   background: #1795bb;
   caret-color: transparent;
   cursor: pointer;
 }
 .team-name:hover {
   background: #1795bb;
+}
+.team-name-box {
+  cursor: pointer;
+  caret-color: transparent;
+  width: 140px;
+  height: 40px;
+  border-radius: 10px;
+  position: relative;
+  float: left;
+  left: 30px;
+  text-align: center;
+}
+.team-name-box:hover {
+  background: #cccccc;
+}
+.document-team {
+  position: relative;
+  display: block;
+  top: -2px;
 }
 /deep/ .el-collapse-item__header{
   font-size: 18px;
