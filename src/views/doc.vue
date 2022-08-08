@@ -1,5 +1,6 @@
 <template>
-  <div class="editor" id="pdfPrint1" v-if="editor">
+  <div>
+    <div class="editor" id="pdfPrint1" v-if="editor">
     <menu-bar class="editor__header" :editor="editor" />
     <div id="outContent">
       <editor-content  id="pdfPrint" class="editor__content" :editor="editor"/>
@@ -29,6 +30,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -53,6 +55,8 @@ import JSZipUtils from "jszip-utils";
 import JSZip from "jszip";
 import docxtemplater from 'docxtemplater'
 import $ from 'jquery'
+import axios from "axios";
+import qs from "qs";
 require('@/assets/js/jquery.wordexport')
 
 const getRandomElement = list => {
@@ -83,7 +87,7 @@ export default {
       provider: null,
       editor: null,
       status: 'connecting',
-      room: getRandomRoom(),
+      room: this.$route.query.room,
       textModel: '',
       textCode: '',
       textDownload: '',
@@ -92,11 +96,18 @@ export default {
       pdfSelector: '#pdfPrint',
       htmlDownload: '',
       markdownContent: '',
+      createVisible: false,
+      createForm: {
+        title: '',
+        type: '',
+      },
+      formLabelWidth: '120px',
     }
   },
 
   mounted() {
-    // this.getText(1);
+
+    this.getText(this.$route.query.type);
     const ydoc = new Y.Doc()
 
     this.provider = new HocuspocusProvider({
@@ -178,22 +189,22 @@ export default {
     },
 
     getText(textCode) {
-      if(textCode === 0){
+      if(textCode === '0'){
         this.textModel = '';
       }
-      else if(textCode === 1){
+      else if(textCode === '1'){
         //需求规格说明书
         this.textModel = '<h2>需求规格说明书</h2>';
       }
-      else if(textCode === 2){
+      else if(textCode === '2'){
         //会议纪要
         this.textModel = '<h2>会议纪要</h2>';
       }
-      else if(textCode === 3){
+      else if(textCode === '3'){
         //项目计划
         this.textModel = '<h2>项目计划</h2>';
       }
-      else if(textCode === 4){
+      else if(textCode === '4'){
         //架构设计说明书
         this.textModel = '<h2>架构设计说明书</h2>';
       }
