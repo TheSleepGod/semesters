@@ -19,20 +19,12 @@
       <div id="showCase2" v-if="isChanging">
         <div class="left-changeMesForm">
           <div class="left-changeMesForm-line">
-            <span class="changeMesForm-label">昵称</span>
-            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" disabled="true" style="cursor:not-allowed"/>
-          </div>
-          <div class="left-changeMesForm-line">
-            <span class="changeMesForm-label">邮箱</span>
-            <input type="text" placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" disabled="true" style="cursor:not-allowed"/>
-          </div>
-          <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">真实姓名</span>
-            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" v-model="newName"/>
+            <input :placeholder = "this.name" class="changeMesForm-input" maxlength="16" v-model="newName"/>
           </div>
           <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">电话</span>
-            <input placeholder="TheSleepGod" class="changeMesForm-input" maxlength="16" v-model="newPhone"/>
+            <input :placeholder = "this.phone" class="changeMesForm-input" maxlength="16" v-model="newPhone"/>
           </div>
           <div style="height: 50px;">
             <button class="changeMesForm-btn" style="margin-left: 20%;" @click="changeOk">保存</button>
@@ -96,6 +88,8 @@ export default {
     let addedTeam = [];
     let allTeam = addedTeam;
     return {
+      name:'',
+      phone:'',
       username: '',
       newTeamName: "",
       newName:'',
@@ -147,9 +141,12 @@ export default {
       this.$axios({
         method : 'post',
         url : 'http://101.42.160.94:8000/api/user_web/update_user',
-        data : JSON.stringify(toSend)
+        data : JSON.stringify(toSend),
+        headers:{
+          'Authorization':localStorage.getItem('Token'),
+        }
       }).then((res) =>{
-        //console.log(res);
+        console.log(res);
         let ans = res.data;
         if(ans.errno===0){
           this.$message({
@@ -257,6 +254,8 @@ export default {
           console.log(ret.data.data);
           this.username = ret.data.data.username;
           this.user_id=ret.data.data.user_id;
+          this.name = ret.data.data.name;
+          this.phone = ret.data.data.phone;
         } else {
           this.$notify.error(ret.data.msg);
         }
@@ -286,11 +285,13 @@ export default {
   float: left;
   width: 25%;
   height: 550px;
+  caret-color: transparent;
 }
 .left-head-box {
   position: relative;
   width: 80%;
   margin-left: 10%;
+  caret-color: transparent;
 }
 .left-head-img {
   position: relative;
@@ -332,6 +333,7 @@ export default {
   display: inline-block;
   position: relative;
   width: 75%;
+  caret-color: transparent;
 }
 .right-head-box {
 }

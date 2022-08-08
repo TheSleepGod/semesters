@@ -8,15 +8,15 @@
 
       <el-main class="main_area">
         <div id="example">
-        <div class="container">
-          <div id="bar">
-            <h1 style="margin-left: 60px">{{this.name}}</h1>
+          <div class="container">
+            <div id="bar">
+              <h1 style="margin-left: 60px;margin-top: 10px">{{this.name}}</h1>
 
-            <button v-on:click="saveDesign">Save Design</button>
-            <button v-on:click="exportHtml">Export HTML</button>
-          </div>
+              <button v-on:click="saveDesign">保 存 页 面</button>
+              <button v-on:click="exportHtml">导 出 HTML</button>
+            </div>
 
-          <EmailEditor ref="emailEditor" v-on:load="editorLoaded" v-on:ready="editorReady" />
+            <EmailEditor ref="emailEditor" v-on:load="editorLoaded" v-on:ready="editorReady" />
           </div>
         </div>
       </el-main>
@@ -75,16 +75,22 @@ html, body {
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 .el-main  {
-   padding: 0px !important;
+  padding: 0 !important;
 }
-
+.container{
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+*, :after, :before {
+  background-repeat: no-repeat;
+  box-sizing: inherit;
+}
 #example {
   height: 100%;
   margin: 0px;
   padding: 0px;
   border: 0px;
 }
-
 #example .container {
   display: flex;
   flex-direction: column;
@@ -98,7 +104,7 @@ html, body {
   color: #FFF;
   padding: 10px;
   display: flex;
-  max-height: 40px;
+  max-height: 60px;
 }
 
 #bar h1 {

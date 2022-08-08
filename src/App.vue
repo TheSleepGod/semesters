@@ -32,9 +32,29 @@ nav a.router-link-exact-active {
 ::-webkit-scrollbar{
 
 }
-/*::-webkit-scrollbar {     width: 10px;   }*/
-/*::-webkit-scrollbar-track {     background: rgb(179, 177, 177);     border-radius: 10px; }*/
-/*::-webkit-scrollbar-thumb {     background: rgb(136, 136, 136);     border-radius: 10px;   }*/
-/*::-webkit-scrollbar-thumb:hover {     background: rgb(100, 100, 100);     border-radius: 10px;   }*/
-/*::-webkit-scrollbar-thumb:active {     background: rgb(68, 68, 68);     border-radius: 10px;   }*/
+/*::-webkit-scrollbar {width: 5px;transition: all 0.25s;}*/
+/*::-webkit-scrollbar-track {background: ghostwhite;border-radius: 10px;}*/
+/*::-webkit-scrollbar-thumb {background: darkgrey;border-radius: 10px;}*/
+/*::-webkit-scrollbar-thumb:hover {background: lightslategrey;}*/
+/*::-webkit-scrollbar-thumb:active {background: grey}*/
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ababab;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  -webkit-transition: all 0.25s;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  border: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
 </style>
