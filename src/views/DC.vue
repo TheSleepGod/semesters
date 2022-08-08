@@ -49,25 +49,28 @@
       <div class="main-right-box">
         <div class="right-pullIcon-bar"/>
         <div class="right-folders-box">
-          <MultiFolder :team_id="team.teamId" :team_name="team.teamName"/>
-<!--            <v-treeview-->
-<!--                v-model="tree"-->
-<!--                :open="initiallyOpen"-->
-<!--                :items="items"-->
-<!--                activatable-->
-<!--                item-key="name"-->
-<!--                open-on-click-->
-<!--                style="text-align: left"-->
-<!--            >-->
-<!--              <template v-slot:prepend="{ item, open }">-->
-<!--                <v-icon v-if="!item.file">-->
-<!--                  {{ open ? 'mdi-folder-open' : 'mdi-folder' }}-->
-<!--                </v-icon>-->
-<!--                <v-icon>-->
-<!--                  {{ files[item.file]}}-->
-<!--                </v-icon>-->
-<!--              </template>-->
-<!--            </v-treeview>-->
+          <!-- todo: put Folders in this box-->
+<!--          <MultiFolder :team_id="team.teamId" :team_name="team.teamName"/>-->
+          <v-treeview
+                v-model="tree"
+                :open="initiallyOpen"
+                :items="items"
+                activatable
+                item-key="name"
+                open-on-click
+                style="text-align: left"
+            >
+                <template v-slot:prepend="{ item, open }" >
+                  <div @contextmenu.prevent="onContextmenu($event,item)" style="width: 100%">
+                    <v-icon v-if="!item.file">
+                      {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+                    </v-icon>
+                    <v-icon v-else>
+                      {{ files[item.file]}}
+                    </v-icon>
+                  </div>
+                </template>
+            </v-treeview>
         </div>
       </div>
     </div>
@@ -119,6 +122,7 @@ export default {
   },
   data(){
     return{
+      visible:false,
       username: '',
       team:{
         teamId: '',
@@ -129,7 +133,7 @@ export default {
         docName: 'name1',
         docContent: ''
       },
-      initiallyOpen: ['public'],
+      initiallyOpen: ['文档中心'],
       files: {
         html: 'mdi-language-html5',
         js: 'mdi-nodejs',
@@ -141,61 +145,66 @@ export default {
         xls: 'mdi-file-excel',
       },
       tree: [],
-      items: [
-        {
-          name: '.git',
-        },
-        {
-          name: 'node_modules',
-        },
-        {
-          name: 'public',
-          children: [
-            {
-              name: 'static',
-              children: [{
-                name: 'logo.png',
+      items: [{
+        name:'文档中心',
+        children: [
+          {
+            name: '.git',
+          },
+          {
+            name: 'node_modules',
+          },
+          {
+            name: 'public',
+            children: [
+              {
+                name: 'static',
+                children: [{
+                  name: 'logo.png',
+                  file: 'png',
+                },
+                  {
+                    name:'abc.js',
+                    file:'js',
+                  }],
+              },
+              {
+                name: 'favicon.ico',
                 file: 'png',
               },
-                {
-                  name:'abc.js',
-                  file:'js',
-                }],
-            },
-            {
-              name: 'favicon.ico',
-              file: 'png',
-            },
-            {
-              name: 'index.html',
-              file: 'html',
-            },
-          ],
-        },
-        {
-          name: '.gitignore',
-          file: 'txt',
-        },
-        {
-          name: 'babel.config.js',
-          file: 'js',
-        },
-        {
-          name: 'package.json',
-          file: 'json',
-        },
-        {
-          name: 'README.md',
-          file: 'md',
-        },
-        {
-          name: 'vue.config.js',
-          file: 'js',
-        },
-        {
-          name: 'yarn.lock',
-          file: 'txt',
-        },
+              {
+                name: 'index.html',
+                file: 'html',
+              },
+            ],
+          },
+          {
+            name: '.gitignore',
+            file: 'txt',
+          },
+          {
+            name: 'babel.config.js',
+            file: 'js',
+          },
+          {
+            name: 'package.json',
+            file: 'json',
+          },
+          {
+            name: 'README.md',
+            file: 'md',
+          },
+          {
+            name: 'vue.config.js',
+            file: 'js',
+          },
+          {
+            name: 'yarn.lock',
+            file: 'txt',
+          },
+        ]
+      }
+
       ],
       currentUser: JSON.parse(localStorage.getItem('currentUser')) || {
         name: this.getRandomName(),
@@ -241,6 +250,66 @@ export default {
   },
 
   methods: {
+    onContextmenu(event,item) {
+      if(item.name=='文档中心'){
+        this.$contextmenu({
+          items: [
+            {
+              label: "新建文件夹",
+              icon:'el-icon-folder-add'
+            },
+          ],
+          event,
+          //x: event.clientX,
+          //y: event.clientY,
+          customClass: "class-a",
+          zIndex: 3,
+          minWidth: 230
+        });
+      }
+      else if(!item.file){
+        this.$contextmenu({
+          items: [
+            {
+              label: "新建文档",
+              icon:"el-icon-document-add"
+            },
+            {
+              label: "重命名文件夹",
+              icon:"el-icon-edit"
+            }
+
+          ],
+          event,
+          //x: event.clientX,
+          //y: event.clientY,
+          customClass: "class-a",
+          zIndex: 3,
+          minWidth: 230
+        });
+      }
+      else{
+        this.$contextmenu({
+          items: [
+            {
+              label: "删除文档",
+              icon:"el-icon-document-delete"
+            },
+            {
+              label: "重命名文档",
+              icon:"el-icon-edit"
+            }
+          ],
+          event,
+          //x: event.clientX,
+          //y: event.clientY,
+          customClass: "class-a",
+          zIndex: 3,
+          minWidth: 230
+        });
+      }
+      return false;
+    },
     setName() {
       const name = (window.prompt('Name') || '')
           .trim()
