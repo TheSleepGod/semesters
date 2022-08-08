@@ -8,13 +8,13 @@
 
       <el-main class="main_area">
         <div id="example">
-          <div class="container">
-            <div id="bar">
-              <h1 style="margin-left: 60px;margin-top: 10px">{{this.name}}</h1>
-
-              <button v-on:click="saveDesign">保 存 页 面</button>
-              <button v-on:click="exportHtml">导 出 HTML</button>
-            </div>
+        <div class="container">
+          <div id="bar">
+            <h1 style="margin-left: 60px">{{this.name}}</h1>
+            <button v-on:click="loadDesign(design)">载入页面</button>
+            <button v-on:click="saveDesign">保存页面</button>
+            <button v-on:click="exportHtml">导出页面</button>
+          </div>
 
             <EmailEditor ref="emailEditor" v-on:load="editorLoaded" v-on:ready="editorReady" />
           </div>
@@ -37,6 +37,7 @@ export default {
   data(){
     return{
       name:'设计图1',
+      design:{},
     }
   },
   methods: {
@@ -49,10 +50,14 @@ export default {
     editorReady() {
       console.log('editorReady');
     },
+    loadDesign(design) {
+      this.$refs.emailEditor.editor.loadDesign(design);
+    },
     saveDesign() {
       this.$refs.emailEditor.editor.saveDesign(
           (design) => {
             console.log('saveDesign', design);
+            this.design=design;
           }
       )
     },
