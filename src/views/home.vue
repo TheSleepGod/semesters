@@ -162,6 +162,7 @@ export default {
         if (ret.data.errno === 0) {
           //console.log(ret);
           //console.log(ret.data.data.authorization);
+          localStorage.clear();
           localStorage.setItem('Token',ret.data.data.authorization);
           this.$message.success("登录成功");
           this.$router.push('/team');

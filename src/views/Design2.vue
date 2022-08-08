@@ -67,15 +67,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
-
- .el-main  {
+.el-main  {
    padding: 0px !important;
 }
 
