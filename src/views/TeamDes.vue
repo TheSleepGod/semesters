@@ -45,7 +45,7 @@
                  alt="成员" title="成员">
           </div>
           <div class = "rpm-right">
-            <ul style="text-align: left; margin-left: -20px; margin-top: 25px">
+            <ul style="text-align: left; margin-left: 16px; margin-top: 25px;z-index: 20">
               <li style="margin-bottom: 10px;">电话: {{people.tel}}</li>
               <li style="margin-bottom: 10px;">邮箱：{{people.mail}}</li>
               <li style="margin-bottom: 10px;">真实姓名：{{people.real_name}}</li>

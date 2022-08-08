@@ -101,6 +101,11 @@ const routes = [
     path: '/teamDoc',
     name: 'documentCenter',
     component: () => import(/* webpackChunkName: "about" */ '../views/DC.vue'),
+  },
+  {
+    path: '/doc',
+    name: 'doc',
+    component: () => import(/* webpackChunkName: "about" */ '../views/doc.vue'),
   }
 ]
 

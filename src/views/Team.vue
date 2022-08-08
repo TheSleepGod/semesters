@@ -346,7 +346,7 @@ export default {
   width: 100%;
 }
 .right-head-choose-tab {
-  height: 35px;
+  height: 37px;
   margin-left: 2%;
   display: inline-block;
   position: absolute;
