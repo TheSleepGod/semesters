@@ -64,7 +64,8 @@
     "vue-router": "^3.5.1",
     "vuedraggable": "^2.24.3",
     "vuetify": "^2.6.8",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "yjs": "^13.5.41"
   },
   "devDependencies": {
     "@mdi/font": "^7.0.96",
