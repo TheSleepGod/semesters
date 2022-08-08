@@ -49,11 +49,7 @@ router.beforeEach((to, from, next) => {
           console.log(ret);
           if(ret.data.errno === 0) {
               isLogin = true;
-              console.log(isLogin + "1");
           }
-          console.log(isLogin + "2");
-          //console.log(this.user_id);
-          console.log(isLogin + "3");
           isLogin ? next(): next("/80");
       })
   }
