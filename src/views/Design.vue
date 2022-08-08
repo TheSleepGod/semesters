@@ -12,7 +12,7 @@
           <template slot="title">
             popular 常用
           </template>
-          <div id="popular" style="overflow-y: scroll;width: 220px;height: 200px;" contenteditable="false">
+          <div id="popular" style="overflow-y: auto;width: 220px;height: 200px;" contenteditable="false">
             <div
                 :class="commonClassName"
                 @click="addControl(1)"
@@ -51,7 +51,7 @@
         <template slot="title">
           figure 图形
         </template>
-        <div id="figure" style="overflow-y: scroll;width: 220px;height: 200px;" contenteditable="false">
+        <div id="figure" style="overflow-y: auto;width: 220px;height: 200px;" contenteditable="false">
         <div
             :class="commonClassName"
             @click="addControl(1)"
@@ -135,7 +135,7 @@
               <template slot="title">
                 &nbsp &nbsp website 网站
               </template>
-              <div id="icon-website" style="overflow-y: scroll;width: 220px;height: 200px;">
+              <div id="icon-website" style="overflow-y: auto;width: 220px;height: 200px;">
                 <div
                     :class="commonClassName"
                     @click="addControl(1)"
@@ -270,7 +270,7 @@
               <template slot="title">
                 &nbsp &nbsp project 项目
               </template>
-              <div id="icon-project" style="overflow-y: scroll;width: 220px;height: 200px;">
+              <div id="icon-project" style="overflow-y: auto;width: 220px;height: 200px;">
                 <div
                     :class="commonClassName"
                     @click="addControl(1)"
@@ -327,7 +327,7 @@
           <template slot="title">
             diagram 图表
           </template>
-          <div id="diagram" style="overflow-y: scroll;width: 220px;height: 300px;">
+          <div id="diagram" style="overflow-y: auto;width: 220px;height: 300px;">
             <div
                 :class="commonClassName"
                 @click="addControl(1)"
@@ -374,7 +374,7 @@
           <template slot="title">
             Media 多媒体
           </template>
-          <div id="media" style="overflow-y: scroll;width: 220px;height: 300px;">
+          <div id="media" style="overflow-y: auto;width: 220px;height: 300px;">
             <div
                 :class="commonClassName"
                 class="controls-item controls-date"

@@ -163,7 +163,6 @@ export default {
   display: flex;
   transition: all 1s;
   width: 10%;
-  /*height: 610px;*/
   padding-left: 5%;
 }
 .main-right-box:hover .main-center-box{
@@ -201,7 +200,6 @@ export default {
 .right-pullIcon-bar{
   cursor: pointer;
   width: 100px;
-  /*height: 100%;*/
   transition: all 1s;
   background-image: url("../assets/left.png");
   background-repeat: no-repeat;
@@ -218,7 +216,6 @@ export default {
 }
 .right-folders-box{
   width: 0;
-  height: 100%;
   background-color: lightyellow;
   transition: all 1s;
 }
