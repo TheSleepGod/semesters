@@ -77,14 +77,16 @@ html, body {
 .el-main  {
    padding: 0px !important;
 }
-
+*, :after, :before {
+  background-repeat: no-repeat;
+  box-sizing: inherit;
+}
 #example {
   height: 100%;
   margin: 0px;
   padding: 0px;
   border: 0px;
 }
-
 #example .container {
   display: flex;
   flex-direction: column;
