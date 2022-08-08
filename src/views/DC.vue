@@ -2,56 +2,52 @@
   <div class = "body-box">
     <top-bar :username="username"></top-bar>
     <TeamLeft :team_id="team.teamId" :team_name="team.teamName"/>
-    <div class = "multi-level-lists-box" @mouseover="comeDocument" @mouseleave="leaveDocument">
-      <div class = "document-center">
-        <transition name="slide-fade">
-          <div class = "document-right-img-box" v-if = "!isDocumentOut">
-            <img src="../assets/DocumentCenter/choose-one.png" alt="" class = "document-right-img"/>
+
+    <div class = "multi-level-folders-box">
+      <div class="multi-level-folders-title">文档中心</div>
+      <div class="multi-level-folders-content">
+        <div class = "first-folder">
+          <div class = "first-folder-title" @click="reverseVisible(projectsFolder,'p1Content')">
+            <i class="el-icon-caret-right" v-if="!projectsFolder.isActive"/>
+            <i class="el-icon-caret-bottom" v-if="projectsFolder.isActive"/>
+            项目文档区
           </div>
-          <div class = "document-center-box" v-if = "isDocumentOut" @mouseover="showOne">
-            <div class = "document-center-box-box">
-              <div class = "document-right-img-box-two" >
-                <img src="../assets/DocumentCenter/choose-one.png" alt="" class = "document-right-img"/>
+          <transition appear>
+            <div class="first-folder-content" id="p1Content" v-if="projectsFolder.isActive">
+              <div class = "second-folder" v-for="(oneProjectFolder,index) in projectsFolder.projectsList">
+                <div class="second-folder-title" @click="reverseVisible(oneProjectFolder,'p2Content'+index)">
+                  <i class="el-icon-caret-right" v-if="!oneProjectFolder.isActive"/>
+                  <i class="el-icon-caret-bottom" v-if="oneProjectFolder.isActive"/>
+                  {{oneProjectFolder.projectName}}
+                </div>
+                <transition appear>
+                  <div class="second-folder-content" :id="'p2Content'+index" v-if="oneProjectFolder.isActive">
+                    <div class="doc-box" v-for="(doc,index) in oneProjectFolder.projectDocs">
+                      {{doc.docName}}
+                    </div>
+                  </div>
+                </transition>
               </div>
-              <div class = "document-right-span-box">
-                <span class = "document-right-span font-1">文档中心</span>
+            </div>
+          </transition>
+        </div>
+        <div class="first-folder" v-for="(anotherFolder,index) in otherFolders">
+          <div class="first-folder-title" @click="reverseVisible(anotherFolder,'oContent'+index)">
+            <i class="el-icon-caret-right" v-if="!anotherFolder.isActive"/>
+            <i class="el-icon-caret-bottom" v-if="anotherFolder.isActive"/>
+            {{anotherFolder.folderName}}
+          </div>
+          <transition appear>
+            <div class="first-folder-content" :id="'oContent'+index" v-if="anotherFolder.isActive">
+              <div class="doc-box" v-for="(doc,index) in anotherFolder.folderDocs">
+                {{doc.docName}}
               </div>
-            </div>  
-          </div>
-          <div class = "" v-if = "oneChoose">
-            <div class = "document-right-team-box">
-              <span>团队1</span>
-            </div>  
-          </div>
-        </transition>  
+            </div>
+          </transition>
+        </div>
       </div>
     </div>
 
-    
-    <el-collapse accordion style="width: 300px;">
-      <el-collapse-item style="">
-        <div slot="title" style=" width: 150px; text-align: center">
-          <div class = "document-team-box">
-            文档中心
-          </div>  
-        </div>
-        <el-collapse accordion>
-          <div v-for="(team,index) in teamList">
-            <el-collapse-item>
-              <div slot="title" class = "team-name">
-                {{team.teamName}}
-              </div>
-              <div v-for="project in projectList" style="text-align: left">
-                <div class = "project-name font-1">
-                  {{project.projectName}}
-                </div>  
-              </div>
-            </el-collapse-item>
-          </div>
-        </el-collapse>
-      </el-collapse-item>
-    </el-collapse>
-    
   </div>
 </template>
 
@@ -69,41 +65,71 @@ export default {
     let oneChoose = false;
     let twoChoose = false;
     let threeChoose = false;
-    let teamList = [
+    let projectsList = [
       {
-        teamId: 1,
-        teamName: "ababab",
+        isActive: false,
+        projectId: 1,
+        projectName: "p1",
+        projectDocs: [
+          {
+            docId: 1,
+            docName: 'doc1'
+          },
+          {
+            docId: 2,
+            docName: 'doc2'
+          }
+        ]
       },
       {
-        teamId: 2,
-        teamName: "cdcdcdcd",
-      },
-      {
-        teamId: 3,
-        teamName: "efefefef",
-      },
-      {
-        teamId: 4,
-        teamName: "ghghghghghg",
-      }  
-    ];
-    let projectList = [
-      {
-        projectId: 1, 
-        projectName: "test1",
-      },
-      {
+        isActive: false,
         projectId: 2,
-        projectName: "test2",
+        projectName: "p2",
+        projectDocs: [
+          {
+            docId: 3,
+            docName: 'doc3'
+          },
+          {
+            docId: 4,
+            docName: 'doc4'
+          }
+        ]
+      },
+    ];
+    let projectsFolder = {
+      isActive: false,
+      projectsList
+    };
+    let otherFolders = [
+      {
+        isActive: false,
+        folderName: 'of1',
+        folderDocs: [
+          {
+            docId: 5,
+            docName: 'doc5'
+          },
+          {
+            docId: 6,
+            docName: 'doc6'
+          }
+        ]
       },
       {
-        projectId: 3,
-        projectName: "test3",
+        isActive: false,
+        folderName: 'of2',
+        folderDocs: [
+          {
+            docId: 7,
+            docName: 'doc7'
+          },
+          {
+            docId: 8,
+            docName: 'doc8'
+          }
+        ]
       },
-      {
-        projectId: 4,
-        projectName: "test4",
-      }
     ]
     return {
       activeNames: ['1'],
@@ -111,8 +137,9 @@ export default {
       oneChoose,
       twoChoose,
       threeChoose,
-      teamList,
-      projectList,
+      projectsFolder,
+      pActive: false,
+      otherFolders,
       username:'',
       team:{
         teamId:0,
@@ -121,6 +148,22 @@ export default {
     }
   },
   methods: {
+    reverseVisible(item,id){
+      item.isActive = !item.isActive;
+
+    },
+    itemLeave(panel){
+      panel.style = "transition:all 0.25s; height:100%;";
+      setTimeout(()=>{
+        panel.style = "height:0";
+      },250);
+    },
+    itemEnter(panel){
+      panel.style = "transition:all 0.25s; height:0";
+      setTimeout(()=>{
+        panel.style = "transition:all 0.25s; height:auto";
+      },250);
+    },
     comeDocument() {
       this.isDocumentOut = true;
     },
@@ -160,23 +203,85 @@ export default {
 </script>
 
 <style scoped>
-.slide-fade-enter-active {
-  transition: all .3s ease;
-}
-.slide-fade-leave-active {
-  transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active 用于 2.1.8 以下版本 */ {
-  transform: translateX(10px);
+/* 进入：始状态 */
+.v-enter {
+  transform: translateY(-20%);
   opacity: 0;
 }
+/* 进入：末状态 */
+.v-enter-to {
+  transform: translateY(0);
+  opacity: 1;
+}
+/* 进入动画 */
+.v-enter-active {
+  transition: 0.25s;
+}
 
-.multi-level-lists-box {
-  height: 700px;
-  background: #0997F7;
+/* 离开：始状态 */
+.v-leave {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* 离开：末状态 */
+.v-leave-to {
+  transform: translateY(-20%);
+  opacity: 0;
+}
+/* 离开动画 */
+.v-leave-active {
+  transition: 0.25s;
+}
+
+.multi-level-folders-box {
+  min-width: 100px;
+  width: 20%;
+  background: whitesmoke;
   position: relative;
   float: right;
+  text-align: left;
+  transition: all 0.25s;
+  font-size: 20px;
+}
+.multi-level-folders-title{
+  text-align: center;
+}
+.multi-level-folders-content{
+}
+.first-folder{
+
+}
+.first-folder-title{
+  cursor: pointer;
+}
+.first-folder-title:hover{
+  color: dodgerblue;
+}
+.first-folder-content{
+
+}
+.second-folder{
+  margin-left: 20px;
+}
+.second-folder-title{
+  cursor: pointer;
+}
+.second-folder-title{
+
+}
+.second-folder-title:hover{
+  color: dodgerblue;
+}
+.second-folder-content{
+
+}
+.doc-box{
+  cursor: pointer;
+  margin-left: 20px;
+  transition: all 0.5s;
+}
+.doc-box:hover{
+  font-weight: bolder;
 }
 .document-center {
   cursor: pointer;
