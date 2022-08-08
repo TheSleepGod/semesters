@@ -19,6 +19,18 @@
       <div id="showCase2" v-if="isChanging">
         <div class="left-changeMesForm">
           <div class="left-changeMesForm-line">
+            <span class="changeMesForm-label">昵称</span>
+            <input :placeholder = "this.username" class="changeMesForm-input" maxlength="16" v-model="newName" disabled="disabled"/>
+          </div>
+          <div class="left-changeMesForm-line">
+            <span class="changeMesForm-label">邮箱</span>
+            <input :placeholder = "this.mail" class="changeMesForm-input" maxlength="16" v-model="newPhone" disabled="disabled"/>
+          </div>
+          <div class="left-changeMesForm-line">
+            <span class="changeMesForm-label">uid</span>
+            <input :placeholder = "this.user_id" class="changeMesForm-input" maxlength="16" v-model="newName" disabled="disabled"/>
+          </div>
+          <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">真实姓名</span>
             <input :placeholder = "this.name" class="changeMesForm-input" maxlength="16" v-model="newName"/>
           </div>
@@ -91,6 +103,7 @@ export default {
       name:'',
       phone:'',
       username: '',
+      mail: '',
       newTeamName: "",
       newName:'',
       newPhone:'',
@@ -255,6 +268,7 @@ export default {
           this.username = ret.data.data.username;
           this.user_id=ret.data.data.user_id;
           this.name = ret.data.data.name;
+          this.mail = ret.data.data.mail;
           this.phone = ret.data.data.phone;
         } else {
           this.$notify.error(ret.data.msg);
@@ -424,7 +438,7 @@ export default {
 .left-changeMesForm-line{
   display: inline-grid;
   width: 100%;
-  height: 100px;
+  height: 80px;
 }
 .changeMesForm-label{
   width: 20%;
@@ -443,6 +457,8 @@ export default {
   padding: 13px 14px;
   font-size: 14px;
   font-weight: 700;
+  display: block;
+  margin-top: 5px;
 }
 .changeMesForm-input:focus{
   border-color: #66afe9;
