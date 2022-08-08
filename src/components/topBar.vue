@@ -100,6 +100,7 @@ export default {
   width: 100%;
   border-bottom: 2px black groove;
   margin-bottom: 20px;
+  caret-color: transparent;
 }
 .webLogo-box{
   float: left;
