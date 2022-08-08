@@ -48,7 +48,7 @@ export default {
 .left-box {
   position: fixed;
   float: left;
-  top: 120px;
+  top: 17%;
   height: 450px;
   width: 100px;
   padding: 0;
