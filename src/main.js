@@ -29,6 +29,14 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
   }
+  const isLogin= !!localStorage.token;
+
+  if(to.path ==="/80") {
+    next();
+  } 
+  else{
+    isLogin? next(): next("/login");
+  }
   next()
 })
 Vue.config.productionTip = false
