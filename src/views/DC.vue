@@ -34,7 +34,7 @@
                   {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
                 </v-icon>
                 <v-icon>
-                  {{ files[item.file] }}
+                  {{ files[item.file]}}
                 </v-icon>
               </template>
             </v-treeview>
