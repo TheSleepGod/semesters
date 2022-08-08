@@ -30,7 +30,7 @@
       <hr style="margin:0;background-color:black;height:1px;border:none; background-image: linear-gradient(to right, #333, #333, #ccc);width: 80%" />
       <div class = "right-people-boxes-container">
         <div class = "right-people-mes-box" v-for="(people,index) in teamPeople" @mouseover="clickCome(index)" @mouseleave="clickLeave(index)" :id = index>
-          <div class = "rpm-left">
+          <div class = "rpm-left" style="  caret-color: transparent;">
             <div>
               <img class = "rpm-left-icon" src="../assets/icon.jpg" alt="">
             </div>
@@ -45,23 +45,23 @@
                  alt="成员" title="成员">
           </div>
           <div class = "rpm-right">
-            <ul style="text-align: left; margin-left: 16px; margin-top: 25px;z-index: 20">
+            <ul style="text-align: left; margin-left: 16px; margin-top: 25px;z-index: 20;   caret-color: transparent;">
               <li style="margin-bottom: 10px;">电话: {{people.tel}}</li>
               <li style="margin-bottom: 10px;">邮箱：{{people.mail}}</li>
               <li style="margin-bottom: 10px;">真实姓名：{{people.real_name}}</li>
             </ul>
           </div>
-          <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '创建者'">
-            <div class="rpm-del-whole" v-if="index === nowLogin" @click="showDissolveConfirm">解 散</div>
+          <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '创建者'" style="  caret-color: transparent;">
+            <div class="rpm-del-whole" v-if="index === nowLogin" @click="showDissolveConfirm(index)">解 散</div>
             <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>
             <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>
           </div>
-          <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '管理员'">
+          <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '管理员'" style="   caret-color: transparent;">
             <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit()">退 出</div>
             <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin && teamPeople[index].identity==='普通成员'" @click="changePer(people)">修 改 权 限</div>
             <div class="rpm-del-rightHalf" v-if="index !== nowLogin && teamPeople[index].identity==='普通成员'" @click="del(people)">删 除</div>
           </div>
-          <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '普通成员'">
+          <div class="rpm-foot" v-if="isHover[index] && teamPeople[nowLogin].identity === '普通成员'" style="   caret-color: transparent;">
             <div class="rpm-del-whole" v-if="index === nowLogin" @click="exit(people)">退 出</div>
 <!--            <div class="rpm-changePer-leftHalf" v-if="index !== nowLogin" @click="changePer(people)">修 改 权 限</div>-->
 <!--            <div class="rpm-del-rightHalf" v-if="index !== nowLogin" @click="del(people)">删 除</div>-->
@@ -170,7 +170,8 @@ export default {
         else this.$notify.error(ans.msg);
       })
     },
-    showDissolveConfirm(){
+    showDissolveConfirm(index){
+      console.log(index);
       this.$confirm('将解散团队, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
