@@ -295,8 +295,19 @@ export default {
       })
     },
     copy(item){
-      this.$notify.success("已生成项目副本：副本-"+item.name);
-      this.getTeamProjects();
+      // this.$axios.post(
+      //     'http://43.138.22.20:8000/api/user/copy_project',
+      //     qs.stringify({
+      //       project_id: item.id
+      //     })
+      // ).then((res)=>{
+      //   if(res.data.errno===0){
+      //     this.$notify.success("已生成项目副本：副本-"+item.name);
+      //     this.getTeamProjects();
+      //   } else this.$notify.error("副本生成失败,"+res.data.msg);
+      // }).catch((error)=>{
+      //   console.log(error)
+      // })
     },
     rename(){
       this.$axios.post(
