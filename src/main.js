@@ -35,8 +35,27 @@ router.beforeEach((to, from, next) => {
      next();
   } 
   else {
-    isLogin = true;
-    isLogin? next(): next("/80");
+    isLogin = false;
+    setTimeout(()=> {},1000);
+
+      axios({
+              method : 'post',
+              url : 'http://101.42.160.94:8000/api/user_web/get_user',
+              headers:{
+                  'Authorization':localStorage.getItem('Token'),
+              }
+          }
+      ).then((ret) => {
+          console.log(ret);
+          if(ret.data.errno === 0) {
+              isLogin = true;
+              console.log(isLogin + "1");
+          }
+          console.log(isLogin + "2");
+          //console.log(this.user_id);
+          console.log(isLogin + "3");
+          isLogin ? next(): next("/80");
+      })
   }
   next();
 })
@@ -49,16 +68,4 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-function getNowUser() {
-  axios({
-        method : 'post',
-        url : 'http://101.42.160.94:8000/api/user_web/get_user',
-        headers:{
-          'Authorization':localStorage.getItem('Token'),
-        }
-      }
-  ).then((ret) => {
-    console.log(ret);
-    isLogin = ret.data.errno === 0;
-  })
-}
+

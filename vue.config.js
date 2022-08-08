@@ -31,4 +31,6 @@ module.exports = defineConfig({
         .set('components', resolve('src/components'))
         .end()
   },
-})
+  
+}
+ )
