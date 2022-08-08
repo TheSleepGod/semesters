@@ -78,13 +78,11 @@ export default {
           this.$router.push("/80");
         } else if(ret.data.errno===4001){
           localStorage.clear();
-          this.$message.error("用户已下线");
+          this.$notify.error("用户已下线");
           this.$router.push("/80");
-        }
-          else {
-          alert(ret.data.msg);
-          this.$message.error("退出失败");
-        }
+        } else this.$notify.error(ret.data.msg+"，退出失败");
+      }).catch((error)=>{
+        console.log(error)
       })
     },
     created() {

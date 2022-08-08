@@ -1,3 +1,4 @@
+
 <template>
   <div class = "body-box">
     <top-bar :username="username"></top-bar>
@@ -323,6 +324,5 @@ export default {
 
 
 </style>
-
 
 
