@@ -77,10 +77,9 @@
 <script>
 import TopBar from "@/components/topBar";
 import TeamLeft from "@/components/ProjectLeft";
-import TurndownService from 'turndown';
 import htmlToPdf from "../utils/htmlToPdf";
 import html2Canvas from "html2canvas";
-import { HocuspocusProvider } from '@hocuspocus/provider'
+import {HocuspocusProvider} from '@hocuspocus/provider'
 import CharacterCount from '@tiptap/extension-character-count'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
@@ -88,18 +87,13 @@ import Highlight from '@tiptap/extension-highlight'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import StarterKit from '@tiptap/starter-kit'
-import { Editor, EditorContent } from '@tiptap/vue-2'
+import {Editor, EditorContent} from '@tiptap/vue-2'
 import * as Y from 'yjs'
 
 import MenuBar from '../components/MenuBar.vue'
 import JsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import JSZipUtils from "jszip-utils";
-import JSZip from "jszip";
-import docxtemplater from 'docxtemplater'
 import $ from 'jquery'
-import axios from "axios";
-import qs from "qs";
+
 require('@/assets/js/jquery.wordexport')
 
 const getRandomElement = list => {
@@ -229,10 +223,10 @@ export default {
 
   beforeCreate() {
     // 读取文件
+    let pms;
     FileReader.prototype.reading = function ({encode} = pms) {
       let bytes = new Uint8Array(this.result);    //无符号整型数组
-      let text = new TextDecoder(encode || 'UTF-8').decode(bytes);
-      return text;
+      return new TextDecoder(encode || 'UTF-8').decode(bytes);
     };
     /* 重写readAsBinaryString函数 */
     FileReader.prototype.readAsBinaryString = function (f) {
@@ -328,15 +322,15 @@ export default {
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
       //title，随意设置，也可以提出来做参数，传入进来，自己发挥
-      var title = "测试啊";
-      var that = this;
-      var shareContent = DomName; //需要截图的包裹的（原生的）DOM 对象
+      let title = "测试啊";
+      let that = this;
+      let shareContent = DomName; //需要截图的包裹的（原生的）DOM 对象
       //打印看有没有获取到dom
       console.log(shareContent);
-      var width = shareContent.offsetWidth; //获取dom 宽度
-      var height = shareContent.offsetHeight; //获取dom 高度
-      var canvas = document.createElement("canvas"); //创建一个canvas节点
-      var scale = 2; //定义任意放大倍数 支持小数
+      let width = shareContent.offsetWidth; //获取dom 宽度
+      let height = shareContent.offsetHeight; //获取dom 高度
+      let canvas = document.createElement("canvas"); //创建一个canvas节点
+      let scale = 2; //定义任意放大倍数 支持小数
       canvas.width = width * scale; //定义canvas 宽度 * 缩放，在此我是把canvas放大了2倍
       canvas.height = height * scale; //定义canvas高度 *缩放
       canvas.getContext("2d").scale(scale, scale); //获取context,设置scale
@@ -346,27 +340,28 @@ export default {
         dpi: window.devicePixelRatio , //将分辨率提高到特定的DPI 提高四倍
         // scale: 2, //按比例增加分辨率
       }).then(function(canvas) {
-        var context = canvas.getContext("2d");
+        let context = canvas.getContext("2d");
         // 【重要】关闭抗锯齿
         context.mozImageSmoothingEnabled = false;
         context.webkitImageSmoothingEnabled = false;
         context.msImageSmoothingEnabled = false;
         context.imageSmoothingEnabled = false;
-        var imgData = canvas.toDataURL("image/", 1.0); //转化成base64格式,可上网了解此格式
-        var img = new Image();
+        let imgData = canvas.toDataURL("image/", 1.0); //转化成base64格式,可上网了解此格式
+        let img = new Image();
         img.src = imgData;
         img.onload = function() {
           img.width = img.width / 2; //因为在上面放大了2倍，生成image之后要/2
           img.height = img.height / 2;
           img.style.transform = "scale(0.5)";
+          let doc;
           if (this.width > this.height) {
             //此可以根据打印的大小进行自动调节
-            var doc = new JsPDF("l", "mm", [
+            doc = new JsPDF("l", "mm", [
               this.width * 0.555,
               this.height * 0.555
             ]);
           } else {
-            var doc = new JsPDF("p", "mm", [
+            doc = new JsPDF("p", "mm", [
               this.width * 0.555,
               this.height * 0.555
             ]);
@@ -410,19 +405,19 @@ export default {
       }).then(canvas=>{
         const _this = this;
         //未生成pdf的html页面高度
-        var leftHeight = canvas.height;
-        var a4Width = 555.28 // 原A4宽 592 因为要设置边距 20 ,这里要减掉 40
-        var a4Height = 801.89 // 原A4高   841 因为要设置边距 20 ,这里要减掉 40
+        let leftHeight = canvas.height;
+        let a4Width = 555.28 // 原A4宽 592 因为要设置边距 20 ,这里要减掉 40
+        let a4Height = 801.89 // 原A4高   841 因为要设置边距 20 ,这里要减掉 40
         //一页pdf显示html页面生成的canvas高度;
-        var a4HeightRef = Math.floor(canvas.width / a4Width * a4Height);
+        let a4HeightRef = Math.floor(canvas.width / a4Width * a4Height);
 
         //pdf页面偏移
-        var position = 0;
+        let position = 0;
 
-        var pageData = canvas.toDataURL('image/jpeg', 1.0);
+        let pageData = canvas.toDataURL('image/jpeg', 1.0);
 
-        var pdf = new JsPDF('x', 'pt', 'a4');
-        var index = 1,
+        let pdf = new JsPDF('x', 'pt', 'a4');
+        let index = 1,
             canvas1 = document.createElement('canvas'),
             height;
         pdf.setDisplayMode('fullwidth', 'continuous', 'FullScreen');
@@ -430,15 +425,14 @@ export default {
         function createImpl(canvas) {
           if (leftHeight > 0) {
             index++;
-            var checkCount = 0;
+            let checkCount = 0;
             if (leftHeight > a4HeightRef) {
-              var i = position + a4HeightRef;
-              for (i = position + a4HeightRef; i >= position; i--) {
-                var isWrite = true
-                for (var j = 0; j < canvas.width; j++) {
-                  var c = canvas.getContext('2d').getImageData(j, i, 1, 1).data
+              for (let i = position + a4HeightRef; i >= position; i--) {
+                let isWrite = true
+                for (let j = 0; j < canvas.width; j++) {
+                  let c = canvas.getContext('2d').getImageData(j, i, 1, 1).data
 
-                  if (c[0] != 0xff || c[1] != 0xff || c[2] != 0xff) {
+                  if (c[0] !== 0xff || c[1] !== 0xff || c[2] !== 0xff) {
                     isWrite = false
                     break
                   }
@@ -465,12 +459,12 @@ export default {
 
             // console.log(index, 'height:', height, 'pos', position);
 
-            var ctx = canvas1.getContext('2d');
+            let ctx = canvas1.getContext('2d');
             ctx.drawImage(canvas, 0, position, canvas.width, height, 0, 0, canvas.width, height); // 边距这里设置0，不然又黑边
 
-            var pageHeight = Math.round(a4Width / canvas.width * height);
+            let pageHeight = Math.round(a4Width / canvas.width * height);
             // pdf.setPageSize(null, pageHeight)
-            if(position != 0){
+            if(position !== 0){
               pdf.addPage();
             }
             // 设置 20px 边距
@@ -726,7 +720,6 @@ export default {
     font-size: 12px;
     font-weight: 600;
     color: #0D0D0D;
-    white-space: nowrap;
     padding: 0.25rem 0.75rem;
   }
 
