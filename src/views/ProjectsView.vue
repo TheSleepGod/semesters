@@ -249,13 +249,13 @@ export default {
     sortCmp(itemA, itemB){
       switch (this.sortType){
         case '按时间降序':
-          return itemB.time < itemA.time;
-        case '按时间升序':
           return itemA.time < itemB.time;
+        case '按时间升序':
+          return itemB.time < itemA.time;
         case '按名称降序':
-          return itemB.name < itemA.name;
-        case '按名称升序':
           return itemA.name < itemB.name;
+        case '按名称升序':
+          return itemB.name < itemA.name;
       }
     },
     sortProjects(){
