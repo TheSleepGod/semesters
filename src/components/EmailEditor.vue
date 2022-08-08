@@ -61,7 +61,7 @@ export default {
         ...options,
         id: this.id,
         displayMode: 'email',
-        locale:'ZH-CN',
+        locale:'zh-CN',
         source: {
           name: pkg.name,
           version: pkg.version,
