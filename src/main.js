@@ -22,8 +22,6 @@ Vue.use(Vuetify)
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 Vue.component('vdr', vdr)
 
-
-Vue.use(ElementUI);
 Vue.prototype.$axios = axios;
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
