@@ -36,14 +36,14 @@
           </div>  
         </div>
         <el-collapse accordion>
-          <div v-for="(team,index) in teamList">
+          <div v-for="(team,index) in projectList">
             <el-collapse-item>
               <div slot="title" class = "team-name">
                 <div class = "team-name-box font-1 ">
                   <span class="document-team">{{team.teamName}}</span>
                 </div>  
               </div>
-              <div v-for="project in projectList" style="text-align: left">
+              <div v-for="project in docList" style="text-align: left">
                 <div class = "project-name font-1">
                   {{project.projectName}}
                 </div>  
@@ -71,7 +71,7 @@ export default {
     let oneChoose = false;
     let twoChoose = false;
     let threeChoose = false;
-    let teamList = [
+    let projectList = [
       {
         teamId: 1,
         teamName: "ababab",
@@ -89,7 +89,7 @@ export default {
         teamName: "ghghghghghg",
       }  
     ];
-    let projectList = [
+    let docList = [
       {
         projectId: 1, 
         projectName: "test1",
@@ -113,7 +113,7 @@ export default {
       oneChoose,
       twoChoose,
       threeChoose,
-      teamList,
+      docList,
       projectList,
       username:'',
       team:{
