@@ -65,7 +65,7 @@ export default {
         console.log(ret);
         if (ret.data.errno === 0) {
           this.$message.success("创建成功");
-          this.$router.push({path:'/doc',query: {room:ret.data.room_name,type:this.createForm.type}});
+          this.$router.push({path:'/teamDoc',query: {room:ret.data.room_name,type:this.createForm.type}});
         } else {
           this.$notify.error(ret.data.msg);
           this.$message.error("创建失败");
@@ -75,7 +75,7 @@ export default {
     openDoc() {
       let con = {};
       con['project_id'] = this.project_id;
-      con['title'] = '008';
+      con['title'] = '007';
       console.log(con);
       axios({
         url: 'http://101.42.160.94:8000/api/user_web/open_document',
@@ -85,7 +85,7 @@ export default {
         console.log(ret);
         if (ret.data.errno === 0) {
           this.$message.success("打开成功");
-          this.$router.push({path:'/doc',query: {room:ret.data.room_name,type:'0'}});
+          this.$router.push({path:'/teamDoc',query: {room:ret.data.room_name,type:'0'}});
         } else {
           this.$notify.error(ret.data.msg);
           this.$message.error("打开失败");
@@ -96,7 +96,7 @@ export default {
     delDoc() {
       let con = {};
       con['project_id'] = this.project_id;
-      con['title'] = '008';
+      con['title'] = '009';
       console.log(con);
       axios({
         url: 'http://101.42.160.94:8000/api/user_web/delete_document',
