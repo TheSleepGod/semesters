@@ -249,7 +249,7 @@ export default {
             method : 'post',
             url : 'http://101.42.160.94:8000/api/user_web/get_user',
             headers:{
-              'Authorization':localStorage.getItem('Token'),
+              'Authorization': localStorage.getItem('Token')
             }
           }
       ).then((ret) => {

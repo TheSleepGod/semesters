@@ -23,19 +23,22 @@ Vue.component('vue-draggable-resizable', VueDraggableResizable)
 Vue.component('vdr', vdr)
 
 Vue.prototype.$axios = axios;
+
+
+let isLogin = false;
+
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
   }
-  const isLogin= !!localStorage.token;
-
   if(to.path ==="/80") {
-    next();
+     next();
   } 
-  else{
-    isLogin? next(): next("/login");
+  else {
+    isLogin = true;
+    isLogin? next(): next("/80");
   }
-  next()
+  next();
 })
 Vue.config.productionTip = false
 new Vue({
@@ -45,3 +48,17 @@ new Vue({
   el: '#app',
   render: h => h(App)
 }).$mount('#app')
+
+function getNowUser() {
+  axios({
+        method : 'post',
+        url : 'http://101.42.160.94:8000/api/user_web/get_user',
+        headers:{
+          'Authorization':localStorage.getItem('Token'),
+        }
+      }
+  ).then((ret) => {
+    console.log(ret);
+    isLogin = ret.data.errno === 0;
+  })
+}
