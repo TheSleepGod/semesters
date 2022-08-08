@@ -108,7 +108,7 @@ export default {
   font-size: 24px;
 }
 .center-doc-editor-box{
-  height: 500px;
+  height: 900px;
   background-color: floralwhite;
   padding: 10px 10px 10px 10px;
 }
