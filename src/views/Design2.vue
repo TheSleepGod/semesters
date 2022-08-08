@@ -12,8 +12,8 @@
             <div id="bar">
               <h1 style="margin-left: 60px;margin-top: 10px">{{this.name}}</h1>
 
-              <button v-on:click="saveDesign">Save Design</button>
-              <button v-on:click="exportHtml">Export HTML</button>
+              <button v-on:click="saveDesign">保 存 页 面</button>
+              <button v-on:click="exportHtml">导 出 HTML</button>
             </div>
 
             <EmailEditor ref="emailEditor" v-on:load="editorLoaded" v-on:ready="editorReady" />
