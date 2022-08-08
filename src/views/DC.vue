@@ -20,6 +20,24 @@
         <div class="right-pullIcon-bar"/>
         <div class="right-folders-box">
           <!-- todo: put Folders in this box-->
+            <v-treeview
+                v-model="tree"
+                :open="initiallyOpen"
+                :items="items"
+                activatable
+                item-key="name"
+                open-on-click
+                style="text-align: left"
+            >
+              <template v-slot:prepend="{ item, open }">
+                <v-icon v-if="!item.file">
+                  {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+                </v-icon>
+                <v-icon>
+                  {{ files[item.file] }}
+                </v-icon>
+              </template>
+            </v-treeview>
         </div>
       </div>
     </div>
@@ -45,7 +63,75 @@ export default {
         docId: '',
         docName: 'name1',
         docContent: ''
-      }
+      },
+      initiallyOpen: ['public'],
+      files: {
+        html: 'mdi-language-html5',
+        js: 'mdi-nodejs',
+        json: 'mdi-code-json',
+        md: 'mdi-language-markdown',
+        pdf: 'mdi-file-pdf',
+        png: 'mdi-file-image',
+        txt: 'mdi-file-document-outline',
+        xls: 'mdi-file-excel',
+      },
+      tree: [],
+      items: [
+        {
+          name: '.git',
+        },
+        {
+          name: 'node_modules',
+        },
+        {
+          name: 'public',
+          children: [
+            {
+              name: 'static',
+              children: [{
+                name: 'logo.png',
+                file: 'png',
+              },
+                {
+                  name:'abc.js',
+                  file:'js',
+                }],
+            },
+            {
+              name: 'favicon.ico',
+              file: 'png',
+            },
+            {
+              name: 'index.html',
+              file: 'html',
+            },
+          ],
+        },
+        {
+          name: '.gitignore',
+          file: 'txt',
+        },
+        {
+          name: 'babel.config.js',
+          file: 'js',
+        },
+        {
+          name: 'package.json',
+          file: 'json',
+        },
+        {
+          name: 'README.md',
+          file: 'md',
+        },
+        {
+          name: 'vue.config.js',
+          file: 'js',
+        },
+        {
+          name: 'yarn.lock',
+          file: 'txt',
+        },
+      ],
     }
   },
   methods:{
@@ -77,7 +163,7 @@ export default {
   display: flex;
   transition: all 1s;
   width: 10%;
-  height: 610px;
+  /*height: 610px;*/
   padding-left: 5%;
 }
 .main-right-box:hover .main-center-box{
@@ -115,7 +201,7 @@ export default {
 .right-pullIcon-bar{
   cursor: pointer;
   width: 100px;
-  height: 100%;
+  /*height: 100%;*/
   transition: all 1s;
   background-image: url("../assets/left.png");
   background-repeat: no-repeat;

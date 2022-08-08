@@ -1,29 +1,103 @@
 <!-- drag-test -->
 <template>
-  <v-row justify="center">
-    <v-expansion-panels popout>
-      <v-expansion-panel
-          v-for="(item,i) in 5"
-          :key="i"
+  <v-navigation-drawer v-model="drawer" app right expand-on-hover>
+      <v-treeview
+          v-model="tree"
+          :open="initiallyOpen"
+          :items="items"
+          activatable
+          item-key="name"
+          open-on-click
+          style="text-align: left"
       >
-        <v-expansion-panel-header>Item</v-expansion-panel-header>
-        <v-expansion-panel-content>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
-  </v-row>
+        <template v-slot:prepend="{ item, open }">
+          <v-icon v-if="!item.file">
+            {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+          </v-icon>
+          <v-icon>
+            {{ files[item.file] }}
+          </v-icon>
+        </template>
+      </v-treeview>
+  </v-navigation-drawer>
 </template>
 
+
+
+
 <script>
-import VueDraggableResizable from '@/components/vue-draggable-resizable';
-import { findIndex, find } from 'lodash';
-import { wordFontSizeToPx } from '@/utils';
-import html2canvas from "html2canvas";
+import 'font-awesome/css/font-awesome.min.css'
 export default {
-  components: { VueDraggableResizable },
+  components: {
+
+  },
   data() {
     return {
+      initiallyOpen: ['public'],
+      files: {
+        html: 'mdi-language-html5',
+        js: 'mdi-nodejs',
+        json: 'mdi-code-json',
+        md: 'mdi-language-markdown',
+        pdf: 'mdi-file-pdf',
+        png: 'mdi-file-image',
+        txt: 'mdi-file-document-outline',
+        xls: 'mdi-file-excel',
+      },
+      tree: [],
+      items: [
+        {
+          name: '.git',
+        },
+        {
+          name: 'node_modules',
+        },
+        {
+          name: 'public',
+          children: [
+            {
+              name: 'static',
+              children: [{
+                name: 'logo.png',
+                file: 'png',
+              }],
+            },
+            {
+              name: 'favicon.ico',
+              file: 'png',
+            },
+            {
+              name: 'index.html',
+              file: 'html',
+            },
+          ],
+        },
+        {
+          name: '.gitignore',
+          file: 'txt',
+        },
+        {
+          name: 'babel.config.js',
+          file: 'js',
+        },
+        {
+          name: 'package.json',
+          file: 'json',
+        },
+        {
+          name: 'README.md',
+          file: 'md',
+        },
+        {
+          name: 'vue.config.js',
+          file: 'js',
+        },
+        {
+          name: 'yarn.lock',
+          file: 'txt',
+        },
+      ],
+      drawer:true,
       projectList :[
         {
           teamId: 1,
