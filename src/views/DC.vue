@@ -49,25 +49,25 @@
       <div class="main-right-box">
         <div class="right-pullIcon-bar"/>
         <div class="right-folders-box">
-          <!-- todo: put Folders in this box-->
-            <v-treeview
-                v-model="tree"
-                :open="initiallyOpen"
-                :items="items"
-                activatable
-                item-key="name"
-                open-on-click
-                style="text-align: left"
-            >
-              <template v-slot:prepend="{ item, open }">
-                <v-icon v-if="!item.file">
-                  {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                </v-icon>
-                <v-icon>
-                  {{ files[item.file]}}
-                </v-icon>
-              </template>
-            </v-treeview>
+          <MultiFolder :team_id="team.teamId" :team_name="team.teamName"/>
+<!--            <v-treeview-->
+<!--                v-model="tree"-->
+<!--                :open="initiallyOpen"-->
+<!--                :items="items"-->
+<!--                activatable-->
+<!--                item-key="name"-->
+<!--                open-on-click-->
+<!--                style="text-align: left"-->
+<!--            >-->
+<!--              <template v-slot:prepend="{ item, open }">-->
+<!--                <v-icon v-if="!item.file">-->
+<!--                  {{ open ? 'mdi-folder-open' : 'mdi-folder' }}-->
+<!--                </v-icon>-->
+<!--                <v-icon>-->
+<!--                  {{ files[item.file]}}-->
+<!--                </v-icon>-->
+<!--              </template>-->
+<!--            </v-treeview>-->
         </div>
       </div>
     </div>
@@ -77,6 +77,7 @@
 <script>
 import TopBar from "@/components/topBar";
 import TeamLeft from "@/components/ProjectLeft";
+import MultiFolder from "@/components/multiFolder";
 import htmlToPdf from "../utils/htmlToPdf";
 import html2Canvas from "html2canvas";
 import {HocuspocusProvider} from '@hocuspocus/provider'
@@ -111,7 +112,7 @@ const turndownService = require('turndown').default;
 export default {
   name: "DC",
   components:{
-    TopBar,TeamLeft,
+    TopBar,TeamLeft,MultiFolder,
     EditorContent,
     MenuBar,
     htmlToPdf,
