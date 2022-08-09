@@ -58,7 +58,6 @@
 </template>
 
 <script>
-
 import Contextmenu from "vue-contextmenujs"
 Vue.use(Contextmenu);
 
