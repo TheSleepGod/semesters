@@ -2,13 +2,13 @@
   <div>
     <el-container>
     <el-aside width="300px">
+      <div class="newCreate" @click="createVisible = true"><i class="el-icon-document-add"></i>&nbsp&nbsp新建文档</div>
+      <el-dialog title="新建文档" :visible.sync="createVisible" style="width:60%;margin-left: 20%">
+        <el-input v-model="newDocName" placeholder="请输入文档名称" maxlength="20" show-word-limit>
+          <el-button slot="append" @click="createDoc()">确认</el-button>
+        </el-input>
+      </el-dialog>
       <div class="leftBar" style="background-color: #FAF594;height: 100%" >
-        <div class="newCreate" @click="this.createVisible = true"><i class="el-icon-document-add"></i>&nbsp&nbsp新建文档</div>
-        <el-dialog title="新建文档" :visible.sync="createVisible" style="width:60%;margin-left: 20%">
-          <el-input v-model="newName" placeholder="请输入文档名称" maxlength="20" show-word-limit>
-            <el-button slot="append" @click="createDoc()">确认</el-button>
-          </el-input>
-        </el-dialog>
         <v-treeview
           v-model="tree"
           :open="initiallyOpen"
@@ -45,14 +45,14 @@
               <div class="editor__footer">
                 <div :class="`editor__status editor__status--${status}`">
                   <template v-if="status === 'connected'">
-                    {{ editor.storage.collaborationCursor.users.length }} user{{ editor.storage.collaborationCursor.users.length === 1 ? '' : 's' }} online in {{ currentDoc.docContent }}
+                    {{ currentDoc.docContent }}
                   </template>
                   <template v-else>
                     offline
                   </template>
                 </div>
                 <div class="editor__name">
-                  <button @click="setName">
+                  <button>
                     {{ currentUser.name }}
                   </button>
                   <button @click="exportWord()">
@@ -97,6 +97,7 @@ import MenuBar from '../components/MenuBar.vue'
 import JsPDF from "jspdf";
 import $ from 'jquery'
 import qs from "qs";
+import axios from "axios";
 
 require('@/assets/js/jquery.wordexport')
 
@@ -123,6 +124,7 @@ export default {
     return{
       visible:false,
       username: '',
+      userid: '',
       team:{
         teamId: '',
         teamName: ''
@@ -157,8 +159,8 @@ export default {
         ]
       }
       ],
-      currentUser: JSON.parse(localStorage.getItem('currentUser')) || {
-        name: this.getRandomName(),
+      currentUser: {
+        name: this.username,
         color: this.getRandomColor(),
       },
       provider: null,
@@ -179,7 +181,7 @@ export default {
         type: '',
       },
       formLabelWidth: '120px',
-      newName: '',
+      newDocName: '',
     }
   },
   beforeCreate() {
@@ -202,8 +204,42 @@ export default {
 
   methods: {
 
-    createDoc() {
+    getNowUser() {
+      this.$axios({
+            method : 'post',
+            url : 'http://101.42.160.94:8000/api/user_web/get_user',
+            headers:{
+              'Authorization': localStorage.getItem('Token')
+            }
+          }
+      ).then((ret) => {
+        if (ret.data.errno === 0) {
+          this.username = ret.data.data.username;
+          this.userid=ret.data.data.user_id;
+        } else {
+          this.$notify.error(ret.data.msg);
+        }
+        console.log('userid:'+this.userid);
+      })
+    },
 
+    createDoc() {
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/create_document',
+          JSON.stringify({
+            project_id: this.project_id,
+            folder_id: '',
+            title: this.newDocName,
+            document_type: 'project_document',
+          })
+      ).then((res)=>{
+        console.log(res);
+        if(res.data.errno===0){
+          this.$message.success("文档创建成功");
+          this.createVisible = false;
+          this.getDocs();
+        } else this.$notify.error(res.data.msg);
+      }).catch((error)=>{console.log(error)})
     },
 
     chooseDoc(item) {
@@ -251,7 +287,6 @@ export default {
           }),
         ],
       })
-      localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
     },
 
     getDocs() {
@@ -317,7 +352,6 @@ export default {
               }),
             ],
           })
-          localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
     },
@@ -594,8 +628,6 @@ export default {
     updateCurrentUser(attributes) {
       this.currentUser = { ...this.currentUser, ...attributes }
       this.editor.chain().focus().updateUser(this.currentUser).run()
-
-      localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
     },
 
     getRandomColor() {
@@ -617,6 +649,7 @@ export default {
     },
   },
   created() {
+    this.getNowUser();
     this.team.teamId = this.$route.query.teamId;
     this.team.teamName = this.$route.query.teamName;
     this.project_id = this.$route.query.projectId;
@@ -666,8 +699,6 @@ export default {
         }),
       ],
     })
-    localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
-    // console.log(this.editor.getText());
   },
   beforeUnmount() {
     this.editor.destroy()
@@ -861,6 +892,20 @@ export default {
 
 <style lang="scss">
 /* Give a remote user a caret */
+
+.newCreate{
+  text-align: center;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 20px;
+  height: 40px;
+  line-height: 40px;
+  background-color: grey;
+}
+
+.newCreate:hover{
+  cursor: pointer;
+}
+
 .collaboration-cursor__caret {
   position: relative;
   margin-left: -1px;

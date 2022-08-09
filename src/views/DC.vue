@@ -116,7 +116,7 @@ export default {
         docName: '',
         docContent: 'initial_#qUClQ3NC63l3lXE'
       },
-      currentUser: JSON.parse(localStorage.getItem('currentUser')) || {
+      currentUser:  {
         name: this.username,
         color: this.getRandomColor(),
       },
@@ -423,8 +423,6 @@ export default {
     updateCurrentUser(attributes) {
       this.currentUser = { ...this.currentUser, ...attributes }
       this.editor.chain().focus().updateUser(this.currentUser).run()
-
-      localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
     },
 
     getRandomColor() {
@@ -553,9 +551,6 @@ export default {
         }),
       ],
     })
-    // console.log(this.editor.getText());
-    localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
-    // console.log(this.editor.getText());
   },
   beforeUnmount() {
     this.editor.destroy()
