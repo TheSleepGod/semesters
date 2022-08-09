@@ -207,6 +207,7 @@ export default {
       this.$refs.emailEditor.editor.saveDesign(
           (design) => {
             console.log('saveDesign', design);
+            console.log(typeof design)
             this.design=design;
           }
       )

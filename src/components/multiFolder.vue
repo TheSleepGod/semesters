@@ -22,18 +22,18 @@
                     <i class="el-icon-folder" v-if="!oneProjectFolder.isActive">{{oneProjectFolder.projectName}}</i>
                     <i class="el-icon-folder-opened" v-if="oneProjectFolder.isActive">{{oneProjectFolder.projectName}}</i>
                     <i class="el-icon-plus folder-tool-icon folder-tool-icon-right"
-                       title="新建文档" v-if="oneProjectFolder.isHover" @click.stop="showCreateDoc(0)"/>
+                       title="新建文档" v-if="oneProjectFolder.isHover" @click.stop="showCreateDoc(0,oneProjectFolder.projectId)"/>
                   </div>
                 </div>
                 <transition appear>
                   <div class="second-folder-content" v-if="oneProjectFolder.isActive">
-                    <div class="doc-box" v-for="(doc) in oneProjectFolder.projectDocs"  @click="openDoc(doc)"
+                    <div class="doc-box" v-for="(doc) in oneProjectFolder.projectDocs"  @click.stop="openDoc(doc)"
                          @mouseenter="showIcon(doc)" @mouseleave="hideIcon(doc)">
                       <div style="margin-left: 74px;display: flex;">
-                        <div class="doc-font">
+                        <div class="doc-font"  :title="doc.docName">
                           <i class="el-icon-document">{{doc.docName}}</i>
                         </div>
-                        <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
+                        <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right0"
                            title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc)"/>
                         <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                            title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
@@ -54,17 +54,17 @@
             <i class="el-icon-folder" v-if="!anotherFolder.isActive">{{anotherFolder.folderName}}</i>
             <i class="el-icon-folder-opened" v-if="anotherFolder.isActive">{{anotherFolder.folderName}}</i>
             <i class="el-icon-plus folder-tool-icon folder-tool-icon-right"
-               title="新建文档" v-if="anotherFolder.isHover" @click.s.stop="showCreateDoc(1)"/>
+               title="新建文档" v-if="anotherFolder.isHover" @click.s.stop="showCreateDoc(1,anotherFolder.folderId)"/>
           </div>
           <transition appear>
             <div class="first-folder-content" v-if="anotherFolder.isActive">
               <div class="doc-box" v-for="(doc) in anotherFolder.folderDocs" @click="openDoc(doc)"
                    @mouseenter="showIcon(doc)" @mouseleave="hideIcon(doc)">
                 <div style="margin-left: 37px;display: flex;">
-                  <div class="doc-font">
+                  <div class="doc-font" :title="doc.docName">
                     <i class="el-icon-document">{{doc.docName}}</i>
                   </div>
-                  <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
+                  <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right0"
                      title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc)"/>
                   <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                      title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
@@ -92,8 +92,8 @@
       </el-input>
     </el-dialog>
     <el-dialog title="新建文档" :visible="createDocVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
-      <el-input v-model="createDocName" placeholder="请输入文档名" maxlength="20" show-word-limit>
-        <el-button slot="append" @click="createDoc(createDocName)">确认</el-button>
+      <el-input v-model="newDoc.name" placeholder="请输入文档名" maxlength="20" show-word-limit>
+        <el-button slot="append" @click="createDoc">确认</el-button>
       </el-input>
     </el-dialog>
     <el-dialog title="新建文件夹" :visible="createFolderVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
@@ -105,6 +105,8 @@
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   name: "multiFolder",
   props:['team_id','team_name'],
@@ -155,6 +157,7 @@ export default {
       {
         isHover: false,
         isActive: false,
+        folderId: '',
         folderName: '团队介绍',
         folderDocs: [
           {
@@ -172,6 +175,7 @@ export default {
       {
         isHover: false,
         isActive: false,
+        folderId: '',
         folderName: '组会记录',
         folderDocs: [
           {
@@ -194,8 +198,12 @@ export default {
         name: ''
       },
       createDocVisible: false,
-      createDocType: 0,//0在项目内,1在项目外
-      createDocName: '',
+      newDoc: {
+        projectId: '',
+        folderId: '',
+        name: '',
+        type: 0 //0在项目内,1在项目外
+      },
       renameDocVisible: false,
       renameDoc: {
         id: 0,
@@ -214,7 +222,7 @@ export default {
   methods: {
     beClose(){
       this.renameDocVisible = false; this.renameDoc={};
-      this.createDocVisible = false; this.createDocName='';
+      this.createDocVisible = false; this.newDoc={};
       this.createFolderVisible = false; this.newFolder.name='';
     },
     showIcon(item){item.isHover=true},
@@ -226,9 +234,14 @@ export default {
       this.renameDoc.newName = doc.docName;
       this.renameDocVisible = true;
     },
-    showCreateDoc(type){
-      if(type===0)this.createDocType = 0;
-      else this.createDocType = 1;
+    showCreateDoc(type,id){
+      if(type===0){
+        this.newDoc.type = 0; //项目内
+        this.newDoc.projectId = id;
+      } else {
+        this.newDoc.type = 1;
+        this.newDoc.folderId = id;
+      }
       this.createDocVisible = true;
     },
     openDoc(doc){
@@ -254,22 +267,36 @@ export default {
     },
     createFolder(name){
       this.$message.success("文件夹 "+name+" 创建成功");
+      this.getTeamAllDocs();
       this.beClose();
     },
-    createDoc(name){
-      if(this.createDocType === 0)this.createDocInProject(name);
-      else this.createDocOutProject(name);
-      this.beClose();
+    createDoc(){
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/create_document',
+          JSON.stringify({
+            project_id: this.newDoc.projectId,
+            folder_id: this.newDoc.folderId,
+            title: this.newDoc.name,
+            document_type: this.newDoc.type===0?'project_document':'other_document',
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$message.success("文档创建成功");
+          this.getTeamAllDocs();
+          this.beClose();
+        } else this.$notify.error(res.data.msg);
+      }).catch((error)=>{console.log(error)})
     },
-    createDocInProject(name){
-      this.$message.success("文档 "+name+" 创建成功in")
+    createDocInProject(){
+      this.$message.success("文档 "+this.newDoc.name+" 创建成功,位于项目(id"+this.newDoc.projectId+")内");
     },
-    createDocOutProject(name){
-      this.$message.success("文档 "+name+" 创建成功out")
+    createDocOutProject(){
+      this.$message.success("文档 "+this.newDoc.name+" 创建成功,位于文件夹(id"+this.newDoc.folderId+")内");
     },
     postRenameDoc(){
       this.$message.success("成功重命名为"+this.renameDoc.newName);
       this.beClose();
+      this.getTeamAllDocs();
     },
     confirmDelDoc(doc) {
       this.$confirm('将彻底删除该文档, 是否继续?', '警告', {
@@ -282,10 +309,106 @@ export default {
     },
     delDoc(doc){
       this.$notify.success("文档 "+doc.docName+"（docID:"+doc.docId+"） 已删除");
+      this.getTeamAllDocs();
+    },
+    getAllProjectsDocs(){
+      this.projectsFolder = {
+        isActive: false,
+        projectsList: []
+      }
+      this.$axios.post(
+          "http://43.138.22.20:8000/api/user/check_team_project",
+          qs.stringify({
+            team_id: this.team_id,
+          }))
+          .then((res) => {
+            if(res.data.errno===0){
+              let array = res.data.data;
+              for(let i in array){
+                if(array[i].recycle===0){
+                  this.projectsFolder.projectsList.push({
+                    isHover: false,
+                    isActive: false,
+                    projectId: array[i].project_id,
+                    projectName: array[i].project_name,
+                    projectDocs: [],
+                  });
+                }
+              }
+              for (let i in this.projectsFolder.projectsList){
+                this.$axios.post(
+                    'http://43.138.22.20:8000/api/user/check_project_document',
+                    qs.stringify({
+                      project_id: this.projectsFolder.projectsList[i].projectId,
+                    })
+                ).then((res)=>{
+                  if(res.data.errno===0){
+                    let docArray = res.data.data;
+                    for (let j in docArray){
+                      this.projectsFolder.projectsList[i].projectDocs.push({
+                        isHover: false,
+                        docId: docArray[j].document_id,
+                        docName: docArray[j].title,
+                        docContent: docArray[j].room_name,
+                      })
+                    }
+                  } else this.$notify.error(res.data.msg)
+                }).catch((error)=>{console.log(error)})
+              }
+              //console.log(this.projectsFolder)
+            } else this.$notify.error(res.data.msg);
+          }).catch((error) => {console.log(error)})
+    },
+    getOtherFoldersDocs(){
+      this.otherFolders = [];
+      this.$axios.post(
+          'http://43.138.22.20:8000/api/user/check_team_folder',
+          qs.stringify({
+            team_id: this.team_id,
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          let array = res.data.data;
+          for(let i in array){
+            this.otherFolders.push({
+              isHover: false,
+              isActive: false,
+              folderId: array[i].folder_id,
+              folderName: array[i].folder_name,
+              folderDocs: [],
+            })
+          }
+          for(let i in this.otherFolders){
+            this.$axios.post(
+                'http://43.138.22.20:8000/api/user/check_folder_document',
+                qs.stringify({
+                  folder_id: this.otherFolders[i].folderId
+                })
+            ).then((res)=>{
+              if(res.data.errno===0){
+                let docArray = res.data.data;
+                for(let j in docArray){
+                  this.otherFolders[i].folderDocs.push({
+                    isHover: false,
+                    docId: docArray[j].document_id,
+                    docName: docArray[j].title,
+                    docContent: docArray[j].room_name,
+                  })
+                }
+              } else this.$notify.error(res.data.msg)
+            }).catch((error)=>{console.log(error)})}
+          console.log(this.otherFolders)
+        } else this.$notify.error(res.data.msg)
+      }).catch((error)=>{console.log(error)})
+    },
+    getTeamAllDocs(){
+      this.getAllProjectsDocs();
+      this.getOtherFoldersDocs();
     }
   },
   created() {
     this.getNowUser();
+    this.getTeamAllDocs();
   },
   mounted() {
   }
@@ -344,6 +467,7 @@ export default {
 
 }
 .doc-box{
+
   min-width: 0;
   max-width: 100%;
   cursor: pointer;
@@ -358,19 +482,25 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: all 1s;
+  transition: all 0.1s;
 }
 .doc-font:hover{
-  width: 85%;
+  width: 80%;
 }
 .folder-tool-icon{
   margin-top: 10px;
   font-size: 15px;
 }
 .folder-tool-icon-right{
+  position: absolute;
   float: right;
   right: 0;
-  margin-left: 5px;
   margin-right: 5px;
+}
+.folder-tool-icon-right0{
+  position: absolute;
+  float: right;
+  right: 0;
+  margin-right: 30px;
 }
 </style>
