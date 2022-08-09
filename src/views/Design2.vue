@@ -30,6 +30,7 @@
             <button v-on:click="loadDesign(design)">载入页面</button>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
+            <button v-on:click="shareDesign">共享页面</button>
           </div>
 
             <EmailEditor ref="emailEditor" v-on:load="editorLoaded" v-on:ready="editorReady" />
@@ -53,6 +54,7 @@ export default {
     EmailEditor
   },
   data(){
+    let nowProjectId;
     return{
       name:'设计图1',
       design:{},
@@ -129,11 +131,12 @@ export default {
         ]
       }
       ],
+      nowProjectId,
     }
   },
   methods: {
     onContextmenu(event,item) {
-      if(item.name=='文档中心'){
+      if(item.name==='文档中心') {
         this.$contextmenu({
           items: [
             {
@@ -236,7 +239,22 @@ export default {
             console.log('exportHtml', data);
           }
       )
+    },
+    shareDesign() {
+      this.saveDesign();
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/try_uml',
+          this.design
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$message.success("上传成功,将为您生成共享界面");
+          //Todo 绑定返回的 Id 和 projectId
+        } else this.$notify.error(res.data.msg);
+      }).catch((error)=>{console.log(error)})
     }
+  },
+  mounted() {
+    this.nowProjectId = this.$route.query.projectId;
   }
 }
 </script>

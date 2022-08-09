@@ -87,7 +87,7 @@
 
     <!-- 对话框-->
     <el-dialog title="重命名文档" :visible="renameDocVisible" :close-on-click-modal=false :before-close="beClose" style="width: 60%;margin-left: 20%">
-      <el-input v-model="renameDoc.newName" placeholder="请输入文档名" maxlength="15" show-word-limit>
+      <el-input v-model="renameDoc.newName" placeholder="请输入文档名" maxlength="12" show-word-limit>
         <el-button slot="append" @click="postRenameDoc">确认</el-button>
       </el-input>
     </el-dialog>
@@ -97,8 +97,8 @@
       </el-input>
     </el-dialog>
     <el-dialog title="新建文件夹" :visible="createFolderVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
-      <el-input v-model="newFolder.name" placeholder="请输入文件夹名" maxlength="15" show-word-limit>
-        <el-button slot="append" @click="createFolder(newFolder.name)">确认</el-button>
+      <el-input v-model="newFolder.name" placeholder="请输入文件夹名" maxlength="12" show-word-limit>
+        <el-button slot="append" @click="createFolder">确认</el-button>
       </el-input>
     </el-dialog>
   </div>
@@ -115,37 +115,16 @@ export default {
       {
         isHover: false,
         isActive: false,
-        projectId: 1,
-        projectName: "项目1",
+        projectId: '',
+        projectName: "",
         projectDocs: [
           {
             isHover: false,
-            docId: 1,
-            docName: 'doc1'
+            docId: '',
+            docName: '',
+            docContent: '',
+            type: 'project_document'
           },
-          {
-            isHover: false,
-            docId: 2,
-            docName: 'doc2'
-          }
-        ]
-      },
-      {
-        isHover: false,
-        isActive: false,
-        projectId: 2,
-        projectName: "项目2",
-        projectDocs: [
-          {
-            isHover: false,
-            docId: 3,
-            docName: 'doc3'
-          },
-          {
-            isHover: false,
-            docId: 4,
-            docName: 'doc4'
-          }
         ]
       },
     ];
@@ -158,36 +137,15 @@ export default {
         isHover: false,
         isActive: false,
         folderId: '',
-        folderName: '团队介绍',
+        folderName: '',
         folderDocs: [
           {
             isHover: false,
-            docId: 5,
-            docName: 'doc5'
+            docId: '',
+            docName: '',
+            docContent: '',
+            type: 'other_document'
           },
-          {
-            isHover: false,
-            docId: 6,
-            docName: 'doc6'
-          }
-        ]
-      },
-      {
-        isHover: false,
-        isActive: false,
-        folderId: '',
-        folderName: '组会记录',
-        folderDocs: [
-          {
-            isHover: false,
-            docId: 7,
-            docName: 'doc7doc7'
-          },
-          {
-            isHover: false,
-            docId: 8,
-            docName: 'doc8'
-          }
         ]
       },
     ]
@@ -246,6 +204,7 @@ export default {
     },
     openDoc(doc){
       this.$emit('input',doc);
+      this.$parent.changeRoom(doc.docContent)
     },
     getNowUser() {
       this.$axios({
@@ -265,12 +224,23 @@ export default {
         }
       })
     },
-    createFolder(name){
-      this.$message.success("文件夹 "+name+" 创建成功");
-      this.getTeamAllDocs();
-      this.beClose();
+    createFolder(){
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/create_folder',
+          JSON.stringify({
+            team_id: this.team_id,
+            folder_name: this.newFolder.name,
+          })
+      ).then((res) => {
+        console.log(res);
+        if (res.data.errno === 0) {
+          this.$message.success("文件夹 "+this.newFolder.name+" 创建成功");
+          this.getTeamAllDocs();
+          this.beClose();
+        } else this.$notify.error(res.data.msg);
+      }).catch((error)=>{console.log(error)})
     },
-    createDoc(){
+    createDoc() {
       this.$axios.post(
           'http://101.42.160.94:8000/api/user_web/create_document',
           JSON.stringify({
@@ -288,19 +258,13 @@ export default {
         } else this.$notify.error(res.data.msg);
       }).catch((error)=>{console.log(error)})
     },
-    createDocInProject(){
-      this.$message.success("文档 "+this.newDoc.name+" 创建成功,位于项目(id"+this.newDoc.projectId+")内");
-    },
-    createDocOutProject(){
-      this.$message.success("文档 "+this.newDoc.name+" 创建成功,位于文件夹(id"+this.newDoc.folderId+")内");
-    },
     postRenameDoc(){
-      this.$message.success("成功重命名为"+this.renameDoc.newName);
+      this.$notify.success("重命名成功");
       this.beClose();
       this.getTeamAllDocs();
     },
     confirmDelDoc(doc) {
-      this.$confirm('将彻底删除该文档, 是否继续?', '警告', {
+      this.$confirm('是否彻底删除该文档（无法撤销）？', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -309,8 +273,18 @@ export default {
       })
     },
     delDoc(doc){
-      this.$notify.success("文档 "+doc.docName+"（docID:"+doc.docId+"） 已删除");
-      this.getTeamAllDocs();
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/delete_document',
+          JSON.stringify({
+            document_id: doc.docId,
+            document_type: doc.type
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$notify.success("文档 "+doc.docName+" 已删除");
+          this.getTeamAllDocs();
+        } else this.$notify.error(res.data.msg)
+      }).catch((error)=>{console.log(error)})
     },
     getAllProjectsDocs(){
       this.projectsFolder = {
@@ -351,6 +325,7 @@ export default {
                         docId: docArray[j].document_id,
                         docName: docArray[j].title,
                         docContent: docArray[j].room_name,
+                        type: 'project_document'
                       })
                     }
                   } else this.$notify.error(res.data.msg)
@@ -394,6 +369,7 @@ export default {
                     docId: docArray[j].document_id,
                     docName: docArray[j].title,
                     docContent: docArray[j].room_name,
+                    type: 'other_document',
                   })
                 }
               } else this.$notify.error(res.data.msg)
