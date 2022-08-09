@@ -7,7 +7,7 @@
             返回
         </div>
         <div class="item_name">
-            {{nowTeamName}}
+            当前项目:&nbsp{{nowProjectName}}
         </div>
       </div>
       <div class="top_head_middle">

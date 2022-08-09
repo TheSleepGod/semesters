@@ -2,7 +2,7 @@
   <div>
     <el-container>
     <el-aside width="300px">
-      <div class="leftBar" style="background-color: #FAF594;height: 100%" >
+      <div class="leftBar" style="background-color: #ffd;height: 100%" >
         <v-treeview
           v-model="tree"
           :open="initiallyOpen"
