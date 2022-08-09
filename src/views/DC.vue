@@ -102,8 +102,8 @@ export default {
     MenuBar,
     htmlToPdf,
   },
-  data(){
-    return{
+  data() {
+    return {
       visible:false,
       username: '',
       userid: '',

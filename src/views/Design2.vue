@@ -30,7 +30,7 @@
             style="text-align: left"
         >
           <template v-slot:prepend="{ item, open }" >
-            <div @contextmenu.prevent="onContextmenu($event,item)" @click="loadDesign(item.id)">
+            <div @contextmenu.prevent="onContextmenu($event,item)" @click="loadDesign(item.id)"  style="position: relative; float: left">
               <v-icon v-if="!item.file">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
@@ -38,6 +38,7 @@
                 {{ files[item.file]}}
               </v-icon>
             </div>
+            <div @contextmenu.prevent="onContextmenu($event,item)" style="height: 30px; width: 200px; position: relative; float: right; margin-right: -200px;" @click="loadDesign(item.id)"></div>
           </template>
         </v-treeview>
       </el-aside>

@@ -26,9 +26,6 @@ Vue.component('vdr', vdr)
 
 Vue.prototype.$axios = axios;
 
-
-
-
 let isLogin = false;
 
 router.beforeEach((to, from, next) => {
