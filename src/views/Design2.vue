@@ -56,6 +56,7 @@ export default {
     return{
       name:'设计图1',
       design:{},
+      project_id:0,
       initiallyOpen: ['文档中心'],
       files: {
         html: 'mdi-language-html5',
@@ -201,11 +202,28 @@ export default {
       console.log('editorReady');
     },
     loadDesign(design) {
-      this.$refs.emailEditor.editor.loadDesign(design);
+      let toSend = {id : 13};
+      this.$axios({
+        method:'post',
+        url : 'http://101.42.160.94:8000/api/user_web/get_uml',
+        data : JSON.stringify(toSend)
+      }).then((res) =>{
+        console.log(res.data.data);
+        this.design=JSON.parse(res.data.data);
+        console.log(this.design)
+      });
+      this.$refs.emailEditor.editor.loadDesign(this.design);
     },
     saveDesign() {
       this.$refs.emailEditor.editor.saveDesign(
           (design) => {
+            this.$axios({
+              method:'post',
+              url : 'http://101.42.160.94:8000/api/user_web/try_uml',
+              data: design
+            }).then((res) =>{
+              console.log(res);
+            })
             console.log('saveDesign', design);
             console.log(typeof design)
             this.design=design;
