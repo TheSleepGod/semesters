@@ -12,12 +12,14 @@
           open-on-click
         >
           <template v-slot:prepend="{ item, open }" >
+            <div @click="chooseDoc(item)">
               <v-icon v-if="!item.file">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
               <v-icon v-else>
                 {{ files[item.file]}}
               </v-icon>
+            </div>
           </template>
         </v-treeview>
     </div>
@@ -37,7 +39,7 @@
               <div class="editor__footer">
                 <div :class="`editor__status editor__status--${status}`">
                   <template v-if="status === 'connected'">
-                    {{ editor.storage.collaborationCursor.users.length }} user{{ editor.storage.collaborationCursor.users.length === 1 ? '' : 's' }} online in {{ room }}
+                    {{ editor.storage.collaborationCursor.users.length }} user{{ editor.storage.collaborationCursor.users.length === 1 ? '' : 's' }} online in {{ currentDoc.docContent }}
                   </template>
                   <template v-else>
                     offline
@@ -88,6 +90,7 @@ import * as Y from 'yjs'
 import MenuBar from '../components/MenuBar.vue'
 import JsPDF from "jspdf";
 import $ from 'jquery'
+import qs from "qs";
 
 require('@/assets/js/jquery.wordexport')
 
@@ -123,7 +126,8 @@ export default {
         docName: 'name1',
         docContent: ''
       },
-      initiallyOpen: ['项目文档','public'],
+      project_id: this.$route.query.projectId,
+      initiallyOpen: ['项目文档'],
       files: {
         html: 'mdi-language-html5',
         js: 'mdi-nodejs',
@@ -139,62 +143,13 @@ export default {
         name:'项目文档',
         children: [
           {
-            name: '.git',
-          },
-          {
-            name: 'node_modules',
-          },
-          {
-            name: 'public',
-            children: [
-              {
-                name: 'static',
-                children: [{
-                  name: 'logo.png',
-                  file: 'png',
-                },
-                  {
-                    name:'abc.js',
-                    file:'js',
-                  }],
-              },
-              {
-                name: 'favicon.ico',
-                file: 'png',
-              },
-              {
-                name: 'index.html',
-                file: 'html',
-              },
-            ],
-          },
-          {
-            name: '.gitignore',
-            file: 'txt',
-          },
-          {
-            name: 'babel.config.js',
-            file: 'js',
-          },
-          {
-            name: 'package.json',
-            file: 'json',
-          },
-          {
-            name: 'README.md',
-            file: 'md',
-          },
-          {
-            name: 'vue.config.js',
-            file: 'js',
-          },
-          {
-            name: 'yarn.lock',
-            file: 'txt',
-          },
+            docId: '',
+            name: '',
+            docContent: '',
+            file: '',
+          }
         ]
       }
-
       ],
       currentUser: JSON.parse(localStorage.getItem('currentUser')) || {
         name: this.getRandomName(),
@@ -239,66 +194,122 @@ export default {
   },
 
   methods: {
-    onContextmenu(event,item) {
-      if(item.name=='文档中心'){
-        this.$contextmenu({
-          items: [
-            {
-              label: "新建文件夹",
-              icon:'el-icon-folder-add'
-            },
-          ],
-          event,
-          //x: event.clientX,
-          //y: event.clientY,
-          customClass: "class-a",
-          zIndex: 3,
-          minWidth: 230
-        });
-      }
-      else if(!item.file){
-        this.$contextmenu({
-          items: [
-            {
-              label: "新建文档",
-              icon:"el-icon-document-add"
-            },
-            {
-              label: "重命名文件夹",
-              icon:"el-icon-edit"
-            }
-
-          ],
-          event,
-          //x: event.clientX,
-          //y: event.clientY,
-          customClass: "class-a",
-          zIndex: 3,
-          minWidth: 230
-        });
-      }
-      else{
-        this.$contextmenu({
-          items: [
-            {
-              label: "删除文档",
-              icon:"el-icon-document-delete"
-            },
-            {
-              label: "重命名文档",
-              icon:"el-icon-edit"
-            }
-          ],
-          event,
-          //x: event.clientX,
-          //y: event.clientY,
-          customClass: "class-a",
-          zIndex: 3,
-          minWidth: 230
-        });
-      }
-      return false;
+    chooseDoc(item) {
+      this.currentDoc.docId = item.docId;
+      this.currentDoc.docName = item.name;
+      this.currentDoc.docContent = item.docContent;
+      console.log('现在选中的是' + this.currentDoc.docId);
+      this.editor.destroy()
+      this.provider.destroy()
+      const ydoc = new Y.Doc()
+      this.provider = new HocuspocusProvider({
+        url: 'wss://connect.gethocuspocus.com',
+        parameters: {
+          key: 'write_bqgvQ3Zwl34V4Nxt43zR',
+        },
+        name: this.currentDoc.docContent,
+        document: ydoc,
+      })
+      this.provider.on('status', event => {
+        this.status = event.status
+      })
+      this.editor = new Editor({
+        onUpdate: ({ editor }) => {
+          this.textDownload = editor.getText();
+          this.htmlDownload = editor.getHTML();
+          // send the content to an API here
+        },
+        content: this.textModel,
+        extensions: [
+          StarterKit.configure({
+            history: false,
+          }),
+          Highlight,
+          TaskList,
+          TaskItem,
+          Collaboration.configure({
+            document: ydoc,
+          }),
+          CollaborationCursor.configure({
+            provider: this.provider,
+            user: this.currentUser,
+          }),
+          CharacterCount.configure({
+            limit: 10000,
+          }),
+        ],
+      })
+      localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
     },
+
+    getDocs() {
+      this.items[0].children = [];
+      this.$axios.post(
+          'http://43.138.22.20:8000/api/user/check_project_document',
+          qs.stringify({
+            project_id: this.project_id
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          let docArray = res.data.data;
+          for (let j in docArray){
+            this.items[0].children.push({
+              docId: docArray[j].document_id,
+              name: docArray[j].title,
+              docContent: docArray[j].room_name,
+              file: 'txt',
+            })
+          }
+          this.currentDoc.docId = this.items[0].children[0].docId;
+          this.currentDoc.docName = this.items[0].children[0].name;
+          this.currentDoc.docContent = this.items[0].children[0].docContent;
+          console.log(this.currentDoc.docContent);
+          this.editor.destroy()
+          this.provider.destroy()
+          const ydoc = new Y.Doc()
+
+          this.provider = new HocuspocusProvider({
+            url: 'wss://connect.gethocuspocus.com',
+            parameters: {
+              key: 'write_bqgvQ3Zwl34V4Nxt43zR',
+            },
+            name: this.currentDoc.docContent,
+            document: ydoc,
+          })
+          this.provider.on('status', event => {
+            this.status = event.status
+          })
+          this.editor = new Editor({
+            onUpdate: ({ editor }) => {
+              this.textDownload = editor.getText();
+              this.htmlDownload = editor.getHTML();
+              // send the content to an API here
+            },
+            content: this.textModel,
+            extensions: [
+              StarterKit.configure({
+                history: false,
+              }),
+              Highlight,
+              TaskList,
+              TaskItem,
+              Collaboration.configure({
+                document: ydoc,
+              }),
+              CollaborationCursor.configure({
+                provider: this.provider,
+                user: this.currentUser,
+              }),
+              CharacterCount.configure({
+                limit: 10000,
+              }),
+            ],
+          })
+          localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
+        } else this.$notify.error(res.data.msg)
+      }).catch((error)=>{console.log(error)})
+    },
+
     setName() {
       const name = (window.prompt('Name') || '')
           .trim()
@@ -335,6 +346,9 @@ export default {
       else if(textCode === '4'){
         //架构设计说明书
         this.textModel = '<h2>架构设计说明书</h2>';
+      }
+      else{
+        this.textModel = '';
       }
     },
 
@@ -593,11 +607,13 @@ export default {
   created() {
     this.team.teamId = this.$route.query.teamId;
     this.team.teamName = this.$route.query.teamName;
-    this.getNowUser();
+    this.project_id = this.$route.query.projectId;
+
   },
 
   mounted() {
-
+    this.getDocs();
+    //
     this.getText(this.$route.query.type);
     const ydoc = new Y.Doc()
 
@@ -606,7 +622,7 @@ export default {
       parameters: {
         key: 'write_bqgvQ3Zwl34V4Nxt43zR',
       },
-      name: this.room,
+      name: this.currentDoc.docContent,
       document: ydoc,
     })
     this.provider.on('status', event => {
@@ -638,7 +654,6 @@ export default {
         }),
       ],
     })
-    // console.log(this.editor.getText());
     localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
     // console.log(this.editor.getText());
   },

@@ -54,7 +54,7 @@
             <i class="el-icon-folder" v-if="!anotherFolder.isActive">{{anotherFolder.folderName}}</i>
             <i class="el-icon-folder-opened" v-if="anotherFolder.isActive">{{anotherFolder.folderName}}</i>
             <i class="el-icon-plus folder-tool-icon folder-tool-icon-right"
-               title="新建文档" v-if="anotherFolder.isHover" @click.s.stop="showCreateDoc(1,anotherFolder.folderId)"/>
+               title="新建文档" v-if="anotherFolder.isHover" @click.stop="showCreateDoc(1,anotherFolder.folderId)"/>
           </div>
           <transition appear>
             <div class="first-folder-content" v-if="anotherFolder.isActive">
