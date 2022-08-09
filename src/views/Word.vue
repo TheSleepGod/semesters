@@ -3,29 +3,23 @@
     <el-container>
     <el-aside width="300px">
       <div class="leftBar" style="background-color: #FAF594">
-      <v-treeview
-      v-model="tree"
-      :open="initiallyOpen"
-      :items="items"
-      activatable
-      expand-icon=""
-      return-object
-      transition
-      dense
-      item-key="name"
-      open-on-click
-  >
-    <template v-slot:prepend="{ item, open }">
-      <div @contextmenu.prevent = "onContextmenu">
-        <v-icon v-if="!item.file">
-          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-        </v-icon>
-        <v-icon v-else>
-          {{ files[item.file] }}
-        </v-icon>
-      </div>
-    </template>
-  </v-treeview>
+        <v-treeview
+          v-model="tree"
+          :open="initiallyOpen"
+          :items="items"
+          activatable
+          item-key="name"
+          open-on-click
+        >
+          <template v-slot:prepend="{ item, open }" >
+              <v-icon v-if="!item.file">
+                {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+              </v-icon>
+              <v-icon v-else>
+                {{ files[item.file]}}
+              </v-icon>
+          </template>
+        </v-treeview>
     </div>
     </el-aside>
     <el-main>
@@ -129,7 +123,7 @@ export default {
         docName: 'name1',
         docContent: ''
       },
-      initiallyOpen: ['项目文档'],
+      initiallyOpen: ['项目文档','public'],
       files: {
         html: 'mdi-language-html5',
         js: 'mdi-nodejs',
