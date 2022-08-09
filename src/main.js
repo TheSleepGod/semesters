@@ -18,11 +18,15 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 import Vuetify from 'vuetify'
 import vuetify from '@/plugins/vuetify'
+import Contextmenu from "vue-contextmenujs"
+Vue.use(Contextmenu);
 Vue.use(Vuetify)
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 Vue.component('vdr', vdr)
 
 Vue.prototype.$axios = axios;
+
+
 
 
 let isLogin = false;

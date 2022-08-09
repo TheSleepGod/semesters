@@ -51,7 +51,7 @@ const routes = [
   }, 
   {
     path: '/editWord',
-    name: 'Edit',
+    name: 'edit',
     component: () => import('../views/Edit'),
     children: [
       {
