@@ -1,9 +1,25 @@
 <!-- drag-test -->
 <template>
   <el-container>
-
-      <el-aside class="aside">
-
+      <el-aside class="aside" style="background-color: #ffd;">
+          <div>新建</div>
+        <v-treeview
+            v-model="tree"
+            :open="initiallyOpen"
+            :items="items"
+            activatable
+            item-key="name"
+            open-on-click
+        >
+          <template v-slot:prepend="{ item, open }" >
+              <v-icon v-if="!item.file">
+                {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+              </v-icon>
+              <v-icon v-else>
+                {{ files[item.file]}}
+              </v-icon>
+          </template>
+        </v-treeview>
       </el-aside>
 
       <el-main class="main_area">
@@ -26,9 +42,11 @@
 </template>
 
 <script>
+import Contextmenu from "vue-contextmenujs"
+Vue.use(Contextmenu);
 import { EmailEditor } from '../components'
 import sample from '../data/sample.json';
-
+import Vue from  'vue'
 export default {
   name: 'exampleView',
   components: {
@@ -38,9 +56,141 @@ export default {
     return{
       name:'设计图1',
       design:{},
+      initiallyOpen: ['文档中心'],
+      files: {
+        html: 'mdi-language-html5',
+        js: 'mdi-nodejs',
+        json: 'mdi-code-json',
+        md: 'mdi-language-markdown',
+        pdf: 'mdi-file-pdf',
+        png: 'mdi-file-image',
+        txt: 'mdi-file-document-outline',
+        xls: 'mdi-file-excel',
+      },
+      tree: [],
+      items: [{
+        name:'文档中心',
+        children: [
+          {
+            name: '.git',
+          },
+          {
+            name: 'node_modules',
+          },
+          {
+            name: 'public',
+            children: [
+              {
+                name: 'static',
+                children: [{
+                  name: 'logo.png',
+                  file: 'png',
+                },
+                  {
+                    name:'abc.js',
+                    file:'js',
+                  }],
+              },
+              {
+                name: 'favicon.ico',
+                file: 'png',
+              },
+              {
+                name: 'index.html',
+                file: 'html',
+              },
+            ],
+          },
+          {
+            name: '.gitignore',
+            file: 'txt',
+          },
+          {
+            name: 'babel.config.js',
+            file: 'js',
+          },
+          {
+            name: 'package.json',
+            file: 'json',
+          },
+          {
+            name: 'README.md',
+            file: 'md',
+          },
+          {
+            name: 'vue.config.js',
+            file: 'js',
+          },
+          {
+            name: 'yarn.lock',
+            file: 'txt',
+          },
+        ]
+      }
+      ],
     }
   },
   methods: {
+    onContextmenu(event,item) {
+      if(item.name=='文档中心'){
+        this.$contextmenu({
+          items: [
+            {
+              label: "新建文件夹",
+              icon:'el-icon-folder-add'
+            },
+          ],
+          event,
+          //x: event.clientX,
+          //y: event.clientY,
+          customClass: "class-a",
+          zIndex: 3,
+          minWidth: 230
+        });
+      }
+      else if(!item.file){
+        this.$contextmenu({
+          items: [
+            {
+              label: "新建文档",
+              icon:"el-icon-document-add"
+            },
+            {
+              label: "重命名文件夹",
+              icon:"el-icon-edit"
+            }
+
+          ],
+          event,
+          //x: event.clientX,
+          //y: event.clientY,
+          customClass: "class-a",
+          zIndex: 3,
+          minWidth: 230
+        });
+      }
+      else{
+        this.$contextmenu({
+          items: [
+            {
+              label: "删除文档",
+              icon:"el-icon-document-delete"
+            },
+            {
+              label: "重命名文档",
+              icon:"el-icon-edit"
+            }
+          ],
+          event,
+          //x: event.clientX,
+          //y: event.clientY,
+          customClass: "class-a",
+          zIndex: 3,
+          minWidth: 230
+        });
+      }
+      return false;
+    },
     // called when the editor is created
     editorLoaded() {
       console.log('editorLoaded');
