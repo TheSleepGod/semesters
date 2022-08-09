@@ -103,7 +103,7 @@ export default {
     htmlToPdf,
   },
   data(){
-    let uniqueNum = 'initial_#'+this.$route.query.teamId+'qUClQ3NC63l3lXE';
+    let uniqueNum = 'initial_#'+this.$route.query.teamId+'q6Ul'+this.$route.query.teamId+'Q3nC3'+this.$route.query.teamId+'g3XEo'+this.$route.query.teamId[0];
     return{
       visible:false,
       username: '',
