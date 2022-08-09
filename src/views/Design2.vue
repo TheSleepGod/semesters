@@ -18,7 +18,7 @@
             style="text-align: left"
         >
           <template v-slot:prepend="{ item, open }" >
-            <div @contextmenu.prevent="onContextmenu($event,item)">
+            <div @contextmenu.prevent="onContextmenu($event,item)" @click="loadDesign(item.id)">
               <v-icon v-if="!item.file">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
@@ -85,17 +85,17 @@ export default {
         name:'原型图列表',
         children: [
           {
-            id:0,
+            id:31,
             name: '.gitignore',
             file: 'txt',
           },
           {
-            id:1,
+            id:32,
             name: 'babel.config.js',
             file: 'js',
           },
           {
-            id:2,
+            id:33,
             name: 'package.json',
             file: 'json',
           },
@@ -155,8 +155,8 @@ export default {
     editorReady() {
       console.log('editorReady');
     },
-    loadDesign() {
-      let toSend = {id : 34};
+    loadDesign(pid) {
+      let toSend = {id : pid};
       this.$axios({
         method:'post',
         url : 'http://101.42.160.94:8000/api/user_web/get_prototype',
