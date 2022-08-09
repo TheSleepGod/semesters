@@ -43,7 +43,7 @@
                           <i class="el-icon-document">{{doc.docName}}</i>
                         </div>
                         <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
-                           title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc,1,oneProjectFolder.projectId)"/>
+                           title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc,0,oneProjectFolder.projectId)"/>
                         <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                            title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
                       </div>
@@ -89,7 +89,7 @@
 
     <!-- 对话框-->
     <el-dialog title="重命名文档" :visible="renameDocVisible" :close-on-click-modal=false :before-close="beClose" style="width: 60%;margin-left: 20%">
-      <el-input v-model="renameDoc.newName" placeholder="请输入文档名" maxlength="12" show-word-limit>
+      <el-input v-model="renameDoc.newName" placeholder="请输入新文档名" maxlength="12" show-word-limit>
         <el-button slot="append" @click="postRenameDoc">确认</el-button>
       </el-input>
     </el-dialog>

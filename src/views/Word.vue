@@ -8,6 +8,11 @@
           <el-button slot="append" @click="createDoc()">确认</el-button>
         </el-input>
       </el-dialog>
+      <el-dialog title="重命名文档" :visible="renameDocVisible" :close-on-click-modal=false style="width: 60%;margin-left: 20%">
+        <el-input v-model="renameDoc.newName" placeholder="请输入新文档名" maxlength="12" show-word-limit>
+          <el-button slot="append" @click="postRenameDoc()">确认</el-button>
+        </el-input>
+      </el-dialog>
       <div class="leftBar" style="height: 100%" >
         <v-treeview
           v-model="tree"
@@ -19,7 +24,7 @@
           style="text-align: left"
         >
           <template v-slot:prepend="{ item, open }" >
-            <div @click="chooseDoc(item)">
+            <div @click="chooseDoc(item)" @contextmenu.prevent="onContextmenu($event,item)">
               <v-icon v-if="!item.file">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
@@ -123,6 +128,15 @@ export default {
   },
   data(){
     return{
+      renameDoc: {
+        docId: '',
+        newName: '',
+        type: '',
+        projectId: '',
+        folderId: '',
+      },
+      renameDocVisible: false,
+      delVisible: false,
       visible:false,
       username: '',
       userid: '',
@@ -204,6 +218,101 @@ export default {
   },
 
   methods: {
+
+    postRenameDoc() {
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/update_document',
+          JSON.stringify({
+            new_title: this.renameDoc.newName,
+            document_id: this.renameDoc.docId,
+            project_id: this.renameDoc.projectId,
+            folder_id: this.renameDoc.folderId,
+            document_type: this.renameDoc.type,
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$message.success("重命名成功");
+          this.getDocs();
+          this.renameDocVisible = false;
+          this.renameDoc = {
+            docId: '',
+            newName: '',
+            projectId: '',
+            folderId: '',
+            type: ''
+          };
+        } else this.$notify.error(res.data.msg)
+      }).catch((error)=>{console.log(error)})
+    },
+
+    delDoc(item) {
+      console.log(item);
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/delete_document',
+          JSON.stringify({
+            document_id: item.docId,
+            document_type: 'project_document'
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$notify.success("文档 "+item.name+" 已删除");
+          this.getDocs();
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        } else this.$notify.error(res.data.msg)
+      }).catch((error)=>{console.log(error)})
+    },
+
+    onContextmenu(event,item) {
+      if(item.file === 'txt'){
+        this.$contextmenu({
+          items: [
+            {
+              label: "删除文档",
+              icon:'el-icon-document-delete',
+              onClick: () => {
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  this.delDoc(item);
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                  });
+                });
+              }
+            },
+            {
+              label: "重命名文档",
+              icon:'el-icon-edit-outline',
+              onClick: () => {
+                this.renameDoc = {
+                  docId: item.docId,
+                  newName: item.name,
+                  projectId: this.project_id,
+                  folderId: '',
+                  type: 'project_document'
+                };
+                this.renameDocVisible = true;
+              }
+            },
+
+          ],
+          event,
+          //x: event.clientX,
+          //y: event.clientY,
+          customClass: "class-a",
+          zIndex: 3,
+          minWidth: 230
+        });
+      }
+      return false;
+    },
 
     getNowUser() {
       this.$axios({
