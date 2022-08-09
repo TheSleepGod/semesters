@@ -1,11 +1,27 @@
 <template>
   <div class = "body-box">
     <div class = "left">
-      <div class = "left-message" v-for="(html,index) in htmlList">
-        <div  @click = "changeShow(index)">
-          <span>{{html.name}}</span>
-        </div>  
-      </div>
+      <v-treeview
+          v-model="tree"
+          :open="initiallyOpen"
+          :items="items"
+          activatable
+          item-key="name"
+          open-on-click
+          style="text-align: left"
+      >
+        <template v-slot:prepend="{ item, open }" >
+          <div @contextmenu.prevent="onContextmenu($event,item)" @click="changeShow(item)" style="position: relative; float: left">
+            <v-icon v-if="!item.file">
+              {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+            </v-icon>
+            <v-icon v-else>
+              {{ files[item.file]}}
+            </v-icon>
+          </div>
+          <div @contextmenu.prevent="onContextmenu($event,item)" style="height: 30px; width: 200px; position: relative; float: right; margin-right: -200px;" @click="changeShow(item)"></div>
+        </template>
+      </v-treeview>
     </div>
     <div class = "share-box">
       <span v-html= "this.htmlList[nowShow].htmlData" id = "asd-asd">
@@ -18,6 +34,7 @@
 export default {
   name: "ShowDesign",
   data(){
+    
     let nowProjectId;
     let nowShow = 0;
     let htmlList = [{
@@ -32,6 +49,44 @@ export default {
       },
     ];
     return {
+      name:'设计图1',
+      design:{},
+      newName:'',
+      createVisible:false,
+      project_id:0,
+      initiallyOpen: ['原型图列表'],
+      files: {
+        html: 'mdi-language-html5',
+        js: 'mdi-nodejs',
+        json: 'mdi-code-json',
+        md: 'mdi-language-markdown',
+        pdf: 'mdi-file-pdf',
+        png: 'mdi-file-image',
+        txt: 'mdi-file-document-outline',
+        xls: 'mdi-file-excel',
+      },
+      tree: [],
+      items: [{
+        name:'原型图列表',
+        children: [
+          {
+            id:31,
+            name: '.gitignore',
+            file: 'txt',
+          },
+          {
+            id:32,
+            name: 'babel.config.js',
+            file: 'js',
+          },
+          {
+            id:33,
+            name: 'package.json',
+            file: 'json',
+          },
+        ]
+      }
+      ],
       htmlList,
       nowProjectId,
       nowShow,
@@ -48,9 +103,42 @@ export default {
     getProjectHtml() {
       //todo 获取单个原型图的html
     },
-    changeShow(index) {
-      this.nowShow = index;
-    }
+    changeShow(item) {
+      this.nowShow = item.id - 31; //todo 改变对应规则
+    },
+    onContextmenu(event,item) {
+      // if(item.file){
+      //   this.$contextmenu({
+      //     items: [
+      //       {
+      //         label: "删除原型图",
+      //         icon:'el-icon-document-delete',
+      //         onClick: () => {
+      //           let toSend={
+      //             id:item.id
+      //           };
+      //           //todo:删除原型图
+      //           this.$axios({
+      //             method:'post',
+      //             url:'http://',
+      //             data:JSON.stringify(toSend)
+      //           }).then((res) =>{
+      //             console.log(res);
+      //           })
+      //           this.$message("del success");
+      //         }
+      //       },
+      //     ],
+      //     event,
+      //     //x: event.clientX,
+      //     //y: event.clientY,
+      //     customClass: "class-a",
+      //     zIndex: 3,
+      //     minWidth: 230
+      //   });
+      // }
+      return false;
+    },
   }
 }
 </script>
@@ -67,7 +155,7 @@ export default {
   margin-top: 20px;
   width: 300px;
   height: 700px;
-  background: #1795bb;
+
   position: relative;
   float: left;
 }

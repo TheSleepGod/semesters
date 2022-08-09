@@ -42,7 +42,7 @@
                         <div class="doc-font"  :title="doc.docName">
                           <i class="el-icon-document">{{doc.docName}}</i>
                         </div>
-                        <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
+                        <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right" style="right: 20px"
                            title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc,0,oneProjectFolder.projectId)"/>
                         <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                            title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
@@ -64,7 +64,7 @@
             <i class="el-icon-folder-opened" v-if="anotherFolder.isActive">{{anotherFolder.folderName}}</i>
             <i class="el-icon-delete-solid folder-tool-icon folder-tool-icon-right" title="删除文件夹"
                v-if="anotherFolder.isHover" @click.stop="confirmDelFolder(anotherFolder)"/>
-            <i class="el-icon-plus folder-tool-icon folder-tool-icon-right" title="新建文档"
+            <i class="el-icon-plus folder-tool-icon folder-tool-icon-right" title="新建文档" style="right: 20px"
                v-if="anotherFolder.isHover" @click.stop="showCreateDoc(1,anotherFolder.folderId)"/>
           </div>
           <transition appear>
@@ -75,7 +75,7 @@
                   <div class="doc-font" :title="doc.docName">
                     <i class="el-icon-document">{{doc.docName}}</i>
                   </div>
-                  <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
+                  <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right" style="right: 20px"
                      title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc,1,anotherFolder.folderId)"/>
                   <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                      title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
@@ -88,17 +88,27 @@
     </div>
 
     <!-- 对话框-->
-    <el-dialog title="重命名文档" :visible="renameDocVisible" :close-on-click-modal=false :before-close="beClose" style="width: 60%;margin-left: 20%">
-      <el-input v-model="renameDoc.newName" placeholder="请输入新文档名" maxlength="12" show-word-limit>
+    <el-dialog title="重命名文档" :visible="renameDocVisible" :close-on-click-modal=false :before-close="beClose" class="dialog-box">
+      <el-input v-model="renameDoc.newName" placeholder="请输入文档名" maxlength="12" show-word-limit>
         <el-button slot="append" @click="postRenameDoc">确认</el-button>
       </el-input>
     </el-dialog>
-    <el-dialog title="新建文档" :visible="createDocVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
-      <el-input v-model="newDoc.name" placeholder="请输入文档名" maxlength="12" show-word-limit>
-        <el-button slot="append" @click="createDoc">选择模板</el-button>
-      </el-input>
+    <el-dialog title="新建文档" :visible="createDocVisible" :close-on-click-modal=false :before-close="beClose" class="dialog-box">
+      <div style="width: 90%;margin-left: 5%">
+        <el-input v-model="newDoc.name" placeholder="请输入文档名" maxlength="12" show-word-limit></el-input>
+        <div style="margin-top: 20px;text-align: left;display: flex">
+          <el-select v-model="createMod" placeholder="请选择模板">
+            <el-option label="空" value="0"></el-option>
+            <el-option label="需求规格说明书" value="1"></el-option>
+            <el-option label="会议纪要" value="2"></el-option>
+            <el-option label="项目计划" value="3"></el-option>
+            <el-option label="架构设计说明书" value="4"></el-option>
+          </el-select>
+          <el-button size="small" type="primary" style="color: white;font-size: 16px;margin-left: 35%" @click="createDoc">创 建</el-button>
+        </div>
+      </div>
     </el-dialog>
-    <el-dialog title="新建文件夹" :visible="createFolderVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
+    <el-dialog title="新建文件夹" :visible="createFolderVisible" :close-on-click-modal=false :before-close="beClose" class="dialog-box">
       <el-input v-model="newFolder.name" placeholder="请输入文件夹名" maxlength="12" show-word-limit>
         <el-button slot="append" @click="createFolder">确认</el-button>
       </el-input>
@@ -152,6 +162,7 @@ export default {
       },
     ]
     return {
+      createMod:'',
       createFolderVisible: false,
       newFolder:{
         isHover: false,
@@ -251,6 +262,7 @@ export default {
       }).catch((error)=>{console.log(error)})
     },
     createDoc() {
+      //todo:模板创建：this.createMod
       this.$axios.post(
           'http://101.42.160.94:8000/api/user_web/create_document',
           JSON.stringify({
@@ -445,6 +457,10 @@ export default {
 .v-leave-to {transform: translateY(-20%);opacity: 0;}
 .v-leave-active {transition: 0.25s;}
 
+.dialog-box{
+  width:60%;
+  margin-left: 20%;
+}
 .multi-level-folders-box {
   position: relative;
   text-align: left;
@@ -489,7 +505,6 @@ export default {
 
 }
 .doc-box{
-
   min-width: 0;
   max-width: 100%;
   cursor: pointer;
@@ -500,15 +515,15 @@ export default {
   background-color: whitesmoke;
 }
 .doc-font{
+  max-width: 198px;
   margin-right: 5px;
-  width: 95%;
+  width: 97%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: all 0.25s;
 }
 .doc-font:hover{
-  width: 85%;
 }
 .folder-tool-icon{
   margin-top: 10px;
@@ -516,7 +531,6 @@ export default {
 }
 .folder-tool-icon-right{
   float: right;
-  right: 0;
   margin-left: 5px;
   margin-right: 5px;
 }
