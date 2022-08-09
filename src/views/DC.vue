@@ -46,9 +46,9 @@
           </div>
         </div>
       </div>
-      <div class="main-right-box">
-        <div class="right-pullIcon-bar"/>
-        <div class="right-folders-box">
+      <div class="main-right-box" id = "main-right-box">
+        <div class="right-pullIcon-bar" id = "right-pullIcon-bar"/>
+        <div class="right-folders-box" id="right-folders-box">
           <!-- todo: put Folders in this box-->
 <!--          <MultiFolder :team_id="team.teamId" :team_name="team.teamName"/>-->
           <v-treeview
@@ -259,6 +259,9 @@ export default {
 
   methods: {
     onContextmenu(event,item) {
+      // document.getElementById("main-right-box").style.width = "500px;"
+      // document.getElementById("right-pullIcon-bar").style.width = "300px;"
+      // document.getElementById("right-folders-box").style.width = "100%";
       if(item.name=='文档中心'){
         this.$contextmenu({
           items: [
@@ -684,9 +687,12 @@ export default {
     this.provider.destroy()
   },
 }
+
 </script>
 
 <style scoped>
+
+
 .body-box{
 }
 .main-box{

@@ -111,6 +111,11 @@ const routes = [
     path: '/createDoc',
     name: 'createDoc',
     component: () => import(/* webpackChunkName: "about" */ '../views/createDoc.vue'),
+  },
+  {
+    path: '/welcome',
+    name: 'showDesign',
+    component: () => import('../views/ShowDesign'),
   }
 ]
 
