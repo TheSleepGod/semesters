@@ -30,10 +30,10 @@
                     <div class="doc-box" v-for="(doc) in oneProjectFolder.projectDocs"  @click.stop="openDoc(doc)"
                          @mouseenter="showIcon(doc)" @mouseleave="hideIcon(doc)">
                       <div style="margin-left: 74px;display: flex;">
-                        <div class="doc-font">
+                        <div class="doc-font"  :title="doc.docName">
                           <i class="el-icon-document">{{doc.docName}}</i>
                         </div>
-                        <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
+                        <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right0"
                            title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc)"/>
                         <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                            title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
@@ -61,10 +61,10 @@
               <div class="doc-box" v-for="(doc) in anotherFolder.folderDocs" @click="openDoc(doc)"
                    @mouseenter="showIcon(doc)" @mouseleave="hideIcon(doc)">
                 <div style="margin-left: 37px;display: flex;">
-                  <div class="doc-font">
+                  <div class="doc-font" :title="doc.docName">
                     <i class="el-icon-document">{{doc.docName}}</i>
                   </div>
-                  <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
+                  <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right0"
                      title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc)"/>
                   <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                      title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
@@ -202,7 +202,7 @@ export default {
         projectId: '',
         folderId: '',
         name: '',
-        createType: 0 //0在项目内,1在项目外
+        type: 0 //0在项目内,1在项目外
       },
       renameDocVisible: false,
       renameDoc: {
@@ -236,10 +236,10 @@ export default {
     },
     showCreateDoc(type,id){
       if(type===0){
-        this.newDoc.createType = 0; //项目内
+        this.newDoc.type = 0; //项目内
         this.newDoc.projectId = id;
       } else {
-        this.newDoc.createType = 1;
+        this.newDoc.type = 1;
         this.newDoc.folderId = id;
       }
       this.createDocVisible = true;
@@ -267,12 +267,25 @@ export default {
     },
     createFolder(name){
       this.$message.success("文件夹 "+name+" 创建成功");
+      this.getTeamAllDocs();
       this.beClose();
     },
     createDoc(){
-      if(this.newDoc.createType === 0)this.createDocInProject();
-      else this.createDocOutProject();
-      this.beClose();
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/create_document',
+          JSON.stringify({
+            project_id: this.newDoc.projectId,
+            folder_id: this.newDoc.folderId,
+            title: this.newDoc.name,
+            document_type: this.newDoc.type===0?'project_document':'other_document',
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$message.success("文档创建成功");
+          this.getTeamAllDocs();
+          this.beClose();
+        } else this.$notify.error(res.data.msg);
+      }).catch((error)=>{console.log(error)})
     },
     createDocInProject(){
       this.$message.success("文档 "+this.newDoc.name+" 创建成功,位于项目(id"+this.newDoc.projectId+")内");
@@ -283,6 +296,7 @@ export default {
     postRenameDoc(){
       this.$message.success("成功重命名为"+this.renameDoc.newName);
       this.beClose();
+      this.getTeamAllDocs();
     },
     confirmDelDoc(doc) {
       this.$confirm('将彻底删除该文档, 是否继续?', '警告', {
@@ -295,6 +309,7 @@ export default {
     },
     delDoc(doc){
       this.$notify.success("文档 "+doc.docName+"（docID:"+doc.docId+"） 已删除");
+      this.getTeamAllDocs();
     },
     getAllProjectsDocs(){
       this.projectsFolder = {
@@ -385,12 +400,15 @@ export default {
           console.log(this.otherFolders)
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
+    },
+    getTeamAllDocs(){
+      this.getAllProjectsDocs();
+      this.getOtherFoldersDocs();
     }
   },
   created() {
     this.getNowUser();
-    this.getAllProjectsDocs();
-    this.getOtherFoldersDocs();
+    this.getTeamAllDocs();
   },
   mounted() {
   }
@@ -449,6 +467,7 @@ export default {
 
 }
 .doc-box{
+
   min-width: 0;
   max-width: 100%;
   cursor: pointer;
@@ -463,19 +482,25 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: all 1s;
+  transition: all 0.1s;
 }
 .doc-font:hover{
-  width: 85%;
+  width: 80%;
 }
 .folder-tool-icon{
   margin-top: 10px;
   font-size: 15px;
 }
 .folder-tool-icon-right{
+  position: absolute;
   float: right;
   right: 0;
-  margin-left: 5px;
   margin-right: 5px;
+}
+.folder-tool-icon-right0{
+  position: absolute;
+  float: right;
+  right: 0;
+  margin-right: 30px;
 }
 </style>

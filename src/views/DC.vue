@@ -116,7 +116,7 @@ export default {
       },
       currentDoc:{
         docId: '',
-        docName: 'name1',
+        docName: '',
         docContent: ''
       },
       initiallyOpen: ['文档中心'],
