@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class = "multi-level-folders-box">
-<!--      <div class="multi-level-folders-title">文档中心</div>-->
+      <div class="multi-level-folders-title">文档列表</div>
       <div class="multi-level-folders-content">
         <!-- 项目文档区-->
         <div class = "first-folder">
