@@ -3,6 +3,15 @@
     <div class = "multi-level-folders-box">
       <div class="multi-level-folders-title">文档列表</div>
       <div class="multi-level-folders-content">
+        <!-- 新建文件夹-->
+        <div class="first-folder">
+          <div class="first-folder-title" @click="showCreateFolder"
+               @mouseenter="showIcon(newFolder)" @mouseleave="hideIcon(newFolder)">
+            <div style="margin-left: 20px">
+              <i class="el-icon-folder-add">新建文件夹</i>
+            </div>
+          </div>
+        </div>
         <!-- 项目文档区-->
         <div class = "first-folder">
           <div class = "first-folder-title" @click="reverseVisible(projectsFolder)">
@@ -21,8 +30,8 @@
                     <i class="el-icon-caret-bottom folder-tool-icon" v-if="oneProjectFolder.isActive">&nbsp</i>
                     <i class="el-icon-folder" v-if="!oneProjectFolder.isActive">{{oneProjectFolder.projectName}}</i>
                     <i class="el-icon-folder-opened" v-if="oneProjectFolder.isActive">{{oneProjectFolder.projectName}}</i>
-                    <i class="el-icon-plus folder-tool-icon folder-tool-icon-right"
-                       title="新建文档" v-if="oneProjectFolder.isHover" @click.stop="showCreateDoc(0,oneProjectFolder.projectId)"/>
+                    <i class="el-icon-plus folder-tool-icon folder-tool-icon-right" title="新建文档"
+                       v-if="oneProjectFolder.isHover" @click.stop="showCreateDoc(0,oneProjectFolder.projectId)"/>
                   </div>
                 </div>
                 <transition appear>
@@ -34,7 +43,7 @@
                           <i class="el-icon-document">{{doc.docName}}</i>
                         </div>
                         <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
-                           title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc)"/>
+                           title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc,1,oneProjectFolder.projectId)"/>
                         <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                            title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
                       </div>
@@ -53,8 +62,10 @@
             <i class="el-icon-caret-bottom folder-tool-icon" v-if="anotherFolder.isActive">&nbsp</i>
             <i class="el-icon-folder" v-if="!anotherFolder.isActive">{{anotherFolder.folderName}}</i>
             <i class="el-icon-folder-opened" v-if="anotherFolder.isActive">{{anotherFolder.folderName}}</i>
-            <i class="el-icon-plus folder-tool-icon folder-tool-icon-right"
-               title="新建文档" v-if="anotherFolder.isHover" @click.stop="showCreateDoc(1,anotherFolder.folderId)"/>
+            <i class="el-icon-delete-solid folder-tool-icon folder-tool-icon-right" title="删除文件夹"
+               v-if="anotherFolder.isHover" @click.stop="confirmDelFolder(anotherFolder)"/>
+            <i class="el-icon-plus folder-tool-icon folder-tool-icon-right" title="新建文档"
+               v-if="anotherFolder.isHover" @click.stop="showCreateDoc(1,anotherFolder.folderId)"/>
           </div>
           <transition appear>
             <div class="first-folder-content" v-if="anotherFolder.isActive">
@@ -65,22 +76,13 @@
                     <i class="el-icon-document">{{doc.docName}}</i>
                   </div>
                   <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
-                     title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc)"/>
+                     title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc,1,anotherFolder.folderId)"/>
                   <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                      title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
                 </div>
               </div>
             </div>
           </transition>
-        </div>
-        <!-- 新建文件夹-->
-        <div class="first-folder">
-          <div class="first-folder-title" @click="showCreateFolder"
-               @mouseenter="showIcon(newFolder)" @mouseleave="hideIcon(newFolder)">
-            <div style="margin-left: 20px">
-              <i class="el-icon-folder-add">新建文件夹</i>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -164,8 +166,11 @@ export default {
       },
       renameDocVisible: false,
       renameDoc: {
-        id: 0,
-        newName: "",
+        docId: '',
+        newName: '',
+        type: '',
+        projectId: '',
+        folderId: '',
       },
       username:'',
       projectsFolder,
@@ -179,7 +184,7 @@ export default {
   },
   methods: {
     beClose(){
-      this.renameDocVisible = false; this.renameDoc={id: 0, newName: "",};
+      this.renameDocVisible = false; this.renameDoc={id:'',newName:'',docId:'',type:'',projectId:'',folderId: ''};
       this.createDocVisible = false; this.newDoc={projectId: '', folderId: '', name: '', type: 0};
       this.createFolderVisible = false; this.newFolder.name='';
     },
@@ -187,9 +192,14 @@ export default {
     hideIcon(item){item.isHover=false},
     reverseVisible(item){item.isActive = !item.isActive;},
     showCreateFolder(){this.createFolderVisible = true;},
-    showRenameDoc(doc){
-      this.renameDoc.docId = doc.docId;
-      this.renameDoc.newName = doc.docName;
+    showRenameDoc(doc,type,id){
+      this.renameDoc = {
+        docId: doc.docId,
+        newName: doc.docName,
+        projectId: id,
+        folderId: id,
+        type: type===0 ? 'project_document':'other_document'
+      }
       this.renameDocVisible = true;
     },
     showCreateDoc(type,id){
@@ -204,7 +214,7 @@ export default {
     },
     openDoc(doc){
       this.$emit('input',doc);
-      this.$parent.changeRoom(doc.docContent)
+      this.$parent.changeRoom();
     },
     getNowUser() {
       this.$axios({
@@ -259,18 +269,31 @@ export default {
       }).catch((error)=>{console.log(error)})
     },
     postRenameDoc(){
-      this.$notify.success("重命名成功");
-      this.beClose();
-      this.getTeamAllDocs();
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/update_document',
+          JSON.stringify({
+            new_title: this.renameDoc.newName,
+            document_id: this.renameDoc.docId,
+            project_id: this.renameDoc.projectId,
+            folder_id: this.renameDoc.folderId,
+            document_type: this.renameDoc.type,
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$message.success("重命名成功");
+          this.getTeamAllDocs();
+          this.beClose();
+        } else this.$notify.error(res.data.msg)
+      }).catch((error)=>{console.log(error)})
     },
     confirmDelDoc(doc) {
-      this.$confirm('是否彻底删除该文档（无法撤销）？', '警告', {
+      this.$confirm('将彻底删除文档 '+doc.docName+' （无法撤销），是否继续？', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.delDoc(doc)
-      })
+      }).catch(()=>{})
     },
     delDoc(doc){
       this.$axios.post(
@@ -282,6 +305,28 @@ export default {
       ).then((res)=>{
         if(res.data.errno===0){
           this.$notify.success("文档 "+doc.docName+" 已删除");
+          this.getTeamAllDocs();
+        } else this.$notify.error(res.data.msg)
+      }).catch((error)=>{console.log(error)})
+    },
+    confirmDelFolder(folder) {
+      this.$confirm('将彻底删除文件夹 '+folder.folderName+' 及其下的文档，是否继续？', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.delFolder(folder)
+      }).catch(()=>{})
+    },
+    delFolder(folder){
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/delete_folder',
+          JSON.stringify({
+            folder_id: folder.folderId
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$notify.success("文件夹 "+folder.folderName+" 已整体删除");
           this.getTeamAllDocs();
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})

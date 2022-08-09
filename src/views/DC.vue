@@ -21,24 +21,21 @@
               <div class="editor__footer">
                 <div :class="`editor__status editor__status--${status}`">
                   <template v-if="status === 'connected'">
-                    {{ editor.storage.collaborationCursor.users.length }} user{{ editor.storage.collaborationCursor.users.length === 1 ? '' : 's' }} online in {{ currentDoc.docContent }}
+                    {{ currentDoc.docContent }}
                   </template>
                   <template v-else>
                     offline
                   </template>
                 </div>
                 <div class="editor__name">
-                  <button>
-                    {{ username }}
-                  </button>
                   <button @click="exportWord()">
-                    导出word!
+                    导出word
                   </button>
                   <button @click="getPdfFromHtml('pdfPrint')">
-                    导出pdf!
+                    导出pdf
                   </button>
                   <button @click="getMd()">
-                    导出md!
+                    导出md
                   </button>
                 </div>
               </div>
@@ -465,16 +462,47 @@ export default {
         console.log('userid:'+this.userid);
       })
     },
-    changeRoom(roomName){
+    changeRoom(){
+      this.editor.destroy()
+      this.provider.destroy()
+      const ydoc = new Y.Doc()
       this.provider = new HocuspocusProvider({
         url: 'wss://connect.gethocuspocus.com',
         parameters: {
           key: 'write_bqgvQ3Zwl34V4Nxt43zR',
         },
-        name: roomName,
+        name: this.currentDoc.docContent,
         document: ydoc,
       })
-      this.$message.success(this.provider.name)
+      this.provider.on('status', event => {
+        this.status = event.status
+      })
+      this.editor = new Editor({
+        onUpdate: ({ editor }) => {
+          this.textDownload = editor.getText();
+          this.htmlDownload = editor.getHTML();
+          // send the content to an API here
+        },
+        content: this.textModel,
+        extensions: [
+          StarterKit.configure({
+            history: false,
+          }),
+          Highlight,
+          TaskList,
+          TaskItem,
+          Collaboration.configure({
+            document: ydoc,
+          }),
+          CollaborationCursor.configure({
+            provider: this.provider,
+            user: this.currentUser,
+          }),
+          CharacterCount.configure({
+            limit: 10000,
+          }),
+        ],
+      })
     }
   },
   created() {
@@ -548,7 +576,7 @@ export default {
   transition: all 1s;
   width: 90%;
   height: 100%;
-  background-color: whitesmoke;
+  /*background-color: whitesmoke;*/
 }
 .main-right-box{
   display: flex;
@@ -560,7 +588,7 @@ export default {
   width: 75%;
 }
 .main-right-box:hover{
-  padding-left: 0;
+  padding-left: 10px;
   width: 25%;
 }
 .center-head-box{
@@ -568,7 +596,7 @@ export default {
   line-height: 60px;
   overflow: hidden;
   padding-left: 20px;
-  background-color: antiquewhite;
+  /*background-color: antiquewhite;*/
 }
 .center-head-font{
   font-size: 28px;
@@ -576,6 +604,7 @@ export default {
   text-align: left;
 }
 .center-doc-box{
+  border-radius: 20px;
   background-color: whitesmoke;
 }
 .center-doc-title{
@@ -584,7 +613,7 @@ export default {
   font-size: 24px;
 }
 .center-doc-editor-box{
-  height: 500px;
+  border-radius: 0 0 20px 20px;
   background-color: floralwhite;
   padding: 10px 10px 10px 10px;
 }
@@ -607,6 +636,7 @@ export default {
 }
 .right-folders-box{
   width: 0;
+  border-radius: 20px;
   background-color: lightyellow;
   transition: all 1s;
 }
