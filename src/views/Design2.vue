@@ -4,6 +4,18 @@
       <el-aside class="aside" style="background-color: #ffd;">
           <div class="newCreate" @click="switchVis"><i class="el-icon-document-add"></i>&nbsp&nbsp新建原型图</div>
         <el-dialog title="新建原型图" :visible.sync="createVisible" style="width:60%;margin-left: 20%">
+          <div style="margin-bottom: 30px">
+          <el-select v-model="model_value" placeholder="请选择">
+            <el-option
+                v-for="item in models"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              <span style="float: left">{{ item.label }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+            </el-option>
+          </el-select><el-button plain style="margin-left: 30px">确认选择</el-button>
+          </div>
           <el-input v-model="newName" placeholder="请输入原型图名称" maxlength="20" show-word-limit>
             <el-button slot="append" @click="CreatePic">确认</el-button>
           </el-input>
@@ -102,6 +114,17 @@ export default {
       }
       ],
       nowProjectId,
+      model_value:'',
+      models:[
+        {
+          label:"model1",
+          value:"1"
+        },
+        {
+          label:"model2",
+          value: "2"
+        }
+      ],
     }
   },
   methods: {
