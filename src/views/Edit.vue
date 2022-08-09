@@ -11,9 +11,9 @@
         </div>
       </div>
       <div class="top_head_middle">
-          <router-link :to="{ path:'/editWord/word',  query:{ nowProjectId: this.nowProjectId }}">文档</router-link>
-          <router-link :to="{ path:'/editWord/design2', query:{ nowProjectId: this.nowProjectId}}" >原型图</router-link>
-          <router-link :to="{ path:'/editWord/UML', query:{ nowProjectId: this.nowProjectId}}">绘制UML图</router-link>
+          <router-link :to="{ path:'/editWord/word',  query:{ projectId: this.nowProjectId ,projectName:this.nowProjectName,teamId:this.nowTeamId,teamName:this.nowTeamName}}">文档</router-link>
+          <router-link :to="{ path:'/editWord/design2', query:{ projectId: this.nowProjectId,projectName:this.nowProjectName,teamId:this.nowTeamId,teamName:this.nowTeamName}}" >原型图</router-link>
+          <router-link :to="{ path:'/editWord/UML', query:{ projectId: this.nowProjectId,projectName:this.nowProjectName,teamId:this.nowTeamId,teamName:this.nowTeamName}}">绘制UML图</router-link>
       </div>
     </div>
     <router-view/>
