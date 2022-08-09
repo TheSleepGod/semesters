@@ -35,7 +35,6 @@
         <div class="container">
           <div id="bar">
             <h1 style="margin-left: 60px">{{this.name}}</h1>
-            <button v-on:click="loadDesign">载入页面</button>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
             <button v-on:click="shareDesign">共享页面</button>
