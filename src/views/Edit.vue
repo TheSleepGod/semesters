@@ -7,16 +7,13 @@
             返回
         </div>
         <div class="item_name">
-            {{itemName}}
-        </div>
-        <div class="item_member" v-for="item in itemMembers" :title="item.name">
-            <img class="member_picture" :src="item.img" alt=""/>
+            {{nowTeamName}}
         </div>
       </div>
       <div class="top_head_middle">
-          <router-link to="/editWord/word">文档</router-link>
-          <router-link to="/editWord/design2" >原型图</router-link>
-          <router-link to="/editWord/UML">绘制UML图</router-link>
+          <router-link :to="{ path:'/editWord/word',  query:{ nowProjectId: this.nowProjectId }}">文档</router-link>
+          <router-link :to="{ path:'/editWord/design2', query:{ nowProjectId: this.nowProjectId}}" >原型图</router-link>
+          <router-link :to="{ path:'/editWord/UML', query:{ nowProjectId: this.nowProjectId}}">绘制UML图</router-link>
       </div>
     </div>
     <router-view/>
@@ -28,11 +25,6 @@ export default {
   name: "Edit",
   data(){
     return{
-      itemName:"item1",
-      itemMembers:[
-        {img:require("../assets/logo.png"),name:"member1"},
-        {img:require("../assets/logo.png"),name:"member2"}
-      ],
       nowTeamId: 1,
       nowTeamName: '',
       nowProjectId: 1,
