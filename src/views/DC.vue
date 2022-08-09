@@ -50,7 +50,8 @@
         <div class="right-pullIcon-bar"/>
         <div class="right-folders-box">
           <!-- todo: put Folders in this box-->
-            <v-treeview
+<!--          <MultiFolder :team_id="team.teamId" :team_name="team.teamName"/>-->
+          <v-treeview
                 v-model="tree"
                 :open="initiallyOpen"
                 :items="items"
@@ -84,6 +85,7 @@ Vue.use(Contextmenu);
 
 import TopBar from "@/components/topBar";
 import TeamLeft from "@/components/ProjectLeft";
+import MultiFolder from "@/components/multiFolder";
 import htmlToPdf from "../utils/htmlToPdf";
 import html2Canvas from "html2canvas";
 import {HocuspocusProvider} from '@hocuspocus/provider'
@@ -118,7 +120,7 @@ const turndownService = require('turndown').default;
 export default {
   name: "DC",
   components:{
-    TopBar,TeamLeft,
+    TopBar,TeamLeft,MultiFolder,
     EditorContent,
     MenuBar,
     htmlToPdf,
