@@ -21,15 +21,15 @@
               <div class="editor__footer">
                 <div :class="`editor__status editor__status--${status}`">
                   <template v-if="status === 'connected'">
-                    {{ editor.storage.collaborationCursor.users.length }} user{{ editor.storage.collaborationCursor.users.length === 1 ? '' : 's' }} online in {{ room }}
+                    {{ editor.storage.collaborationCursor.users.length }} user{{ editor.storage.collaborationCursor.users.length === 1 ? '' : 's' }} online in {{ currentDoc.docContent }}
                   </template>
                   <template v-else>
                     offline
                   </template>
                 </div>
                 <div class="editor__name">
-                  <button @click="setName">
-                    {{ currentUser.name }}
+                  <button>
+                    {{ username }}
                   </button>
                   <button @click="exportWord()">
                     导出word!
@@ -117,83 +117,10 @@ export default {
       currentDoc:{
         docId: '',
         docName: '',
-        docContent: ''
+        docContent: 'initial_#qUClQ3NC63l3lXE'
       },
-      initiallyOpen: ['文档中心'],
-      files: {
-        html: 'mdi-language-html5',
-        js: 'mdi-nodejs',
-        json: 'mdi-code-json',
-        md: 'mdi-language-markdown',
-        pdf: 'mdi-file-pdf',
-        png: 'mdi-file-image',
-        txt: 'mdi-file-document-outline',
-        xls: 'mdi-file-excel',
-      },
-      tree: [],
-      items: [{
-        name:'文档中心',
-        children: [
-          {
-            name: '.git',
-          },
-          {
-            name: 'node_modules',
-          },
-          {
-            name: 'public',
-            children: [
-              {
-                name: 'static',
-                children: [{
-                  name: 'logo.png',
-                  file: 'png',
-                },
-                  {
-                    name:'abc.js',
-                    file:'js',
-                  }],
-              },
-              {
-                name: 'favicon.ico',
-                file: 'png',
-              },
-              {
-                name: 'index.html',
-                file: 'html',
-              },
-            ],
-          },
-          {
-            name: '.gitignore',
-            file: 'txt',
-          },
-          {
-            name: 'babel.config.js',
-            file: 'js',
-          },
-          {
-            name: 'package.json',
-            file: 'json',
-          },
-          {
-            name: 'README.md',
-            file: 'md',
-          },
-          {
-            name: 'vue.config.js',
-            file: 'js',
-          },
-          {
-            name: 'yarn.lock',
-            file: 'txt',
-          },
-        ]
-      }
-
-      ],
       currentUser: JSON.parse(localStorage.getItem('currentUser')) || {
-        name: this.getRandomName(),
+        name: this.username,
         color: this.getRandomColor(),
       },
       provider: null,
@@ -208,12 +135,6 @@ export default {
       pdfSelector: '#pdfPrint',
       htmlDownload: '',
       markdownContent: '',
-      createVisible: false,
-      createForm: {
-        title: '',
-        type: '',
-      },
-      formLabelWidth: '120px',
     }
   },
 
@@ -236,66 +157,6 @@ export default {
   },
 
   methods: {
-    onContextmenu(event,item) {
-      if(item.name=='文档中心'){
-        this.$contextmenu({
-          items: [
-            {
-              label: "新建文件夹",
-              icon:'el-icon-folder-add'
-            },
-          ],
-          event,
-          //x: event.clientX,
-          //y: event.clientY,
-          customClass: "class-a",
-          zIndex: 3,
-          minWidth: 230
-        });
-      }
-      else if(!item.file){
-        this.$contextmenu({
-          items: [
-            {
-              label: "新建文档",
-              icon:"el-icon-document-add"
-            },
-            {
-              label: "重命名文件夹",
-              icon:"el-icon-edit"
-            }
-
-          ],
-          event,
-          //x: event.clientX,
-          //y: event.clientY,
-          customClass: "class-a",
-          zIndex: 3,
-          minWidth: 230
-        });
-      }
-      else{
-        this.$contextmenu({
-          items: [
-            {
-              label: "删除文档",
-              icon:"el-icon-document-delete"
-            },
-            {
-              label: "重命名文档",
-              icon:"el-icon-edit"
-            }
-          ],
-          event,
-          //x: event.clientX,
-          //y: event.clientY,
-          customClass: "class-a",
-          zIndex: 3,
-          minWidth: 230
-        });
-      }
-      return false;
-    },
     setName() {
       const name = (window.prompt('Name') || '')
           .trim()
@@ -604,6 +465,17 @@ export default {
         console.log('userid:'+this.userid);
       })
     },
+    changeRoom(roomName){
+      this.provider = new HocuspocusProvider({
+        url: 'wss://connect.gethocuspocus.com',
+        parameters: {
+          key: 'write_bqgvQ3Zwl34V4Nxt43zR',
+        },
+        name: roomName,
+        document: ydoc,
+      })
+      this.$message.success(this.provider.name)
+    }
   },
   created() {
     this.team.teamId = this.$route.query.teamId;
@@ -621,7 +493,7 @@ export default {
       parameters: {
         key: 'write_bqgvQ3Zwl34V4Nxt43zR',
       },
-      name: this.room,
+      name: 'initial_doc_room',
       document: ydoc,
     })
     this.provider.on('status', event => {
