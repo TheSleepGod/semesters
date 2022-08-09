@@ -250,6 +250,7 @@ export default {
             document_type: this.newDoc.type===0?'project_document':'other_document',
           })
       ).then((res)=>{
+        console.log(res);
         if(res.data.errno===0){
           this.$message.success("文档创建成功");
           this.getTeamAllDocs();
