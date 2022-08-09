@@ -33,7 +33,7 @@
                         <div class="doc-font"  :title="doc.docName">
                           <i class="el-icon-document">{{doc.docName}}</i>
                         </div>
-                        <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right0"
+                        <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
                            title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc)"/>
                         <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                            title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
@@ -64,7 +64,7 @@
                   <div class="doc-font" :title="doc.docName">
                     <i class="el-icon-document">{{doc.docName}}</i>
                   </div>
-                  <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right0"
+                  <i class="el-icon-edit-outline folder-tool-icon folder-tool-icon-right"
                      title="重命名" v-if="doc.isHover" @click.stop="showRenameDoc(doc)"/>
                   <i class="el-icon-delete folder-tool-icon folder-tool-icon-right"
                      title="删除" v-if="doc.isHover" @click.stop="confirmDelDoc(doc)"/>
@@ -87,17 +87,17 @@
 
     <!-- 对话框-->
     <el-dialog title="重命名文档" :visible="renameDocVisible" :close-on-click-modal=false :before-close="beClose" style="width: 60%;margin-left: 20%">
-      <el-input v-model="renameDoc.newName" placeholder="请输入文档名" maxlength="20" show-word-limit>
+      <el-input v-model="renameDoc.newName" placeholder="请输入文档名" maxlength="15" show-word-limit>
         <el-button slot="append" @click="postRenameDoc">确认</el-button>
       </el-input>
     </el-dialog>
     <el-dialog title="新建文档" :visible="createDocVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
-      <el-input v-model="newDoc.name" placeholder="请输入文档名" maxlength="20" show-word-limit>
+      <el-input v-model="newDoc.name" placeholder="请输入文档名" maxlength="12" show-word-limit>
         <el-button slot="append" @click="createDoc">确认</el-button>
       </el-input>
     </el-dialog>
     <el-dialog title="新建文件夹" :visible="createFolderVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
-      <el-input v-model="newFolder.name" placeholder="请输入文件夹名" maxlength="20" show-word-limit>
+      <el-input v-model="newFolder.name" placeholder="请输入文件夹名" maxlength="15" show-word-limit>
         <el-button slot="append" @click="createFolder(newFolder.name)">确认</el-button>
       </el-input>
     </el-dialog>
@@ -221,8 +221,8 @@ export default {
   },
   methods: {
     beClose(){
-      this.renameDocVisible = false; this.renameDoc={};
-      this.createDocVisible = false; this.newDoc={};
+      this.renameDocVisible = false; this.renameDoc={id: 0, newName: "",};
+      this.createDocVisible = false; this.newDoc={projectId: '', folderId: '', name: '', type: 0};
       this.createFolderVisible = false; this.newFolder.name='';
     },
     showIcon(item){item.isHover=true},
@@ -280,6 +280,7 @@ export default {
             document_type: this.newDoc.type===0?'project_document':'other_document',
           })
       ).then((res)=>{
+        console.log(res);
         if(res.data.errno===0){
           this.$message.success("文档创建成功");
           this.getTeamAllDocs();
@@ -478,29 +479,24 @@ export default {
   background-color: whitesmoke;
 }
 .doc-font{
+  margin-right: 5px;
   width: 95%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: all 0.1s;
+  transition: all 0.25s;
 }
 .doc-font:hover{
-  width: 80%;
+  width: 85%;
 }
 .folder-tool-icon{
   margin-top: 10px;
   font-size: 15px;
 }
 .folder-tool-icon-right{
-  position: absolute;
   float: right;
   right: 0;
+  margin-left: 5px;
   margin-right: 5px;
-}
-.folder-tool-icon-right0{
-  position: absolute;
-  float: right;
-  right: 0;
-  margin-right: 30px;
 }
 </style>
