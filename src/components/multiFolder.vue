@@ -27,7 +27,7 @@
                 </div>
                 <transition appear>
                   <div class="second-folder-content" v-if="oneProjectFolder.isActive">
-                    <div class="doc-box" v-for="(doc) in oneProjectFolder.projectDocs"
+                    <div class="doc-box" v-for="(doc) in oneProjectFolder.projectDocs"  @click="openDoc(doc)"
                          @mouseenter="showIcon(doc)" @mouseleave="hideIcon(doc)">
                       <div style="margin-left: 74px;display: flex;">
                         <div class="doc-font">
@@ -58,7 +58,7 @@
           </div>
           <transition appear>
             <div class="first-folder-content" v-if="anotherFolder.isActive">
-              <div class="doc-box" v-for="(doc) in anotherFolder.folderDocs"
+              <div class="doc-box" v-for="(doc) in anotherFolder.folderDocs" @click="openDoc(doc)"
                    @mouseenter="showIcon(doc)" @mouseleave="hideIcon(doc)">
                 <div style="margin-left: 37px;display: flex;">
                   <div class="doc-font">
@@ -204,6 +204,11 @@ export default {
       username:'',
       projectsFolder,
       otherFolders,
+      currentDoc:{
+        docId: '',
+        docName: '',
+        docContent: '',
+      }
     }
   },
   methods: {
@@ -225,6 +230,9 @@ export default {
       if(type===0)this.createDocType = 0;
       else this.createDocType = 1;
       this.createDocVisible = true;
+    },
+    openDoc(doc){
+      this.$emit('input',doc);
     },
     getNowUser() {
       this.$axios({

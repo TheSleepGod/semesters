@@ -50,7 +50,7 @@
         <div class="right-pullIcon-bar"/>
         <div class="right-folders-box">
           <!-- todo: put Folders in this box-->
-          <MultiFolder :team_id="team.teamId" :team_name="team.teamName"/>
+          <MultiFolder :team_id="team.teamId" :team_name="team.teamName" v-model="currentDoc"/>
 <!--          <v-treeview-->
 <!--                v-model="tree"-->
 <!--                :open="initiallyOpen"-->
