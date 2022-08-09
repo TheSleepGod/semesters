@@ -1,5 +1,5 @@
 <template>
-  <div id="topBar">
+  <div id="topBar" @click="goHome" style="cursor: pointer">
     <div class="webLogo-box">
       <img class="webLogo" src="../assets/ink_black.png" alt=""/>
     </div>
@@ -35,6 +35,9 @@ export default {
     }
   },
   methods:{
+    goHome() {
+      this.$router.push({path:'/team'})
+    },
     handleHeadCommand(command){
       switch (command){
         case "gotoTeams":

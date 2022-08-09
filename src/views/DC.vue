@@ -546,6 +546,7 @@ export default {
   display: flex;
   width: 90%;
   margin-left: 10%;
+  height: 800px;
 }
 .main-center-box{
   transition: all 1s;

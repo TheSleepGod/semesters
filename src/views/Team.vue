@@ -290,6 +290,7 @@ export default {
 
 <style scoped>
 .box-body {
+  height: 800px;
   padding: 0;
   overflow: hidden;
 }
