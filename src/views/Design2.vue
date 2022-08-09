@@ -276,4 +276,9 @@ html, body {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   font-size: 20px;
 }
+
+.newCreate:hover{
+  cursor: pointer;
+}
+
 </style>

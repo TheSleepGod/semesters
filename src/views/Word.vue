@@ -3,6 +3,12 @@
     <el-container>
     <el-aside width="300px">
       <div class="leftBar" style="background-color: #FAF594;height: 100%" >
+        <div class="newCreate" @click="this.createVisible = true"><i class="el-icon-document-add"></i>&nbsp&nbsp新建文档</div>
+        <el-dialog title="新建文档" :visible.sync="createVisible" style="width:60%;margin-left: 20%">
+          <el-input v-model="newName" placeholder="请输入文档名称" maxlength="20" show-word-limit>
+            <el-button slot="append" @click="createDoc()">确认</el-button>
+          </el-input>
+        </el-dialog>
         <v-treeview
           v-model="tree"
           :open="initiallyOpen"
@@ -173,6 +179,7 @@ export default {
         type: '',
       },
       formLabelWidth: '120px',
+      newName: '',
     }
   },
   beforeCreate() {
@@ -194,6 +201,11 @@ export default {
   },
 
   methods: {
+
+    createDoc() {
+
+    },
+
     chooseDoc(item) {
       this.currentDoc.docId = item.docId;
       this.currentDoc.docName = item.name;
