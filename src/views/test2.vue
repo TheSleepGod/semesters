@@ -1,105 +1,76 @@
-<!-- drag-test -->
 <template>
-  <v-treeview
-      v-model="tree"
-      :open="initiallyOpen"
-      :items="items"
-      activatable
-      expand-icon=""
-      return-object
-      transition
-      dense
-      item-key="name"
-      open-on-click
-  >
-    <template v-slot:prepend="{ item, open }">
-      <div @contextmenu.prevent = "onContextmenu">
-      <v-icon v-if="!item.file">
-        {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-      </v-icon>
-      <v-icon v-else>
-        {{ files[item.file] }}
-      </v-icon>
-      </div>
-    </template>
-  </v-treeview>
+  <div class = "body-box">
+    <TopBar :username="username"></TopBar>
+    <TeamLeft :team_id="team.teamId" :team_name="team.teamName"/>
+    <MultiFolder :team_id="team.teamId" :team_name="team.teamName" style="float: right;width: 300px"/>
+<!--    <v-treeview-->
+<!--        v-model="tree"-->
+<!--        :open="initiallyOpen"-->
+<!--        :items="items"-->
+<!--        activatable-->
+<!--        expand-icon=""-->
+<!--        return-object-->
+<!--        transition-->
+<!--        dense-->
+<!--        item-key="name"-->
+<!--        open-on-click-->
+<!--    >-->
+<!--      <template v-slot:prepend="{ item, open }">-->
+<!--        <div @contextmenu.prevent = "onContextmenu">-->
+<!--        <v-icon v-if="!item.file">-->
+<!--          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}-->
+<!--        </v-icon>-->
+<!--        <v-icon v-else>-->
+<!--          {{ files[item.file] }}-->
+<!--        </v-icon>-->
+<!--        </div>-->
+<!--      </template>-->
+<!--    </v-treeview>-->
+  </div>
 </template>
 
-
-
-
 <script>
+import TeamLeft from "../components/ProjectLeft";
+import TopBar from "../components/topBar"
+import MultiFolder from "@/components/multiFolder";
 export default {
+  name: "DC",
+  components: {
+    TeamLeft, TopBar, MultiFolder
+  },
   data(){
     return{
-
-      initiallyOpen: ['public'],
-      files: {
-        html: 'mdi-language-html5',
-        js: 'mdi-nodejs',
-        json: 'mdi-code-json',
-        md: 'mdi-language-markdown',
-        pdf: 'mdi-file-pdf',
-        png: 'mdi-file-image',
-        txt: 'mdi-file-document-outline',
-        xls: 'mdi-file-excel',
-      },
-      tree: [],
-      items: [
-        {
-          name: '.git',
-        },
-        {
-          name: 'node_modules',
-        },
-        {
-          name: 'public',
-          children: [
-            {
-              name: 'static',
-              children: [{
-                name: 'logo.png',
-                file: 'png',
-              }],
-            },
-            {
-              name: 'favicon.ico',
-              file: 'png',
-            },
-            {
-              name: 'index.html',
-              file: 'html',
-            },
-          ],
-        },
-        {
-          name: '.gitignore',
-          file: 'txt',
-        },
-        {
-          name: 'babel.config.js',
-          file: 'js',
-        },
-        {
-          name: 'package.json',
-          file: 'json',
-        },
-        {
-          name: 'README.md',
-          file: 'md',
-        },
-        {
-          name: 'vue.config.js',
-          file: 'js',
-        },
-        {
-          name: 'yarn.lock',
-          file: 'txt',
-        },
-      ]
+      username:'',
+      team:{
+        teamId:'',
+        teamName:'',
+      }
     }
   },
+  created() {
+    this.team.teamId = this.$route.query.teamId;
+    this.team.teamName = this.$route.query.teamName;
+    this.getNowUser();
+  },
   methods: {
+    getNowUser() {
+      this.$axios({
+            method : 'post',
+            url : 'http://101.42.160.94:8000/api/user_web/get_user',
+            headers:{
+              'Authorization':localStorage.getItem('Token'),
+            }
+          }
+      ).then((ret) => {
+        if (ret.data.errno === 0) {
+          console.log(ret.data.data);
+          this.username = ret.data.data.username;
+          this.userId=ret.data.data.user_id;
+        } else {
+          this.$notify.error(ret.data.msg);
+        }
+      })
+    },
     onContextmenu(event) {
       this.$contextmenu({
         items: [
@@ -149,14 +120,8 @@ export default {
 }
 </script>
 
-<style>
-.el-menu{
-  text-align: left;
-}
-.el-submenu{
-  text-align: left;
-}
-.el-menu-item{
-  text-align: left !important;
-}
+<style scoped>
+
 </style>
+
+
