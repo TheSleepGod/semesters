@@ -293,7 +293,6 @@ export default {
 .v-leave-active {transition: 0.25s;}
 
 .multi-level-folders-box {
-  min-width: 250px;
   position: relative;
   text-align: left;
   transition: all 0.25s;

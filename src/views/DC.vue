@@ -50,27 +50,27 @@
         <div class="right-pullIcon-bar"/>
         <div class="right-folders-box">
           <!-- todo: put Folders in this box-->
-<!--          <MultiFolder :team_id="team.teamId" :team_name="team.teamName"/>-->
-          <v-treeview
-                v-model="tree"
-                :open="initiallyOpen"
-                :items="items"
-                activatable
-                item-key="name"
-                open-on-click
-                style="text-align: left"
-            >
-                <template v-slot:prepend="{ item, open }" >
-                  <div @contextmenu.prevent="onContextmenu($event,item)" style="width: 100%">
-                    <v-icon v-if="!item.file">
-                      {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                    </v-icon>
-                    <v-icon v-else>
-                      {{ files[item.file]}}
-                    </v-icon>
-                  </div>
-                </template>
-            </v-treeview>
+          <MultiFolder :team_id="team.teamId" :team_name="team.teamName"/>
+<!--          <v-treeview-->
+<!--                v-model="tree"-->
+<!--                :open="initiallyOpen"-->
+<!--                :items="items"-->
+<!--                activatable-->
+<!--                item-key="name"-->
+<!--                open-on-click-->
+<!--                style="text-align: left"-->
+<!--            >-->
+<!--                <template v-slot:prepend="{ item, open }" >-->
+<!--                  <div @contextmenu.prevent="onContextmenu($event,item)" style="width: 100%">-->
+<!--                    <v-icon v-if="!item.file">-->
+<!--                      {{ open ? 'mdi-folder-open' : 'mdi-folder' }}-->
+<!--                    </v-icon>-->
+<!--                    <v-icon v-else>-->
+<!--                      {{ files[item.file]}}-->
+<!--                    </v-icon>-->
+<!--                  </div>-->
+<!--                </template>-->
+<!--            </v-treeview>-->
         </div>
       </div>
     </div>
