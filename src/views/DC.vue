@@ -103,6 +103,8 @@ import MenuBar from '../components/MenuBar.vue'
 import JsPDF from "jspdf";
 import $ from 'jquery'
 
+import Vue from  'vue'
+
 require('@/assets/js/jquery.wordexport')
 
 const getRandomElement = list => {
@@ -129,6 +131,7 @@ export default {
     return{
       visible:false,
       username: '',
+      userid: '',
       team:{
         teamId: '',
         teamName: ''
@@ -604,6 +607,24 @@ export default {
       return getRandomElement([
         'Lea Thompson', 'Cyndi Lauper', 'Tom Cruise', 'Madonna', 'Jerry Hall', 'Joan Collins', 'Winona Ryder', 'Christina Applegate', 'Alyssa Milano', 'Molly Ringwald', 'Ally Sheedy', 'Debbie Harry', 'Olivia Newton-John', 'Elton John', 'Michael J. Fox', 'Axl Rose', 'Emilio Estevez', 'Ralph Macchio', 'Rob Lowe', 'Jennifer Grey', 'Mickey Rourke', 'John Cusack', 'Matthew Broderick', 'Justine Bateman', 'Lisa Bonet',
       ])
+    },
+    getNowUser() {
+      this.$axios({
+            method : 'post',
+            url : 'http://101.42.160.94:8000/api/user_web/get_user',
+            headers:{
+              'Authorization': localStorage.getItem('Token')
+            }
+          }
+      ).then((ret) => {
+        if (ret.data.errno === 0) {
+          this.username = ret.data.data.username;
+          this.userid=ret.data.data.user_id;
+        } else {
+          this.$notify.error(ret.data.msg);
+        }
+        console.log(this.userid);
+      })
     },
   },
   created() {
