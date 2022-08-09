@@ -95,7 +95,7 @@
     </el-dialog>
     <el-dialog title="新建文档" :visible="createDocVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
       <el-input v-model="newDoc.name" placeholder="请输入文档名" maxlength="12" show-word-limit>
-        <el-button slot="append" @click="createDoc">确认</el-button>
+        <el-button slot="append" @click="createDoc">选择模板</el-button>
       </el-input>
     </el-dialog>
     <el-dialog title="新建文件夹" :visible="createFolderVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
