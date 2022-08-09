@@ -116,6 +116,7 @@ export default {
                 let toSend={
                   id:item.id
                 };
+                //todo:删除原型图
                 this.$axios({
                   method:'post',
                   url:'http://',
@@ -137,7 +138,20 @@ export default {
       }
       return false;
     },
+    //todo:新建原型图
     CreatePic(){
+      let toSend={
+        model:this.model_id,
+        newName:this.newName
+      }
+      this.$axios({
+        method:'post',
+        url:'http://',
+        data:JSON.stringify(toSend)
+      }).then((res) =>{
+        console.log(res);
+        this.loadDesign(/*new_id*/)
+      });
       this.$message('success');
       this.createVisible=false;
       this.newName='';
@@ -194,6 +208,7 @@ export default {
           }
       )
     },
+    //todo:分享页面
     shareDesign() {
       // this.saveDesign();
       // this.$axios.post(
@@ -205,10 +220,25 @@ export default {
       //     //Todo 绑定返回的 Id 和 projectId
       //   } else this.$notify.error(res.data.msg);
       // }).catch((error)=>{console.log(error)})
+    },
+    //todo:查看项目下原型图
+    ShowPrototype(){
+      let toSend={
+        project_id:this.project_id
+      }
+      this.$axios({
+        method:'post',
+        url:'http://',
+        data:JSON.stringify(toSend),
+      }).then((res) =>{
+        console.log(res);
+        this.items[0].children=res.data.data;
+      })
     }
   },
   mounted() {
     this.nowProjectId = this.$route.query.projectId;
+    this.ShowPrototype();
   }
 }
 </script>
