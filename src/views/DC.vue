@@ -103,6 +103,7 @@ export default {
     htmlToPdf,
   },
   data(){
+    let uniqueNum = 'initial_#'+this.$route.query.teamId+'qUClQ3NC63l3lXE';
     return{
       visible:false,
       username: '',
@@ -114,7 +115,7 @@ export default {
       currentDoc:{
         docId: '',
         docName: '',
-        docContent: 'initial_#qUClQ3NC63l3lXE'
+        docContent: uniqueNum
       },
       currentUser:  {
         name: this.username,
@@ -570,7 +571,7 @@ export default {
   display: flex;
   width: 90%;
   margin-left: 10%;
-  height: 800px;
+  padding-bottom: 25px;
 }
 .main-center-box{
   transition: all 1s;
@@ -579,6 +580,7 @@ export default {
   /*background-color: whitesmoke;*/
 }
 .main-right-box{
+  margin-top: 60px;
   display: flex;
   transition: all 1s;
   width: 10%;
@@ -605,7 +607,7 @@ export default {
 }
 .center-doc-box{
   border-radius: 20px;
-  background-color: whitesmoke;
+  background-color: ghostwhite;
 }
 .center-doc-title{
   height: 50px;
@@ -661,7 +663,8 @@ export default {
 .editor {
   display: flex;
   flex-direction: column;
-  max-height: 26rem;
+  min-height: 590px;
+  //max-height: 590px;
   color: #0D0D0D;
   background-color: #FFF;
   border: 3px solid #0D0D0D;
