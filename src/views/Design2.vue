@@ -18,7 +18,7 @@
             style="text-align: left"
         >
           <template v-slot:prepend="{ item, open }" >
-            <div @contextmenu.prevent="onContextmenu($event,item)">
+            <div @contextmenu.prevent="onContextmenu($event,item)" @click="loadDesign(item.id)">
               <v-icon v-if="!item.file">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
@@ -35,7 +35,6 @@
         <div class="container">
           <div id="bar">
             <h1 style="margin-left: 60px">{{this.name}}</h1>
-            <button v-on:click="loadDesign">载入页面</button>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
             <button v-on:click="shareDesign">共享页面</button>
@@ -85,17 +84,17 @@ export default {
         name:'原型图列表',
         children: [
           {
-            id:0,
+            id:31,
             name: '.gitignore',
             file: 'txt',
           },
           {
-            id:1,
+            id:32,
             name: 'babel.config.js',
             file: 'js',
           },
           {
-            id:2,
+            id:33,
             name: 'package.json',
             file: 'json',
           },
@@ -117,6 +116,7 @@ export default {
                 let toSend={
                   id:item.id
                 };
+                //todo:删除原型图
                 this.$axios({
                   method:'post',
                   url:'http://',
@@ -138,7 +138,20 @@ export default {
       }
       return false;
     },
+    //todo:新建原型图
     CreatePic(){
+      let toSend={
+        model:this.model_id,
+        newName:this.newName
+      }
+      this.$axios({
+        method:'post',
+        url:'http://',
+        data:JSON.stringify(toSend)
+      }).then((res) =>{
+        console.log(res);
+        this.loadDesign(/*new_id*/)
+      });
       this.$message('success');
       this.createVisible=false;
       this.newName='';
@@ -155,8 +168,8 @@ export default {
     editorReady() {
       console.log('editorReady');
     },
-    loadDesign() {
-      let toSend = {id : 34};
+    loadDesign(pid) {
+      let toSend = {id : pid};
       this.$axios({
         method:'post',
         url : 'http://101.42.160.94:8000/api/user_web/get_prototype',
@@ -195,6 +208,7 @@ export default {
           }
       )
     },
+    //todo:分享页面
     shareDesign() {
       // this.saveDesign();
       // this.$axios.post(
@@ -206,10 +220,25 @@ export default {
       //     //Todo 绑定返回的 Id 和 projectId
       //   } else this.$notify.error(res.data.msg);
       // }).catch((error)=>{console.log(error)})
+    },
+    //todo:查看项目下原型图
+    ShowPrototype(){
+      let toSend={
+        project_id:this.project_id
+      }
+      this.$axios({
+        method:'post',
+        url:'http://',
+        data:JSON.stringify(toSend),
+      }).then((res) =>{
+        console.log(res);
+        this.items[0].children=res.data.data;
+      })
     }
   },
   mounted() {
     this.nowProjectId = this.$route.query.projectId;
+    this.ShowPrototype();
   }
 }
 </script>
