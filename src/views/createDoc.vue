@@ -10,7 +10,7 @@
           <el-form-item label="文档标题" :label-width="formLabelWidth">
             <el-input v-model="createForm.title" autocomplete="off" style="width: 220px"></el-input>
           </el-form-item>
-          <el-form-item label="文档模板" :label-width="formLabelWidth">
+          <el-form-item label="文档模板">
             <el-select v-model="createForm.type" placeholder="请选择模板">
               <el-option label="空" value="0"></el-option>
               <el-option label="需求规格说明书" value="1"></el-option>

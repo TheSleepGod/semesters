@@ -93,10 +93,15 @@
         <el-button slot="append" @click="postRenameDoc">确认</el-button>
       </el-input>
     </el-dialog>
-    <el-dialog title="新建文档" :visible="createDocVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
-      <el-input v-model="newDoc.name" placeholder="请输入文档名" maxlength="12" show-word-limit>
-        <el-button slot="append" @click="createDoc">选择模板</el-button>
-      </el-input>
+    <el-dialog title="新建文档" :visible="createDocVisible" :close-on-click-modal=false :before-close="beClose" class="create-doc-dialog-box">
+      <el-input v-model="newDoc.name" placeholder="请输入文档名" maxlength="12" show-word-limit></el-input>
+      <el-select v-model="createMod" placeholder="请选择模板">
+        <el-option label="空" value="0"></el-option>
+        <el-option label="需求规格说明书" value="1"></el-option>
+        <el-option label="会议纪要" value="2"></el-option>
+        <el-option label="项目计划" value="3"></el-option>
+        <el-option label="架构设计说明书" value="4"></el-option>
+      </el-select>
     </el-dialog>
     <el-dialog title="新建文件夹" :visible="createFolderVisible" :close-on-click-modal=false :before-close="beClose" style="width:60%;margin-left: 20%">
       <el-input v-model="newFolder.name" placeholder="请输入文件夹名" maxlength="12" show-word-limit>
@@ -152,6 +157,7 @@ export default {
       },
     ]
     return {
+      createMod:'',
       createFolderVisible: false,
       newFolder:{
         isHover: false,
@@ -445,6 +451,11 @@ export default {
 .v-leave-to {transform: translateY(-20%);opacity: 0;}
 .v-leave-active {transition: 0.25s;}
 
+.create-doc-dialog-box{
+  width:60%;
+  margin-left: 20%;
+  text-align: left;
+}
 .multi-level-folders-box {
   position: relative;
   text-align: left;
