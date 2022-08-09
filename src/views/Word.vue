@@ -10,6 +10,7 @@
           activatable
           item-key="name"
           open-on-click
+          style="text-align: left"
         >
           <template v-slot:prepend="{ item, open }" >
             <div @click="chooseDoc(item)">
