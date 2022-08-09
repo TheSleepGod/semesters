@@ -454,6 +454,47 @@ export default {
         if (ret.data.errno === 0) {
           this.username = ret.data.data.username;
           this.userid=ret.data.data.user_id;
+          this.currentUser.color = this.getRandomColor();
+          this.currentUser.name = this.username;
+          const ydoc = new Y.Doc()
+
+          this.provider = new HocuspocusProvider({
+            url: 'wss://connect.gethocuspocus.com',
+            parameters: {
+              key: 'write_bqgvQ3Zwl34V4Nxt43zR',
+            },
+            name: 'initial_doc_room',
+            document: ydoc,
+          })
+          this.provider.on('status', event => {
+            this.status = event.status
+          })
+          this.editor = new Editor({
+            onUpdate: ({ editor }) => {
+              this.textDownload = editor.getText();
+              this.htmlDownload = editor.getHTML();
+              // send the content to an API here
+            },
+            content: this.textModel,
+            extensions: [
+              StarterKit.configure({
+                history: false,
+              }),
+              Highlight,
+              TaskList,
+              TaskItem,
+              Collaboration.configure({
+                document: ydoc,
+              }),
+              CollaborationCursor.configure({
+                provider: this.provider,
+                user: this.currentUser,
+              }),
+              CharacterCount.configure({
+                limit: 10000,
+              }),
+            ],
+          })
         } else {
           this.$notify.error(ret.data.msg);
         }
@@ -510,47 +551,7 @@ export default {
   },
 
   mounted() {
-
     this.getText(this.$route.query.type);
-    const ydoc = new Y.Doc()
-
-    this.provider = new HocuspocusProvider({
-      url: 'wss://connect.gethocuspocus.com',
-      parameters: {
-        key: 'write_bqgvQ3Zwl34V4Nxt43zR',
-      },
-      name: 'initial_doc_room',
-      document: ydoc,
-    })
-    this.provider.on('status', event => {
-      this.status = event.status
-    })
-    this.editor = new Editor({
-      onUpdate: ({ editor }) => {
-        this.textDownload = editor.getText();
-        this.htmlDownload = editor.getHTML();
-        // send the content to an API here
-      },
-      content: this.textModel,
-      extensions: [
-        StarterKit.configure({
-          history: false,
-        }),
-        Highlight,
-        TaskList,
-        TaskItem,
-        Collaboration.configure({
-          document: ydoc,
-        }),
-        CollaborationCursor.configure({
-          provider: this.provider,
-          user: this.currentUser,
-        }),
-        CharacterCount.configure({
-          limit: 10000,
-        }),
-      ],
-    })
   },
   beforeUnmount() {
     this.editor.destroy()
