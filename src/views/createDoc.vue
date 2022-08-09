@@ -4,6 +4,7 @@
       <el-button type="primary" round @click="createVisible = true">创建新文档</el-button>
       <el-button type="primary" round @click="openDoc()">打开文档</el-button>
       <el-button type="primary" round @click="delDoc()">删除文档</el-button>
+      <el-button type="primary" round @click="createDirVisible = true">创建文件夹</el-button>
       <el-dialog title="新建文档" :visible.sync="createVisible" style="text-align: left">
         <el-form :model="createForm">
           <el-form-item label="文档标题" :label-width="formLabelWidth">
@@ -24,6 +25,17 @@
           <el-button type="primary" @click="createDoc()">确 定</el-button>
         </div>
       </el-dialog>
+      <el-dialog title="新建文件夹" :visible.sync="createDirVisible" style="text-align: left">
+        <el-form :model="createDirForm">
+          <el-form-item label="文件夹名称" :label-width="formLabelWidth">
+            <el-input v-model="createDirForm.title" autocomplete="off" style="width: 220px"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="createDirVisible = false">取 消</el-button>
+          <el-button type="primary" @click="createDir()">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -39,12 +51,17 @@ export default {
   data() {
     return {
       createVisible: false,
+      createDirVisible: false,
       createForm: {
         title: '',
         type: '',
       },
+      createDirForm: {
+        title: '',
+      },
       formLabelWidth: '120px',
       project_id: '83',
+      team_id: '48',
     }
   },
 
@@ -111,7 +128,28 @@ export default {
           this.$message.error("删除失败");
         }
       })
-    }
+    },
+
+    createDir() {
+      let con = {};
+      con['team_id'] = this.team_id;
+      con['folder_name'] = this.createDirForm.title;
+      console.log(con);
+      axios({
+        url: 'http://101.42.160.94:8000/api/user_web/create_folder',
+        method: 'post',
+        data: JSON.stringify(con),
+      }).then((ret) => {
+        console.log(ret);
+        if (ret.data.errno === 0) {
+          this.$message.success("创建成功");
+        } else {
+          this.$notify.error(ret.data.msg);
+          this.$message.error("创建失败");
+        }
+      })
+    },
+
   },
 }
 </script>
