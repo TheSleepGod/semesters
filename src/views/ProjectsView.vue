@@ -1,15 +1,18 @@
 <template>
-  <div>
+  <div style="height: 800px;">
     <TopBar :username="username"/>
     <TeamLeft :team_id="team.teamId" :team_name="team.teamName"/>
     <!-- 页头-->
     <div class="head-box">
-      <div class="head-font">{{team.teamName}} - 项目中心</div>
+      <div class="head-font font-1" style="border-radius: 5px; width: 150px; height: 50px; background: coral; text-align: center;line-height: 50px;">
+        {{team.teamName}}
+      </div>
+      <div class="head-font font-1">&nbsp;&nbsp;项目中心</div>
       <div class="tools">
-        <div class="search-box">
+        <div class="search-box font-1">
           <el-input v-model="searchProectName" placeholder="请输入要搜索的项目名称" clearable size="mini" @input="searchProject"/>
         </div>
-        <div class="dropdownSort-box">
+        <div class="dropdownSort-box font-1">
           <el-dropdown placement="bottom" trigger="click" @command="handleSort">
             <span style="cursor: pointer;color: dodgerblue">{{ sortType }}<i class="el-icon-arrow-down el-icon--right"/></span>
             <el-dropdown-menu slot="dropdown">
@@ -23,7 +26,7 @@
       </div>
     </div>
     <!-- 项目展示-->
-    <el-tabs v-model="activeName" style="width: 76%;margin-left: 12%">
+    <el-tabs v-model="activeName" style="width: 76%;margin-left: 12%; caret-color: transparent;" class="font-1">
       <el-tab-pane label="团队项目" name="first">
         <div class="cards-container" style="margin-top: 10px">
           <div class="projectsCard" id="commonPrCard" v-for="item in projectsList" :key="item.data" v-if="item.isRecycled===0"
@@ -441,6 +444,9 @@ export default {
 </script>
 
 <style scoped>
+.font-1 {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+}
 .head-box{
   width: 76%;
   margin-left: 12%;

@@ -43,9 +43,9 @@
           </div>
         </div>
       </div>
-      <div class="main-right-box">
-        <div class="right-pullIcon-bar"/>
-        <div class="right-folders-box">
+      <div class="main-right-box" id = "main-right-box">
+        <div class="right-pullIcon-bar" id = "right-pullIcon-bar"/>
+        <div class="right-folders-box" id="right-folders-box">
           <!-- todo: put Folders in this box-->
           <MultiFolder :team_id="team.teamId" :team_name="team.teamName" v-model="currentDoc"/>
         </div>
@@ -562,15 +562,19 @@ export default {
     this.provider.destroy()
   },
 }
+
 </script>
 
 <style scoped>
+
+
 .body-box{
 }
 .main-box{
   display: flex;
   width: 90%;
   margin-left: 10%;
+  height: 800px;
 }
 .main-center-box{
   transition: all 1s;

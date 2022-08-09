@@ -2,7 +2,12 @@
 <template>
   <el-container>
       <el-aside class="aside" style="background-color: #ffd;">
-          <div>新建</div>
+          <div class="newCreate" @click="switchVis"><i class="el-icon-document-add"></i>&nbsp&nbsp新建原型图</div>
+        <el-dialog title="新建原型图" :visible.sync="createVisible" style="width:60%;margin-left: 20%">
+          <el-input v-model="newName" placeholder="请输入原型图名称" maxlength="20" show-word-limit>
+            <el-button slot="append" @click="CreatePic">确认</el-button>
+          </el-input>
+        </el-dialog>
         <v-treeview
             v-model="tree"
             :open="initiallyOpen"
@@ -12,12 +17,14 @@
             open-on-click
         >
           <template v-slot:prepend="{ item, open }" >
+            <div @contextmenu.prevent="onContextmenu($event,item)">
               <v-icon v-if="!item.file">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
               <v-icon v-else>
                 {{ files[item.file]}}
               </v-icon>
+            </div>
           </template>
         </v-treeview>
       </el-aside>
@@ -30,6 +37,7 @@
             <button v-on:click="loadDesign(design)">载入页面</button>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
+            <button v-on:click="shareDesign">共享页面</button>
           </div>
 
             <EmailEditor ref="emailEditor" v-on:load="editorLoaded" v-on:ready="editorReady" />
@@ -53,9 +61,12 @@ export default {
     EmailEditor
   },
   data(){
+    let nowProjectId;
     return{
       name:'设计图1',
       design:{},
+      newName:'',
+      createVisible:false,
       project_id:0,
       initiallyOpen: ['文档中心'],
       files: {
@@ -72,36 +83,6 @@ export default {
       items: [{
         name:'文档中心',
         children: [
-          {
-            name: '.git',
-          },
-          {
-            name: 'node_modules',
-          },
-          {
-            name: 'public',
-            children: [
-              {
-                name: 'static',
-                children: [{
-                  name: 'logo.png',
-                  file: 'png',
-                },
-                  {
-                    name:'abc.js',
-                    file:'js',
-                  }],
-              },
-              {
-                name: 'favicon.ico',
-                file: 'png',
-              },
-              {
-                name: 'index.html',
-                file: 'html',
-              },
-            ],
-          },
           {
             name: '.gitignore',
             file: 'txt',
@@ -129,58 +110,18 @@ export default {
         ]
       }
       ],
+      nowProjectId,
     }
   },
   methods: {
     onContextmenu(event,item) {
-      if(item.name=='文档中心'){
+      if(item.file){
         this.$contextmenu({
           items: [
             {
-              label: "新建文件夹",
-              icon:'el-icon-folder-add'
+              label: "删除原型图",
+              icon:'el-icon-document-delete'
             },
-          ],
-          event,
-          //x: event.clientX,
-          //y: event.clientY,
-          customClass: "class-a",
-          zIndex: 3,
-          minWidth: 230
-        });
-      }
-      else if(!item.file){
-        this.$contextmenu({
-          items: [
-            {
-              label: "新建文档",
-              icon:"el-icon-document-add"
-            },
-            {
-              label: "重命名文件夹",
-              icon:"el-icon-edit"
-            }
-
-          ],
-          event,
-          //x: event.clientX,
-          //y: event.clientY,
-          customClass: "class-a",
-          zIndex: 3,
-          minWidth: 230
-        });
-      }
-      else{
-        this.$contextmenu({
-          items: [
-            {
-              label: "删除文档",
-              icon:"el-icon-document-delete"
-            },
-            {
-              label: "重命名文档",
-              icon:"el-icon-edit"
-            }
           ],
           event,
           //x: event.clientX,
@@ -191,6 +132,14 @@ export default {
         });
       }
       return false;
+    },
+    CreatePic(){
+      this.$message('success');
+      this.createVisible=false;
+      this.newName='';
+    },
+    switchVis(){
+      this.createVisible=true;
     },
     // called when the editor is created
     editorLoaded() {
@@ -236,7 +185,22 @@ export default {
             console.log('exportHtml', data);
           }
       )
+    },
+    shareDesign() {
+      this.saveDesign();
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/try_uml',
+          this.design
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$message.success("上传成功,将为您生成共享界面");
+          //Todo 绑定返回的 Id 和 projectId
+        } else this.$notify.error(res.data.msg);
+      }).catch((error)=>{console.log(error)})
     }
+  },
+  mounted() {
+    this.nowProjectId = this.$route.query.projectId;
   }
 }
 </script>
@@ -305,5 +269,11 @@ html, body {
 .main_area{
   border: 1px solid black;
 }
-
+.newCreate{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 20px;
+}
 </style>

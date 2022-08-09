@@ -318,6 +318,7 @@ export default {
 }
 .box-body {
   padding: 0;
+  height: 800px;
   overflow: hidden;
 }
 .right-box {

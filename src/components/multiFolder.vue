@@ -250,7 +250,7 @@ export default {
         } else this.$notify.error(res.data.msg);
       }).catch((error)=>{console.log(error)})
     },
-    createDoc(){
+    createDoc() {
       this.$axios.post(
           'http://101.42.160.94:8000/api/user_web/create_document',
           JSON.stringify({
