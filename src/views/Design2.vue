@@ -85,28 +85,19 @@ export default {
         name:'原型图列表',
         children: [
           {
+            id:0,
             name: '.gitignore',
             file: 'txt',
           },
           {
+            id:1,
             name: 'babel.config.js',
             file: 'js',
           },
           {
+            id:2,
             name: 'package.json',
             file: 'json',
-          },
-          {
-            name: 'README.md',
-            file: 'md',
-          },
-          {
-            name: 'vue.config.js',
-            file: 'js',
-          },
-          {
-            name: 'yarn.lock',
-            file: 'txt',
           },
         ]
       }
@@ -121,7 +112,20 @@ export default {
           items: [
             {
               label: "删除原型图",
-              icon:'el-icon-document-delete'
+              icon:'el-icon-document-delete',
+              onClick: () => {
+                let toSend={
+                  id:item.id
+                };
+                this.$axios({
+                  method:'post',
+                  url:'http://',
+                  data:JSON.stringify(toSend)
+                }).then((res) =>{
+                  console.log(res);
+                })
+                this.$message("del success");
+              }
             },
           ],
           event,
@@ -192,16 +196,16 @@ export default {
       )
     },
     shareDesign() {
-      this.saveDesign();
-      this.$axios.post(
-          'http://101.42.160.94:8000/api/user_web/try_uml',
-          this.design
-      ).then((res)=>{
-        if(res.data.errno===0){
-          this.$message.success("上传成功,将为您生成共享界面");
-          //Todo 绑定返回的 Id 和 projectId
-        } else this.$notify.error(res.data.msg);
-      }).catch((error)=>{console.log(error)})
+      // this.saveDesign();
+      // this.$axios.post(
+      //     'http://101.42.160.94:8000/api/user_web/try_prototype',
+      //     this.design
+      // ).then((res)=>{
+      //   if(res.data.errno===0){
+      //     this.$message.success("上传成功,将为您生成共享界面");
+      //     //Todo 绑定返回的 Id 和 projectId
+      //   } else this.$notify.error(res.data.msg);
+      // }).catch((error)=>{console.log(error)})
     }
   },
   mounted() {

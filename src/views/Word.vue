@@ -1,14 +1,14 @@
 <template>
   <div>
     <el-container>
-    <el-aside width="300px">
+    <el-aside width="300px" style="background-color: #ffd">
       <div class="newCreate" @click="createVisible = true"><i class="el-icon-document-add"></i>&nbsp&nbsp新建文档</div>
       <el-dialog title="新建文档" :visible.sync="createVisible" style="width:60%;margin-left: 20%">
         <el-input v-model="newDocName" placeholder="请输入文档名称" maxlength="20" show-word-limit>
           <el-button slot="append" @click="createDoc()">确认</el-button>
         </el-input>
       </el-dialog>
-      <div class="leftBar" style="background-color: #FAF594;height: 100%" >
+      <div class="leftBar" style="height: 100%" >
         <v-treeview
           v-model="tree"
           :open="initiallyOpen"
@@ -895,12 +895,12 @@ export default {
 /* Give a remote user a caret */
 
 .newCreate{
+  margin-top: 10px;
+  margin-bottom: 10px;
   text-align: center;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   font-size: 20px;
-  height: 40px;
-  line-height: 40px;
-  background-color: grey;
+  background-color: #FAF594;
 }
 
 .newCreate:hover{
