@@ -418,18 +418,19 @@ export default {
             team_id: this.team.teamId,
           }))
           .then((res) => {
-            console.log(res);
-            let array = res.data.data;
-            for(let i in array){
-              this.projectsList.push({
-                id: array[i].project_id,
-                name: array[i].project_name,
-                time: array[i].create_time,
-                isRecycled: array[i].recycle,
-                isHover: false,
-              });
-            }
-            this.sortProjects();
+            if(res.data.errno===0){
+              let array = res.data.data;
+              for(let i in array){
+                this.projectsList.push({
+                  id: array[i].project_id,
+                  name: array[i].project_name,
+                  time: array[i].create_time,
+                  isRecycled: array[i].recycle,
+                  isHover: false,
+                });
+              }
+              this.sortProjects();
+            } else this.$notify.error(res.data.msg);
           })
           .catch((error) => {
             console.log(error);
