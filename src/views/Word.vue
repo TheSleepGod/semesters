@@ -2,7 +2,7 @@
   <div>
     <el-container>
     <el-aside width="300px">
-      <div class="leftBar" style="background-color: #FAF594">
+      <div class="leftBar" style="background-color: #FAF594;height: 100%" >
         <v-treeview
           v-model="tree"
           :open="initiallyOpen"
@@ -762,8 +762,8 @@ export default {
 .editor {
   display: flex;
   flex-direction: column;
-  min-height: 400px;
-  max-height: 580px;
+  min-height: 590px;
+  max-height: 590px;
   color: #0D0D0D;
   background-color: #FFF;
   border: 3px solid #0D0D0D;
