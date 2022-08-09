@@ -15,9 +15,10 @@
             activatable
             item-key="name"
             open-on-click
+            style="text-align: left"
         >
           <template v-slot:prepend="{ item, open }" >
-            <div @contextmenu.prevent="onContextmenu($event,item)">
+            <div @contextmenu.prevent="onContextmenu($event,item)" @click="loadDesign(item.id)">
               <v-icon v-if="!item.file">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
@@ -34,7 +35,6 @@
         <div class="container">
           <div id="bar">
             <h1 style="margin-left: 60px">{{this.name}}</h1>
-            <button v-on:click="loadDesign(design)">载入页面</button>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
             <button v-on:click="shareDesign">共享页面</button>
@@ -68,7 +68,7 @@ export default {
       newName:'',
       createVisible:false,
       project_id:0,
-      initiallyOpen: ['文档中心'],
+      initiallyOpen: ['原型图列表'],
       files: {
         html: 'mdi-language-html5',
         js: 'mdi-nodejs',
@@ -81,31 +81,22 @@ export default {
       },
       tree: [],
       items: [{
-        name:'文档中心',
+        name:'原型图列表',
         children: [
           {
+            id:31,
             name: '.gitignore',
             file: 'txt',
           },
           {
+            id:32,
             name: 'babel.config.js',
             file: 'js',
           },
           {
+            id:33,
             name: 'package.json',
             file: 'json',
-          },
-          {
-            name: 'README.md',
-            file: 'md',
-          },
-          {
-            name: 'vue.config.js',
-            file: 'js',
-          },
-          {
-            name: 'yarn.lock',
-            file: 'txt',
           },
         ]
       }
@@ -120,7 +111,20 @@ export default {
           items: [
             {
               label: "删除原型图",
-              icon:'el-icon-document-delete'
+              icon:'el-icon-document-delete',
+              onClick: () => {
+                let toSend={
+                  id:item.id
+                };
+                this.$axios({
+                  method:'post',
+                  url:'http://',
+                  data:JSON.stringify(toSend)
+                }).then((res) =>{
+                  console.log(res);
+                })
+                this.$message("del success");
+              }
             },
           ],
           event,
@@ -150,30 +154,34 @@ export default {
     editorReady() {
       console.log('editorReady');
     },
-    loadDesign(design) {
-      let toSend = {id : 13};
+    loadDesign(pid) {
+      let toSend = {id : pid};
       this.$axios({
         method:'post',
-        url : 'http://101.42.160.94:8000/api/user_web/get_uml',
+        url : 'http://101.42.160.94:8000/api/user_web/get_prototype',
         data : JSON.stringify(toSend)
       }).then((res) =>{
         console.log(res.data.data);
-        this.design=JSON.parse(res.data.data);
+        this.design=res.data.data;
         console.log(this.design)
+        setTimeout(() =>{
+          this.$refs.emailEditor.editor.loadDesign(this.design);
+        },500)
       });
-      this.$refs.emailEditor.editor.loadDesign(this.design);
+
     },
     saveDesign() {
       this.$refs.emailEditor.editor.saveDesign(
           (design) => {
             this.$axios({
               method:'post',
-              url : 'http://101.42.160.94:8000/api/user_web/try_uml',
+              url : 'http://101.42.160.94:8000/api/user_web/try_prototype',
               data: design
             }).then((res) =>{
               console.log(res);
             })
-            console.log('saveDesign', design);
+            console.log('saveDesign');
+            console.log(design);
             console.log(typeof design)
             this.design=design;
           }
@@ -187,16 +195,16 @@ export default {
       )
     },
     shareDesign() {
-      this.saveDesign();
-      this.$axios.post(
-          'http://101.42.160.94:8000/api/user_web/try_uml',
-          this.design
-      ).then((res)=>{
-        if(res.data.errno===0){
-          this.$message.success("上传成功,将为您生成共享界面");
-          //Todo 绑定返回的 Id 和 projectId
-        } else this.$notify.error(res.data.msg);
-      }).catch((error)=>{console.log(error)})
+      // this.saveDesign();
+      // this.$axios.post(
+      //     'http://101.42.160.94:8000/api/user_web/try_prototype',
+      //     this.design
+      // ).then((res)=>{
+      //   if(res.data.errno===0){
+      //     this.$message.success("上传成功,将为您生成共享界面");
+      //     //Todo 绑定返回的 Id 和 projectId
+      //   } else this.$notify.error(res.data.msg);
+      // }).catch((error)=>{console.log(error)})
     }
   },
   mounted() {
