@@ -58,9 +58,9 @@
                   </template>
                 </div>
                 <div class="editor__name">
-<!--                  <button>-->
-<!--                    {{ currentUser.name }}-->
-<!--                  </button>-->
+                  <button @click="outJson()">
+                    导出Json
+                  </button>
                   <button @click="exportWord()">
                     导出word!
                   </button>
@@ -218,6 +218,10 @@ export default {
   },
 
   methods: {
+
+    outJson() {
+      console.log(this.editor.getJSON());
+    },
 
     postRenameDoc() {
       this.$axios.post(
