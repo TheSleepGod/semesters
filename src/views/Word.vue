@@ -9,14 +9,7 @@
         </el-input>
       </el-dialog>
       <div class="leftBar" style="background-color: #FAF594;height: 100%" >
-        <v-treeview
-          v-model="tree"
-          :open="initiallyOpen"
-          :items="items"
-          activatable
-          item-key="name"
-          open-on-click
-        >
+        <v-treeview v-model="tree" :open="initiallyOpen" :items="items" activatable item-key="name" open-on-click>
           <template v-slot:prepend="{ item, open }" >
             <div @click="chooseDoc(item)">
               <v-icon v-if="!item.file">
