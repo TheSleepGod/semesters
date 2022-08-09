@@ -13,7 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background: #DDDDDD;
+  background: antiquewhite;
 }
 html{
   overflow-y: auto !important;

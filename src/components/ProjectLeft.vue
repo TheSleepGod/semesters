@@ -54,13 +54,14 @@ export default {
   padding: 0;
 }
 .left-project-one {
+  background-color: rgba(255, 255, 255, 0.8);
   width: 80px;
   height: 80px;
   margin-left: -40px;
   margin-bottom: 30px;
   border-radius: 40px;
   cursor: pointer;
-  box-shadow: 1px 1px 1px 1px lightgrey;
+  box-shadow: 1px 1px 2px 1px lightgrey;
   transition: all 0.25s;
 }
 .left-project-one:hover{
