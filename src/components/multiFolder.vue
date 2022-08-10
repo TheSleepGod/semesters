@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="caret-color: transparent;" class = "font-1">
     <div class = "multi-level-folders-box">
       <div class="multi-level-folders-title">文档列表</div>
       <div class="multi-level-folders-content">
@@ -456,7 +456,9 @@ export default {
 .v-leave {opacity: 1;transform: translateY(0);}
 .v-leave-to {transform: translateY(-20%);opacity: 0;}
 .v-leave-active {transition: 0.25s;}
-
+.font-1 {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+}
 .dialog-box{
   width:60%;
   margin-left: 20%;
@@ -477,7 +479,7 @@ export default {
 .multi-level-folders-content{
 }
 .first-folder{
-
+  
 }
 .first-folder-title{
   cursor: pointer;

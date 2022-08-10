@@ -14,6 +14,10 @@
   text-align: center;
   color: #2c3e50;
   background: whitesmoke;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
 }
 html{
   overflow-y: auto !important;

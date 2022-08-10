@@ -38,7 +38,6 @@ router.beforeEach((to, from, next) => {
   else {
     isLogin = false;
     setTimeout(()=> {},1000);
-
       axios({
               method : 'post',
               url : 'http://101.42.160.94:8000/api/user_web/get_user',
