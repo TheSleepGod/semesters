@@ -66,7 +66,9 @@ export default {
           image: {
             enabled: false
           },
-
+        },
+        features: {
+          pageAnchors: true
         },
         source: {
           name: pkg.name,
@@ -89,6 +91,12 @@ export default {
     exportHtml(callback) {
       this.editor.exportHtml(callback);
     },
+    exportPlainText(callback){
+      this.editor.exportPlainText(callback);
+    },
+    exportImage(callback) {
+      this.editor.exportImage(callback);
+    }
   },
 };
 </script>
