@@ -6,9 +6,16 @@
       <div class="main-center-box">
         <div class="center-head-box">
           <div class="center-head-font">
-            {{team.teamName}} - 文档中心
+            <div class="head-font font-1" style="border-radius: 5px; width: 150px; height: 50px; background: coral; text-align: center;line-height: 50px;">
+              {{team.teamName}}
+            </div>
+            <div class="head-font font-1" >
+              <img src="../assets/png/document.png" alt="" style="height: 60px; width: 60px; left: 20px; position: relative; ">
+              <span style="position: relative; float: right; top: -5px; left: 20px;">文档中心</span>
+            </div>
           </div>
         </div>
+        <hr style="margin:0;height: 1px;border:none;background-image: linear-gradient(to right, black,grey,white)"/>
         <div class="center-doc-box">
           <div class="center-doc-title">{{currentDoc.docName}}</div>
           <div class="center-doc-editor-box">
@@ -47,7 +54,7 @@
         <div class="right-pullIcon-bar" id = "right-pullIcon-bar"/>
         <div class="right-folders-box" id="right-folders-box">
           <!-- todo: put Folders in this box-->
-          <MultiFolder :team_id="team.teamId" :team_name="team.teamName" v-model="currentDoc"/>
+          <MultiFolder :team_id="team.teamId" :team_name="team.teamName" v-model="currentDoc" ref="child" />
         </div>
       </div>
     </div>
@@ -113,9 +120,14 @@ export default {
         teamName: ''
       },
       currentDoc:{
+        project_id: '',
+        folder_id: '',
         docId: '',
         docName: '',
-        docRoom: ''
+        docRoom: '',
+        openType:'',
+        content: {},
+        type: '',
       },
       currentUser:  {
         name: this.username,
@@ -125,7 +137,7 @@ export default {
       editor: null,
       status: 'connecting',
       room: this.$route.query.room,
-      textModel: '',
+      textModel: {},
       textCode: '',
       textDownload: '',
       // 填入导出的pdf文件名和html元素
@@ -133,6 +145,7 @@ export default {
       pdfSelector: '#pdfPrint',
       htmlDownload: '',
       markdownContent: '',
+      sendJson: {},
     }
   },
 
@@ -506,6 +519,28 @@ export default {
       this.editor.destroy()
       this.provider.destroy()
       const ydoc = new Y.Doc()
+      if(this.currentDoc.openType === 'first'){
+        this.textModel = this.currentDoc.content;
+      }
+      else{
+        this.textModel = {};
+      }
+      console.log("openType:" + this.currentDoc.openType);
+      this.$axios.post(
+          'http://101.42.160.94:8000/api/user_web/update_document',
+          JSON.stringify({
+            document_id: this.currentDoc.docId,
+            project_id: this.currentDoc.project_id,
+            folder_id: this.currentDoc.folder_id,
+            document_type: this.currentDoc.type,
+            content: this.currentDoc.content,
+            open_type:'',
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          console.log(1)
+        } else this.$notify.error(res.data.msg)
+      }).catch((error)=>{console.log(error)})
       this.provider = new HocuspocusProvider({
         url: 'wss://connect.gethocuspocus.com',
         parameters: {
@@ -521,7 +556,23 @@ export default {
         onUpdate: ({ editor }) => {
           this.textDownload = editor.getText();
           this.htmlDownload = editor.getHTML();
-          // send the content to an API here
+          this.sendJson = editor.getJSON();
+          console.log(this.sendJson);
+          this.$axios.post(
+              'http://101.42.160.94:8000/api/user_web/update_document',
+              JSON.stringify({
+                document_id: this.currentDoc.docId,
+                project_id: this.currentDoc.project_id,
+                folder_id: this.currentDoc.folder_id,
+                document_type: this.currentDoc.type,
+                content: this.sendJson,
+                open_type:this.currentDoc.openType,
+              })
+          ).then((res)=>{
+            if(res.data.errno===0){
+              console.log(1)
+            } else this.$notify.error(res.data.msg)
+          }).catch((error)=>{console.log(error)})
         },
         content: this.textModel,
         extensions: [
@@ -564,7 +615,14 @@ export default {
 
 <style scoped>
 
-
+.head-font{
+  font-size: 28px;
+  float: left;
+  text-align: left;
+}
+.font-1 {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+}
 .body-box{
 }
 .main-box{
@@ -610,7 +668,7 @@ export default {
   background-color: ghostwhite;
 }
 .center-doc-title{
-  height: 50px;
+  height: 20px;
   line-height: 50px;
   font-size: 24px;
 }

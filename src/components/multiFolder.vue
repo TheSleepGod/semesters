@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="caret-color: transparent;" class = "font-1">
     <div class = "multi-level-folders-box">
       <div class="multi-level-folders-title">文档列表</div>
       <div class="multi-level-folders-content">
@@ -36,7 +36,7 @@
                 </div>
                 <transition appear>
                   <div class="second-folder-content" v-if="oneProjectFolder.isActive">
-                    <div class="doc-box" v-for="(doc) in oneProjectFolder.projectDocs"  @click.stop="openDoc(doc)"
+                    <div class="doc-box" v-for="(doc) in oneProjectFolder.projectDocs"  @click.stop="openDoc(doc,oneProjectFolder.projectId)"
                          @mouseenter="showIcon(doc)" @mouseleave="hideIcon(doc)">
                       <div style="margin-left: 74px;display: flex;">
                         <div class="doc-font"  :title="doc.docName">
@@ -69,7 +69,7 @@
           </div>
           <transition appear>
             <div class="first-folder-content" v-if="anotherFolder.isActive">
-              <div class="doc-box" v-for="(doc) in anotherFolder.folderDocs" @click="openDoc(doc)"
+              <div class="doc-box" v-for="(doc) in anotherFolder.folderDocs" @click="openDoc(doc,anotherFolder.folderId)"
                    @mouseenter="showIcon(doc)" @mouseleave="hideIcon(doc)">
                 <div style="margin-left: 37px;display: flex;">
                   <div class="doc-font" :title="doc.docName">
@@ -99,12 +99,12 @@
         <div style="margin-top: 20px;text-align: left;display: flex">
           <el-select v-model="createMod" placeholder="请选择模板">
             <el-option label="空" value="0"></el-option>
-            <el-option label="需求规格说明书" value="1"></el-option>
-            <el-option label="会议纪要" value="2"></el-option>
+            <el-option label="会议纪要" value="1"></el-option>
+            <el-option label="需求规格说明书" value="2"></el-option>
             <el-option label="项目计划" value="3"></el-option>
             <el-option label="架构设计说明书" value="4"></el-option>
           </el-select>
-          <el-button size="small" type="primary" style="color: white;font-size: 16px;margin-left: 35%" @click="createDoc">创 建</el-button>
+          <el-button size="small" type="primary" style="color: white;font-size: 16px;margin-left: 35%" @click="createDoc()">创 建</el-button>
         </div>
       </div>
     </el-dialog>
@@ -135,7 +135,9 @@ export default {
             docId: '',
             docName: '',
             docRoom: '',
-            type: 'project_document'
+            type: 'project_document',
+            openType:'',
+            content: {},
           },
         ]
       },
@@ -156,12 +158,15 @@ export default {
             docId: '',
             docName: '',
             docRoom: '',
-            type: 'other_document'
+            type: 'other_document',
+            openType:'',
+            content: {},
           },
         ]
       },
     ]
     return {
+      tempModelJson: {},
       createMod:'',
       createFolderVisible: false,
       newFolder:{
@@ -182,20 +187,42 @@ export default {
         type: '',
         projectId: '',
         folderId: '',
-        content: '',
+        content: {},
         openType: '',
       },
       username:'',
       projectsFolder,
       otherFolders,
-      currentDoc:{
-        docId: '',
-        docName: '',
-        docRoom: '',
-      }
     }
   },
   methods: {
+
+    changeType(item) {
+      item.openType = '';
+    },
+
+    chooseModel(type){
+      this.tempModelJson = {};
+      if(type === '0'){
+        this.tempModelJson = {};
+      }
+      else if(type === '1'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "会议纪要", "type": "text"}]}]}
+      }
+      else if(type === '2'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "需求规格说明书", "type": "text"}]}]}
+      }
+      else if(type === '3'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "项目计划", "type": "text"}]}]}
+      }
+      else if(type === '4'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "架构设计说明书", "type": "text"}]}]}
+      }
+      else if(type === '5'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "会议纪要", "type": "text"}]}]}
+      }
+    },
+
     beClose(){
       this.renameDocVisible = false; this.renameDoc={id:'',newName:'',docId:'',type:'',projectId:'',folderId: '',content: '',openType: ''};
       this.createDocVisible = false; this.newDoc={projectId: '', folderId: '', name: '', type: 0};
@@ -227,9 +254,21 @@ export default {
       }
       this.createDocVisible = true;
     },
-    openDoc(doc){
-      this.$emit('input',doc);
+    openDoc(doc ,id){
+      let tempDoc = {
+        project_id: id,
+        folder_id: id,
+        docId: doc.docId,
+        docName: doc.docName,
+        docRoom: doc.docRoom,
+        openType: doc.openType,
+        content: doc.content,
+        type: doc.type,
+      }
+      this.$emit('input',tempDoc);
+
       this.$parent.changeRoom();
+      doc.openType = '';
     },
     getNowUser() {
       this.$axios({
@@ -266,7 +305,7 @@ export default {
       }).catch((error)=>{console.log(error)})
     },
     createDoc() {
-      //todo:模板创建：this.createMod
+      this.chooseModel(this.createMod)
       this.$axios.post(
           'http://101.42.160.94:8000/api/user_web/create_document',
           JSON.stringify({
@@ -274,6 +313,7 @@ export default {
             folder_id: this.newDoc.folderId,
             title: this.newDoc.name,
             document_type: this.newDoc.type===0?'project_document':'other_document',
+            content: this.tempModelJson,
           })
       ).then((res)=>{
         console.log(res);
@@ -286,15 +326,13 @@ export default {
     },
     postRenameDoc(){
       this.$axios.post(
-          'http://101.42.160.94:8000/api/user_web/update_document',
+          'http://101.42.160.94:8000/api/user_web/update_title',
           JSON.stringify({
             new_title: this.renameDoc.newName,
             document_id: this.renameDoc.docId,
             project_id: this.renameDoc.projectId,
             folder_id: this.renameDoc.folderId,
             document_type: this.renameDoc.type,
-            content: this.renameDoc.content,
-            open_type: this.renameDoc.openType
           })
       ).then((res)=>{
         if(res.data.errno===0){
@@ -388,7 +426,9 @@ export default {
                         docId: docArray[j].document_id,
                         docName: docArray[j].title,
                         docRoom: docArray[j].room_name,
-                        type: 'project_document'
+                        type: 'project_document',
+                        content: docArray[j].content,
+                        openType: docArray[j].open_type
                       })
                     }
                   } else this.$notify.error(res.data.msg)
@@ -433,6 +473,8 @@ export default {
                     docName: docArray[j].title,
                     docRoom: docArray[j].room_name,
                     type: 'other_document',
+                    content: docArray[j].content,
+                    openType: docArray[j].open_type
                   })
                 }
               } else this.$notify.error(res.data.msg)
@@ -462,7 +504,9 @@ export default {
 .v-leave {opacity: 1;transform: translateY(0);}
 .v-leave-to {transform: translateY(-20%);opacity: 0;}
 .v-leave-active {transition: 0.25s;}
-
+.font-1 {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+}
 .dialog-box{
   width:60%;
   margin-left: 20%;
@@ -483,7 +527,7 @@ export default {
 .multi-level-folders-content{
 }
 .first-folder{
-
+  
 }
 .first-folder-title{
   cursor: pointer;

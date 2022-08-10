@@ -7,7 +7,9 @@
       <div class="head-font font-1" style="border-radius: 5px; width: 150px; height: 50px; background: coral; text-align: center;line-height: 50px;">
         {{team.teamName}}
       </div>
-      <div class="head-font font-1">&nbsp;&nbsp;项目中心</div>
+      <div class="head-font font-1" >
+        <img src="../assets/png/project_center.png" alt="" style="height: 35px; width: 35px; left: 20px; position: relative; ">
+        <span style="position: relative; float: right; top: -5px; left: 20px;">项目中心</span></div>
       <div class="tools">
         <div class="search-box font-1">
           <el-input v-model="searchProectName" placeholder="请输入要搜索的项目名称" clearable size="mini" @input="searchProject"/>
@@ -464,8 +466,8 @@ export default {
   line-height: 40px;
   display: flex;
   right: 12%;
-  height: 40px;
-  top: 145px;
+  height: 10px;
+  top: 15px;
   z-index: 20;
 }
 .search-box{

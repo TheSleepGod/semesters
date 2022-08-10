@@ -4,9 +4,24 @@
     <el-aside width="300px" style="background-color: #ffd">
       <div class="newCreate" @click="createVisible = true"><i class="el-icon-document-add"></i>&nbsp&nbsp新建文档</div>
       <el-dialog title="新建文档" :visible.sync="createVisible" style="width:60%;margin-left: 20%">
-        <el-input v-model="newDocName" placeholder="请输入文档名称" maxlength="20" show-word-limit>
-          <el-button slot="append" @click="createDoc()">确认</el-button>
-        </el-input>
+        <el-form :model="createForm">
+        <el-form-item label="文档标题" :label-width="'120px'">
+          <el-input v-model="createForm.title" autocomplete="off" style="width: 200px"></el-input>
+        </el-form-item>
+        <el-form-item label="文档模板" :label-width="'120px'">
+          <el-select v-model="createForm.type" placeholder="请选择模板">
+            <el-option label="空" value="0"></el-option>
+            <el-option label="会议纪要" value="1"></el-option>
+            <el-option label="需求规格说明书" value="2"></el-option>
+            <el-option label="项目计划" value="3"></el-option>
+            <el-option label="架构设计说明书" value="4"></el-option>
+          </el-select>
+        </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="createVisible = false">取 消</el-button>
+          <el-button type="primary" @click="createDoc()">确 定</el-button>
+        </div>
       </el-dialog>
       <el-dialog title="重命名文档" :visible="renameDocVisible" :close-on-click-modal=false style="width: 60%;margin-left: 20%">
         <el-input v-model="renameDoc.newName" placeholder="请输入新文档名" maxlength="12" show-word-limit>
@@ -128,6 +143,9 @@ export default {
   },
   data(){
     return{
+      tempModelJson: {},
+      tempOpenType: '',
+      sendJson: {},
       renameDoc: {
         docId: '',
         newName: '',
@@ -135,7 +153,7 @@ export default {
         projectId: '',
         folderId: '',
         openType: '',
-        content: ''
+        content: {},
       },
       renameDocVisible: false,
       delVisible: false,
@@ -151,7 +169,7 @@ export default {
         docName: '',
         docRoom: '',
         openType:'',
-        content: '',
+        content: {},
       },
       project_id: this.$route.query.projectId,
       initiallyOpen: ['项目文档'],
@@ -174,7 +192,7 @@ export default {
             name: '',
             docRoom: '',
             file: '',
-            content: '',
+            content: {},
             openType: '',
           }
         ]
@@ -188,7 +206,7 @@ export default {
       editor: null,
       status: 'connecting',
       room: this.$route.query.room,
-      textModel: '',
+      textModel: {},
       textCode: '',
       textDownload: '',
       // 填入导出的pdf文件名和html元素
@@ -202,7 +220,6 @@ export default {
         type: '',
       },
       formLabelWidth: '120px',
-      newDocName: '',
     }
   },
   beforeCreate() {
@@ -225,34 +242,57 @@ export default {
 
   methods: {
 
+    chooseModel(type){
+      this.tempModelJson = {};
+      if(type === '0'){
+        this.tempModelJson = {};
+      }
+      else if(type === '1'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "会议纪要", "type": "text"}]}]}
+      }
+      else if(type === '2'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "需求规格说明书", "type": "text"}]}]}
+      }
+      else if(type === '3'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "项目计划", "type": "text"}]}]}
+      }
+      else if(type === '4'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "架构设计说明书", "type": "text"}]}]}
+      }
+      else if(type === '5'){
+        this.tempModelJson = {"type": "doc", "content": [{"type": "heading", "attrs": {"level": 2}, "content": [{"text": "会议纪要", "type": "text"}]}]}
+      }
+    },
+
     outJson() {
       console.log(this.editor.getJSON());
     },
 
     postRenameDoc() {
       this.$axios.post(
-          'http://101.42.160.94:8000/api/user_web/update_document',
+          'http://101.42.160.94:8000/api/user_web/update_title',
           JSON.stringify({
-            new_title: this.renameDoc.newName,
             document_id: this.renameDoc.docId,
             project_id: this.renameDoc.projectId,
-            folder_id: this.renameDoc.folderId,
-            document_type: this.renameDoc.type,
-            content: '',
-            open_type:this.renameDoc.openType
+            folder_id: '',
+            document_type: 'project_document',
+            new_title: this.renameDoc.newName,
           })
       ).then((res)=>{
         if(res.data.errno===0){
           this.$message.success("重命名成功");
           this.getDocs();
           this.renameDocVisible = false;
+          if(this.currentDoc.docId === this.renameDoc.docId){
+            this.currentDoc.docName = this.renameDoc.newName;
+          }
           this.renameDoc = {
             docId: '',
             newName: '',
             projectId: '',
             folderId: '',
             type: '',
-            content: '',
+            content: {},
             openType: '',
           };
         } else this.$notify.error(res.data.msg)
@@ -275,6 +315,8 @@ export default {
             type: 'success',
             message: '删除成功!'
           });
+          this.provider.destroy();
+          this.editor.destroy();
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
     },
@@ -343,8 +385,7 @@ export default {
           this.currentUser.color = this.getRandomColor();
           this.currentUser.name = this.username;
           const ydoc = new Y.Doc()
-          //TODO
-          this.textModel = this.currentDoc.docContent;
+          //this.textModel = this.currentDoc.content;
           this.provider = new HocuspocusProvider({
             url: 'wss://connect.gethocuspocus.com',
             parameters: {
@@ -360,7 +401,25 @@ export default {
             onUpdate: ({ editor }) => {
               this.textDownload = editor.getText();
               this.htmlDownload = editor.getHTML();
-              // send the content to an API here
+              this.sendJson = editor.getJSON();
+              if(this.currentDoc.openType === 'first'){
+                this.tempOpenType = '';
+              }
+              this.$axios.post(
+                  'http://101.42.160.94:8000/api/user_web/update_document',
+                  JSON.stringify({
+                    document_id: this.currentDoc.docId,
+                    project_id: this.project_id,
+                    folder_id: '',
+                    document_type: 'project_document',
+                    content: this.sendJson,
+                    open_type:this.tempOpenType
+                  })
+              ).then((res)=>{
+                if(res.data.errno===0){
+                  console.log(1)
+                } else this.$notify.error(res.data.msg)
+              }).catch((error)=>{console.log(error)})
             },
             content: this.textModel,
             extensions: [
@@ -390,13 +449,15 @@ export default {
     },
 
     createDoc() {
+      this.chooseModel(this.createForm.type);
       this.$axios.post(
           'http://101.42.160.94:8000/api/user_web/create_document',
           JSON.stringify({
             project_id: this.project_id,
             folder_id: '',
-            title: this.newDocName,
+            title: this.createForm.title,
             document_type: 'project_document',
+            content: this.tempModelJson,
           })
       ).then((res)=>{
         console.log(res);
@@ -413,7 +474,19 @@ export default {
         this.currentDoc.docId = item.docId;
         this.currentDoc.docName = item.name;
         this.currentDoc.docRoom = item.docRoom;
+        this.currentDoc.content = item.content;
+        this.currentDoc.openType = item.openType;
+        if(this.currentDoc.openType === 'first'){
+          this.textModel = this.currentDoc.content;
+          this.tempOpenType = '';
+          this.currentDoc.openType = '';
+          item.openType = '';
+        }
+        else{
+          this.textModel = {};
+        }
         console.log('现在选中的是' + this.currentDoc.docId);
+        console.log(this.textModel);
         this.editor.destroy()
         this.provider.destroy()
         const ydoc = new Y.Doc()
@@ -432,7 +505,26 @@ export default {
           onUpdate: ({editor}) => {
             this.textDownload = editor.getText();
             this.htmlDownload = editor.getHTML();
-            // send the content to an API here
+            this.sendJson = editor.getJSON();
+            console.log(this.sendJson);
+            if(this.currentDoc.openType === 'first'){
+              this.tempOpenType = '';
+            }
+            this.$axios.post(
+                'http://101.42.160.94:8000/api/user_web/update_document',
+                JSON.stringify({
+                  document_id: this.currentDoc.docId,
+                  project_id: this.project_id,
+                  folder_id: '',
+                  document_type: 'project_document',
+                  content: this.sendJson,
+                  open_type:this.tempOpenType
+                })
+            ).then((res)=>{
+              if(res.data.errno===0){
+                console.log(1)
+              } else this.$notify.error(res.data.msg)
+            }).catch((error)=>{console.log(error)})
           },
           content: this.textModel,
           extensions: [
@@ -477,58 +569,71 @@ export default {
               file: 'txt',
             })
           }
-          this.currentDoc.docId = this.items[0].children[0].docId;
-          this.currentDoc.docName = this.items[0].children[0].name;
-          this.currentDoc.docRoom = this.items[0].children[0].docRoom;
-          this.currentDoc.content = this.items[0].children[0].content;
-          this.currentDoc.openType = this.items[0].children[0].openType;
-          if(this.currentDoc.openType === 'first'){
-            this.textModel = this.currentDoc.content;
-          }
-          else{
-            this.textModel = '';
-          }
-          this.editor.destroy()
-          this.provider.destroy()
-          const ydoc = new Y.Doc()
-
-          this.provider = new HocuspocusProvider({
-            url: 'wss://connect.gethocuspocus.com',
-            parameters: {
-              key: 'write_bqgvQ3Zwl34V4Nxt43zR',
-            },
-            name: this.currentDoc.docRoom,
-            document: ydoc,
-          })
-          this.provider.on('status', event => {
-            this.status = event.status
-          })
-          this.editor = new Editor({
-            onUpdate: ({ editor }) => {
-              this.textDownload = editor.getText();
-              this.htmlDownload = editor.getHTML();
-              // send the content to an API here
-            },
-            content: this.textModel,
-            extensions: [
-              StarterKit.configure({
-                history: false,
-              }),
-              Highlight,
-              TaskList,
-              TaskItem,
-              Collaboration.configure({
-                document: ydoc,
-              }),
-              CollaborationCursor.configure({
-                provider: this.provider,
-                user: this.currentUser,
-              }),
-              CharacterCount.configure({
-                limit: 10000,
-              }),
-            ],
-          })
+          // this.currentDoc.docId = this.items[0].children[0].docId;
+          // this.currentDoc.docName = this.items[0].children[0].name;
+          // this.currentDoc.docRoom = this.items[0].children[0].docRoom;
+          // this.currentDoc.content = this.items[0].children[0].content;
+          // this.currentDoc.openType = this.items[0].children[0].openType;
+          //
+          // this.editor.destroy()
+          // this.provider.destroy()
+          // const ydoc = new Y.Doc()
+          //
+          // this.provider = new HocuspocusProvider({
+          //   url: 'wss://connect.gethocuspocus.com',
+          //   parameters: {
+          //     key: 'write_bqgvQ3Zwl34V4Nxt43zR',
+          //   },
+          //   name: this.currentDoc.docRoom,
+          //   document: ydoc,
+          // })
+          // this.provider.on('status', event => {
+          //   this.status = event.status
+          // })
+          // this.editor = new Editor({
+          //   onUpdate: ({ editor }) => {
+          //     this.textDownload = editor.getText();
+          //     this.htmlDownload = editor.getHTML();
+          //     this.sendJson = editor.getJSON();
+          //     if(this.currentDoc.openType === 'first'){
+          //       this.tempOpenType = '';
+          //     }
+          //     this.$axios.post(
+          //         'http://101.42.160.94:8000/api/user_web/update_document',
+          //         JSON.stringify({
+          //           document_id: this.currentDoc.docId,
+          //           project_id: this.project_id,
+          //           folder_id: '',
+          //           document_type: 'project_document',
+          //           content: this.sendJson,
+          //           open_type:this.tempOpenType
+          //         })
+          //     ).then((res)=>{
+          //       if(res.data.errno===0){
+          //         console.log(1)
+          //       } else this.$notify.error(res.data.msg)
+          //     }).catch((error)=>{console.log(error)})
+          //   },
+          //   content: this.textModel,
+          //   extensions: [
+          //     StarterKit.configure({
+          //       history: false,
+          //     }),
+          //     Highlight,
+          //     TaskList,
+          //     TaskItem,
+          //     Collaboration.configure({
+          //       document: ydoc,
+          //     }),
+          //     CollaborationCursor.configure({
+          //       provider: this.provider,
+          //       user: this.currentUser,
+          //     }),
+          //     CharacterCount.configure({
+          //       limit: 10000,
+          //     }),
+          //   ],
+          // })
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
     },
