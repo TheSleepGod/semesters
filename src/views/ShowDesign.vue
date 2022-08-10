@@ -129,12 +129,17 @@ export default {
       //todo 获取单个原型图的html
     },
     changeShow(item) {  //todo 根据item里面的id获取html 存到htmldate里
+      console.log(item);
+      let para = {
+        test_id : item.id,
+      }
       this.$axios({
         method:'post',
         url : 'http://43.138.22.20:8000/api/user/get_html',
-        data: qs.stringify(item.test_id)
+        data: qs.stringify(para)
       }).then((res) =>{
-        this.htmlList[nowShow].htmlData = res.data.data.html;
+        console.log(res);
+        this.htmlList[this.nowShow].htmlData = res.data.data.html;
       })
     },
     onContextmenu(event,item) {
