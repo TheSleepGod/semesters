@@ -372,10 +372,7 @@ export default {
         if(res.data.errno===0){
           this.$notify.success("文档 "+doc.docName+" 已删除");
           this.getTeamAllDocs();
-          if(this.currentDoc.docId===doc.docId && this.currentDoc.type===doc.type){
-            this.currentDoc={project_id:'',folder_id:'',docId:'',docName:'',docRoom:'initial_#'+this.$route.query.teamId+'q6Ul'+this.$route.query.teamId+'Q3nC3'+this.$route.query.teamId+'g3XEo'+this.$route.query.teamId[0],openType:'',content:{},type:'',};
-            this.openDoc(this.currentDoc)
-          }
+          this.$parent.destroyEditor()
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
     },
@@ -398,10 +395,7 @@ export default {
         if(res.data.errno===0){
           this.$notify.success("文件夹 "+folder.folderName+" 已整体删除");
           this.getTeamAllDocs();
-          if(this.currentDoc.folder_id===folder.folderId){
-            this.currentDoc={project_id:'',folder_id:'',docId:'',docName:'',docRoom:'initial_#'+this.$route.query.teamId+'q6Ul'+this.$route.query.teamId+'Q3nC3'+this.$route.query.teamId+'g3XEo'+this.$route.query.teamId[0],openType:'',content:{},type:'',};
-            this.openDoc(this.currentDoc)
-          }
+          this.$parent.destroyEditor()
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
     },

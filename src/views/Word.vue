@@ -1133,8 +1133,8 @@ export default {
 /* Give a remote user a caret */
 
 .newCreate{
-  margin-top: 10px;
-  margin-bottom: 10px;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   font-size: 20px;
