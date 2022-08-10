@@ -423,6 +423,7 @@ export default {
   line-height: 30px !important;
 }
 .body-box{
+  height: 720px;
 }
 #topBar-login{
   position: relative;
