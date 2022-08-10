@@ -21,7 +21,7 @@
               <div class="editor__footer">
                 <div :class="`editor__status editor__status--${status}`">
                   <template v-if="status === 'connected'">
-                    {{ currentDoc.docContent }}
+                    {{ currentDoc.docRoom }}
                   </template>
                   <template v-else>
                     offline
@@ -115,7 +115,7 @@ export default {
       currentDoc:{
         docId: '',
         docName: '',
-        docContent: uniqueNum
+        docRoom: ''
       },
       currentUser:  {
         name: this.username,
@@ -511,7 +511,7 @@ export default {
         parameters: {
           key: 'write_bqgvQ3Zwl34V4Nxt43zR',
         },
-        name: this.currentDoc.docContent,
+        name: this.currentDoc.docRoom,
         document: ydoc,
       })
       this.provider.on('status', event => {

@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
   }
-  if(to.path ==="/80") {
+  if(to.path ==="/80" || to.query === "/welcome" || to.query === "/home1") {
      next();
   } 
   else {
@@ -50,11 +50,12 @@ router.beforeEach((to, from, next) => {
           if(ret.data.errno === 0) {
               isLogin = true;
           }
-          isLogin ? next(): next("/80");
+          // isLogin ? next(): next("/80");
       })
   }
   next();
 })
+
 Vue.config.productionTip = false
 new Vue({
   router,

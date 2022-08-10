@@ -64,6 +64,7 @@
 
 <script>
 import Contextmenu from "vue-contextmenujs"
+import qs from 'qs'
 Vue.use(Contextmenu);
 import { EmailEditor } from '../components'
 import sample from '../data/sample.json';
@@ -96,26 +97,13 @@ export default {
       items: [{
         name:'原型图列表',
         children: [
-          {
-            id:31,
-            name: '.gitignore',
-            file: 'txt',
-          },
-          {
-            id:32,
-            name: 'babel.config.js',
-            file: 'js',
-          },
-          {
-            id:33,
-            name: 'package.json',
-            file: 'json',
-          },
+
         ]
       }
       ],
       nowProjectId,
       model_value:'',
+      model_id:0,
       models:[
         {
           label:"model1",
@@ -193,20 +181,21 @@ export default {
       console.log('editorReady');
     },
     loadDesign(pid) {
-      let toSend = {id : pid};
-      this.$axios({
-        method:'post',
-        url : 'http://101.42.160.94:8000/api/user_web/get_prototype',
-        data : JSON.stringify(toSend)
-      }).then((res) =>{
-        console.log(res.data.data);
-        this.design=res.data.data;
-        console.log(this.design)
-        setTimeout(() =>{
-          this.$refs.emailEditor.editor.loadDesign(this.design);
-        },500)
-      });
-
+      if(pid){
+        let toSend = {id : pid};
+        this.$axios({
+          method:'post',
+          url : 'http://101.42.160.94:8000/api/user_web/get_prototype',
+          data : JSON.stringify(toSend)
+        }).then((res) =>{
+          console.log(res.data.data);
+          this.design=res.data.data;
+          console.log(this.design)
+          setTimeout(() =>{
+            this.$refs.emailEditor.editor.loadDesign(this.design);
+          },500)
+        });
+      }
     },
     saveDesign() {
       this.$refs.emailEditor.editor.saveDesign(
@@ -222,6 +211,7 @@ export default {
             console.log(design);
             console.log(typeof design)
             this.design=design;
+            this.putProToProject(1,this.nowProjectId,"test");
           }
       )
     },
@@ -231,6 +221,20 @@ export default {
             console.log('exportHtml', data);
           }
       )
+    },
+    putProToProject(testId,projectId,title) {
+      let param = {
+        test_id: testId,
+        title: title,
+        project_id: projectId
+      };
+      this.$axios( {
+        method: 'post',
+        url: 'http://101.42.160.94:8000/api/user_web/update_prototype',
+        data: JSON.stringify(param)
+      }).then((res) => {
+        console.log(res);
+      }) 
     },
     //todo:分享页面
     shareDesign() {
@@ -247,22 +251,33 @@ export default {
     },
     //todo:查看项目下原型图
     ShowPrototype(){
-      let toSend={
+      let toSend = {
         project_id:this.project_id
       }
       this.$axios({
         method:'post',
-        url:'http://',
-        data:JSON.stringify(toSend),
+        url:'http://43.138.22.20:8000/api/user/check_project_prototype',
+        data:qs.stringify(toSend),
       }).then((res) =>{
         console.log(res);
-        this.items[0].children=res.data.data;
+        let ans=res.data;
+        if(ans.errno===0){
+          for(let i in ans.data){
+            this.items[0].children.push({
+              id:ans.data[i].prototype_id,
+              name:ans.data[i].title,
+              file: 'txt'
+            })
+          }
+        }
       })
     }
   },
   mounted() {
-    this.nowProjectId = this.$route.query.projectId;
-    this.ShowPrototype();
+    this.project_id = this.$route.query.projectId;
+    setTimeout(() =>{
+      this.ShowPrototype();
+    },500);
   }
 }
 </script>
