@@ -151,6 +151,7 @@ export default {
         docName: '',
         docRoom: '',
         openType:'',
+        content: '',
       },
       project_id: this.$route.query.projectId,
       initiallyOpen: ['项目文档'],
@@ -173,6 +174,8 @@ export default {
             name: '',
             docRoom: '',
             file: '',
+            content: '',
+            openType: '',
           }
         ]
       }
@@ -469,13 +472,22 @@ export default {
               docId: docArray[j].document_id,
               name: docArray[j].title,
               docRoom: docArray[j].room_name,
-
+              openType: docArray[j].open_type,
+              content: docArray[j].content,
               file: 'txt',
             })
           }
           this.currentDoc.docId = this.items[0].children[0].docId;
           this.currentDoc.docName = this.items[0].children[0].name;
           this.currentDoc.docRoom = this.items[0].children[0].docRoom;
+          this.currentDoc.content = this.items[0].children[0].content;
+          this.currentDoc.openType = this.items[0].children[0].openType;
+          if(this.currentDoc.openType === 'first'){
+            this.textModel = this.currentDoc.content;
+          }
+          else{
+            this.textModel = '';
+          }
           this.editor.destroy()
           this.provider.destroy()
           const ydoc = new Y.Doc()
