@@ -117,11 +117,6 @@ const routes = [
     name: 'showDesign',
     component: () => import('../views/ShowDesign'),
   },
-  {
-    path: '/home1',
-    name: 'home1',
-    component: () => import('../views/home1'),
-  }
 ]
 
 const router = new VueRouter({
