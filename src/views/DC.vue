@@ -112,6 +112,7 @@ export default {
   data(){
     let uniqueNum = 'initial_#'+this.$route.query.teamId+'q6Ul'+this.$route.query.teamId+'Q3nC3'+this.$route.query.teamId+'g3XEo'+this.$route.query.teamId[0];
     return{
+      uniqueNum,
       visible:false,
       username: '',
       userid: '',
@@ -477,7 +478,7 @@ export default {
             parameters: {
               key: 'write_bqgvQ3Zwl34V4Nxt43zR',
             },
-            name: 'initial_doc_room',
+            name: this.uniqueNum,
             document: ydoc,
           })
           this.provider.on('status', event => {
@@ -594,7 +595,11 @@ export default {
           }),
         ],
       })
-    }
+    },
+    destroyEditor(){
+      this.provider.destroy();
+      this.editor.destroy();
+    },
   },
   created() {
     this.team.teamId = this.$route.query.teamId;
@@ -660,7 +665,7 @@ export default {
   width: 75%;
 }
 .main-right-box:hover{
-  padding-left: 10px;
+  padding-left: 0;
   width: 25%;
 }
 .center-head-box{
@@ -709,7 +714,7 @@ export default {
 .right-folders-box{
   width: 0;
   border-radius: 20px;
-  background-color: lightyellow;
+  background-color: #ffd;
   transition: all 1s;
 }
 .main-right-box:hover .right-pullIcon-bar{

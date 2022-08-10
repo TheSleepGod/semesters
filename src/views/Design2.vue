@@ -191,7 +191,7 @@ export default {
         data: this.design
       }).then((res) =>{
         console.log(res);
-        this.putProToProject(res.data.test_id,this.project_id,this.newName,this.design);;
+        this.putProToProject(res.data.test_id,this.project_id,this.newName,this.design);
         this.createVisible=false;
         this.$message('新建原型图成功！！');
         setTimeout(() =>{
@@ -247,6 +247,18 @@ export default {
       this.$refs.emailEditor.editor.exportHtml(
           (data) => {
             console.log('exportHtml', data);
+            let params = {
+              html: data,
+              test_id:  this.test_id
+            }
+            this.$axios({
+              method:'post',
+              url:'http://43.138.22.20:8000/api/user/save_html', //todo
+              data:qs.stringify(params),
+            }).then((res) =>{
+              console.log("看我下面");
+              console.log(res);
+            })
           }
       )
     },
@@ -294,8 +306,10 @@ export default {
             console.log(design);
             console.log(typeof design)
             this.design=design;
+            this.exportHtml();
+            this.$router.push({path:'/welcome',query:{projectId:  this.project_id}})
           }
-      )
+      );
     },
     ShowPrototype(){
       this.items[0].children=[];
@@ -319,7 +333,7 @@ export default {
           }
         }
       })
-    }
+    },
   },
   mounted() {
     this.project_id = this.$route.query.projectId;
@@ -395,8 +409,8 @@ html, body {
   border: 1px solid black;
 }
 .newCreate{
-  margin-top: 10px;
-  margin-bottom: 10px;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   font-size: 20px;
