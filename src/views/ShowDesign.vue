@@ -34,8 +34,7 @@
 export default {
   name: "ShowDesign",
   data(){
-    
-    let nowProjectId;
+    let nowProjectId = 1;
     let nowShow = 0;
     let htmlList = [{
       name: "test",
@@ -94,11 +93,32 @@ export default {
     }
   },
   mounted() {
-    this.nowProjectId = this.$route.query.projectId;
+    // this.nowProjectId = this.$route.query.projectId;
+    this.ShowPrototype();
   },
   methods: {
-    getProject() {
-      //todo 把项目原型图列表放进来
+    ShowPrototype(){
+      this.items[0].children=[];
+      let toSend = {
+        project_id:this.project_id
+      }
+      this.$axios({
+        method:'post',
+        url:'http://43.138.22.20:8000/api/user/check_project_prototype',
+        data:qs.stringify(toSend),
+      }).then((res) =>{
+        console.log(res);
+        let ans=res.data;
+        if(ans.errno===0){
+          for(let i in ans.data){
+            this.items[0].children.push({
+              id:ans.data[i].prototype_id,
+              name:ans.data[i].title,
+              file: 'txt'
+            })
+          }
+        }
+      })
     },
     getProjectHtml() {
       //todo 获取单个原型图的html
