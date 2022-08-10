@@ -48,7 +48,8 @@
           <div id="bar">
             <h1 style="margin-left: 60px;margin-top: 8px">{{this.name}}</h1>
             <button v-on:click="saveDesign">保存页面</button>
-            <button v-on:click="exportHtml">导出页面</button>
+<!--            <button v-on:click="exportHtml">导出页面</button>-->
+
             <button v-on:click="stopHtml">关闭页面</button>
             <button v-on:click="keepDesign">共享页面</button>
           </div>
