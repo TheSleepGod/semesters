@@ -46,7 +46,7 @@
         <div id="example">
         <div class="container">
           <div id="bar">
-            <h1 style="margin-left: 60px">{{this.name}}</h1>
+            <h1 style="margin-left: 60px;margin-top: 8px">{{this.name}}</h1>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
             <button v-on:click="shareDesign">共享页面</button>
@@ -76,7 +76,7 @@ export default {
   data(){
     let nowProjectId;
     return{
-      name:'设计图1',
+      name:'model1',
       design:{},
       newName:'',
       createVisible:false,
@@ -206,8 +206,9 @@ export default {
           url : 'http://101.42.160.94:8000/api/user_web/get_prototype',
           data : JSON.stringify(toSend)
         }).then((res) =>{
-          console.log(res.data.data);
+          console.log(res.data);
           this.design=res.data.data;
+          this.name=res.data.title;
           console.log(this.design)
           setTimeout(() =>{
             this.$refs.emailEditor.editor.loadDesign(this.design);
