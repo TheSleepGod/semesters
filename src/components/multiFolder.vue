@@ -88,12 +88,12 @@
     </div>
 
     <!-- 对话框-->
-    <el-dialog title="重命名文档" :visible="renameDocVisible" :close-on-click-modal=false :before-close="beClose" class="dialog-box">
+    <el-dialog title="重命名文档" :visible="renameDocVisible" :close-on-click-modal=false :before-close="beClose" class="dialog-box" :append-to-body="true" >
       <el-input v-model="renameDoc.newName" placeholder="请输入文档名" maxlength="12" show-word-limit>
         <el-button slot="append" @click="postRenameDoc">确认</el-button>
       </el-input>
     </el-dialog>
-    <el-dialog title="新建文档" :visible="createDocVisible" :close-on-click-modal=false :before-close="beClose" class="dialog-box">
+    <el-dialog title="新建文档" :visible="createDocVisible" :close-on-click-modal=false :before-close="beClose" class="dialog-box" :append-to-body="true" >
       <div style="width: 90%;margin-left: 5%">
         <el-input v-model="newDoc.name" placeholder="请输入文档名" maxlength="12" show-word-limit></el-input>
         <div style="margin-top: 20px;text-align: left;display: flex">
@@ -108,7 +108,7 @@
         </div>
       </div>
     </el-dialog>
-    <el-dialog title="新建文件夹" :visible="createFolderVisible" :close-on-click-modal=false :before-close="beClose" class="dialog-box">
+    <el-dialog title="新建文件夹" :visible="createFolderVisible" :close-on-click-modal=false :before-close="beClose" class="dialog-box" :append-to-body="true" >
       <el-input v-model="newFolder.name" placeholder="请输入文件夹名" maxlength="12" show-word-limit>
         <el-button slot="append" @click="createFolder">确认</el-button>
       </el-input>

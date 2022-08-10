@@ -62,6 +62,11 @@ export default {
         id: this.id,
         displayMode: 'email',
         locale:'zh-CN',
+        tools:{
+          image: {
+            enabled: false
+          }
+        },
         source: {
           name: pkg.name,
           version: pkg.version,

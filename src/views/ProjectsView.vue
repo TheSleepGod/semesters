@@ -3,18 +3,19 @@
     <TopBar :username="username"/>
     <TeamLeft :team_id="team.teamId" :team_name="team.teamName"/>
     <!-- 页头-->
-    <div class="head-box">
-      <div class="head-font font-1" style="border-radius: 5px; width: 150px; height: 50px; background: coral; text-align: center;line-height: 50px;">
+    <div class="head-box font-1">
+      <div class="head-font head-teamName-font">
         {{team.teamName}}
       </div>
-      <div class="head-font font-1" >
-        <img src="../assets/png/project_center.png" alt="" style="height: 35px; width: 35px; left: 20px; position: relative; ">
-        <span style="position: relative; float: right; top: -5px; left: 20px;">项目中心</span></div>
+      <div class="head-font" >
+        <img src="../assets/png/project_center.png" alt="" style="margin-top: 10px;height: 35px; width: 35px; left: 20px; position: relative; ">
+        <span style="position: relative; float: right; top: -5px; left: 20px;">项目中心</span>
+      </div>
       <div class="tools">
-        <div class="search-box font-1">
+        <div class="search-box">
           <el-input v-model="searchProectName" placeholder="请输入要搜索的项目名称" clearable size="mini" @input="searchProject"/>
         </div>
-        <div class="dropdownSort-box font-1">
+        <div class="dropdownSort-box">
           <el-dropdown placement="bottom" trigger="click" @command="handleSort">
             <span style="cursor: pointer;color: dodgerblue">{{ sortType }}<i class="el-icon-arrow-down el-icon--right"/></span>
             <el-dropdown-menu slot="dropdown">
@@ -461,7 +462,20 @@ export default {
   float: left;
   text-align: left;
 }
+.head-teamName-font{
+  cursor: default;
+  border-radius: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  min-width: 100px;
+  height: 50px;
+  background-color: white;
+  text-align: center;
+  line-height: 50px;
+  box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9;
+}
 .tools{
+  margin-top: 130px;
   position: absolute;
   line-height: 40px;
   display: flex;
@@ -482,6 +496,7 @@ export default {
   display: flex;
 }
 .projectsCard{
+  background-color: white;
   min-width: 150px;
   max-width: 200px;
   height:140px;
@@ -506,7 +521,8 @@ export default {
   background-size: 101% 70%;
 }
 #commonPrCard:hover{
-  filter: brightness(0.75);
+  background-position: -5px -12px;
+  background-size: 110% 80% ;
 }
 #recyclePrCard{
   cursor: default;
@@ -550,7 +566,7 @@ export default {
   filter: opacity(1);
 }
 #newPrCard{
-  background-color: whitesmoke;
+  background-color: white;
 }
 #newPrCard:hover{
   background-color: ghostwhite;
