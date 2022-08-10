@@ -64,15 +64,7 @@ export default {
         locale:'zh-CN',
         tools:{
           image: {
-            properties: {
-              src: {
-                value: {
-                  url: 'https://via.placeholder.com/500x100?text=IMAGE',
-                  width: 500,
-                  height: 100
-                }
-              }
-            }
+            enabled: false
           }
         },
         source: {
