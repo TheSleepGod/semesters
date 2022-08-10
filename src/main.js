@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
           if(ret.data.errno === 0) {
               isLogin = true;
           }
-          isLogin ? next(): next("/80");
+          // isLogin ? next(): next("/80");
       })
   }
   next();

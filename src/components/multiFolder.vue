@@ -134,7 +134,7 @@ export default {
             isHover: false,
             docId: '',
             docName: '',
-            docContent: '',
+            docRoom: '',
             type: 'project_document'
           },
         ]
@@ -155,7 +155,7 @@ export default {
             isHover: false,
             docId: '',
             docName: '',
-            docContent: '',
+            docRoom: '',
             type: 'other_document'
           },
         ]
@@ -189,7 +189,7 @@ export default {
       currentDoc:{
         docId: '',
         docName: '',
-        docContent: '',
+        docRoom: '',
       }
     }
   },
@@ -381,7 +381,7 @@ export default {
                         isHover: false,
                         docId: docArray[j].document_id,
                         docName: docArray[j].title,
-                        docContent: docArray[j].room_name,
+                        docRoom: docArray[j].room_name,
                         type: 'project_document'
                       })
                     }
@@ -425,7 +425,7 @@ export default {
                     isHover: false,
                     docId: docArray[j].document_id,
                     docName: docArray[j].title,
-                    docContent: docArray[j].room_name,
+                    docRoom: docArray[j].room_name,
                     type: 'other_document',
                   })
                 }

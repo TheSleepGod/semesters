@@ -51,7 +51,7 @@
               <div class="editor__footer">
                 <div :class="`editor__status editor__status--${status}`">
                   <template v-if="status === 'connected'">
-                    {{ currentDoc.docContent }}
+                    {{ currentDoc.docRoom }}
                   </template>
                   <template v-else>
                     offline
@@ -146,8 +146,9 @@ export default {
       },
       currentDoc:{
         docId: '',
-        docName: 'name1',
-        docContent: ''
+        docName: '',
+        docRoom: '',
+        openType:'',
       },
       project_id: this.$route.query.projectId,
       initiallyOpen: ['项目文档'],
@@ -168,7 +169,7 @@ export default {
           {
             docId: '',
             name: '',
-            docContent: '',
+            docRoom: '',
             file: '',
           }
         ]
@@ -333,13 +334,14 @@ export default {
           this.currentUser.color = this.getRandomColor();
           this.currentUser.name = this.username;
           const ydoc = new Y.Doc()
-
+          //TODO
+          this.textModel = this.currentDoc.docContent;
           this.provider = new HocuspocusProvider({
             url: 'wss://connect.gethocuspocus.com',
             parameters: {
               key: 'write_bqgvQ3Zwl34V4Nxt43zR',
             },
-            name: this.currentDoc.docContent,
+            name: this.currentDoc.docRoom,
             document: ydoc,
           })
           this.provider.on('status', event => {
@@ -398,50 +400,52 @@ export default {
     },
 
     chooseDoc(item) {
-      this.currentDoc.docId = item.docId;
-      this.currentDoc.docName = item.name;
-      this.currentDoc.docContent = item.docContent;
-      console.log('现在选中的是' + this.currentDoc.docId);
-      this.editor.destroy()
-      this.provider.destroy()
-      const ydoc = new Y.Doc()
-      this.provider = new HocuspocusProvider({
-        url: 'wss://connect.gethocuspocus.com',
-        parameters: {
-          key: 'write_bqgvQ3Zwl34V4Nxt43zR',
-        },
-        name: this.currentDoc.docContent,
-        document: ydoc,
-      })
-      this.provider.on('status', event => {
-        this.status = event.status
-      })
-      this.editor = new Editor({
-        onUpdate: ({ editor }) => {
-          this.textDownload = editor.getText();
-          this.htmlDownload = editor.getHTML();
-          // send the content to an API here
-        },
-        content: this.textModel,
-        extensions: [
-          StarterKit.configure({
-            history: false,
-          }),
-          Highlight,
-          TaskList,
-          TaskItem,
-          Collaboration.configure({
-            document: ydoc,
-          }),
-          CollaborationCursor.configure({
-            provider: this.provider,
-            user: this.currentUser,
-          }),
-          CharacterCount.configure({
-            limit: 10000,
-          }),
-        ],
-      })
+      if(item.file === 'txt') {
+        this.currentDoc.docId = item.docId;
+        this.currentDoc.docName = item.name;
+        this.currentDoc.docRoom = item.docRoom;
+        console.log('现在选中的是' + this.currentDoc.docId);
+        this.editor.destroy()
+        this.provider.destroy()
+        const ydoc = new Y.Doc()
+        this.provider = new HocuspocusProvider({
+          url: 'wss://connect.gethocuspocus.com',
+          parameters: {
+            key: 'write_bqgvQ3Zwl34V4Nxt43zR',
+          },
+          name: this.currentDoc.docRoom,
+          document: ydoc,
+        })
+        this.provider.on('status', event => {
+          this.status = event.status
+        })
+        this.editor = new Editor({
+          onUpdate: ({editor}) => {
+            this.textDownload = editor.getText();
+            this.htmlDownload = editor.getHTML();
+            // send the content to an API here
+          },
+          content: this.textModel,
+          extensions: [
+            StarterKit.configure({
+              history: false,
+            }),
+            Highlight,
+            TaskList,
+            TaskItem,
+            Collaboration.configure({
+              document: ydoc,
+            }),
+            CollaborationCursor.configure({
+              provider: this.provider,
+              user: this.currentUser,
+            }),
+            CharacterCount.configure({
+              limit: 10000,
+            }),
+          ],
+        })
+      }
     },
 
     getDocs() {
@@ -458,14 +462,14 @@ export default {
             this.items[0].children.push({
               docId: docArray[j].document_id,
               name: docArray[j].title,
-              docContent: docArray[j].room_name,
+              docRoom: docArray[j].room_name,
+              //TODO
               file: 'txt',
             })
           }
           this.currentDoc.docId = this.items[0].children[0].docId;
           this.currentDoc.docName = this.items[0].children[0].name;
-          this.currentDoc.docContent = this.items[0].children[0].docContent;
-          console.log(this.currentDoc.docContent);
+          this.currentDoc.docRoom = this.items[0].children[0].docRoom;
           this.editor.destroy()
           this.provider.destroy()
           const ydoc = new Y.Doc()
@@ -475,7 +479,7 @@ export default {
             parameters: {
               key: 'write_bqgvQ3Zwl34V4Nxt43zR',
             },
-            name: this.currentDoc.docContent,
+            name: this.currentDoc.docRoom,
             document: ydoc,
           })
           this.provider.on('status', event => {
