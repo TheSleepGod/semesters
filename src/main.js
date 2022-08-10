@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
   }
-  if(to.path ==="/80") {
+  if(to.path ==="/80" || to.query === "/welcome" || to.query === "/home1") {
      next();
   } 
   else {
@@ -56,6 +56,7 @@ router.beforeEach((to, from, next) => {
   }
   next();
 })
+
 Vue.config.productionTip = false
 new Vue({
   router,

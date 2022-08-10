@@ -247,16 +247,29 @@ export default {
     },
     //todo:查看项目下原型图
     ShowPrototype(){
-      let toSend={
+      let toSend = {
         project_id:this.project_id
       }
       this.$axios({
         method:'post',
         url:'http://',
         data:JSON.stringify(toSend),
-      }).then((res) =>{
+      }).then((res) => {
         console.log(res);
-        this.items[0].children=res.data.data;
+        let tmp = {
+          id:33, 
+          name: 'package.json',
+          file: 'json',
+        }
+        this.items = [];
+        for(let i in res.data.data) {
+          tmp.id = i.id;
+          tmp.name = i.name;
+          tmp.file = 'json';
+          // this.items[0].children.id = res.data.data; 
+          this.items.push(tmp);
+        }
+        console.log("原型图加载完毕");
       })
     }
   },
