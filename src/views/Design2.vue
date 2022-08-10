@@ -135,17 +135,18 @@ export default {
               icon:'el-icon-document-delete',
               onClick: () => {
                 let toSend={
-                  id:item.id
+                  test_id:item.id
                 };
                 //todo:删除原型图
                 this.$axios({
                   method:'post',
-                  url:'http://',
+                  url:'http://101.42.160.94:8000/api/user_web/delete_prototype',
                   data:JSON.stringify(toSend)
                 }).then((res) =>{
                   console.log(res);
+                  this.$message("del success");
+                  this.ShowPrototype();
                 })
-                this.$message("del success");
               }
             },
           ],
@@ -159,9 +160,6 @@ export default {
       }
       return false;
     },
-    beSure(model){
-      this.design=this.models_list[model].content;
-    },
     getModel(val){
       let obj={}
       obj = this.models.find((item)=>{
@@ -172,7 +170,6 @@ export default {
       this.model_value=getName;
       console.log(getName)
     },
-    //todo:新建原型图
     CreatePic(){
       this.design=this.models_list[this.model_value].content;
       this.$axios({
@@ -269,7 +266,6 @@ export default {
       //   } else this.$notify.error(res.data.msg);
       // }).catch((error)=>{console.log(error)})
     },
-    //todo:查看项目下原型图
     ShowPrototype(){
       this.items[0].children=[];
       let toSend = {
