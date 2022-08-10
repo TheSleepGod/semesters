@@ -1,5 +1,5 @@
 <template>
-  <div id="all">
+  <div class="body-box">
     <div id="topBar-login">
       <div class="webLogo-box">
         <img class="webLogo" src="../assets/ink_black.png" alt=""/>
@@ -7,69 +7,75 @@
       <div class="logo-font-box">
         <div style="padding-top: 10px;">墨书</div>
       </div>
-      <div><el-button type="danger" @click="outerVisible = true" style="position: absolute;float: right;right: 10px;top:10px" round>登录/注册</el-button></div>
     </div>
-    <div id="main">
-      <div class="name">团队项目管理</div>
-      <div class="name1">专业一体化平台</div>
-      <div class="name2">墨书·让管理更简单</div>
-    </div>
-    <el-dialog title="登录" :visible.sync="outerVisible" width="600px" height="300px">
-      <el-form :model="loginForm" :rules="loginRules" label-width="80px" label-position="right">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="loginForm.username"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" show-password></el-input>
-        </el-form-item>
-      </el-form>
-      <el-dialog
-          title="用户注册"
-          width="600px"
-          :visible.sync="innerVisible"
-          append-to-body>
-        <el-form :model="createUserForm" :rules="registerRules" label-width="120px" label-position="right">
-          <el-form-item label="真实姓名" prop="name">
-            <el-input v-model="createUserForm.name"></el-input>
+    <div class="main-box">
+      <div :class="['container', 'container-register', { 'is-txl': isLogin }]">
+        <el-form :rules="registerRules" :model="createUserForm">
+          <h2 class="title">注册</h2>
+          <el-form-item prop="username">
+            <el-input v-model="createUserForm.username" class="form__input" type="text" placeholder="用户名"/>
           </el-form-item>
-          <el-form-item label="昵称" prop="username">
-            <el-input v-model="createUserForm.username"></el-input>
+          <el-form-item prop="password1">
+            <el-input v-model="createUserForm.password1" class="form__input" type="password" placeholder="密码" show-password/>
           </el-form-item>
-          <el-form-item label="密码" prop="password1">
-            <el-input v-model="createUserForm.password1"></el-input>
+          <el-form-item prop="password2">
+            <el-input v-model="createUserForm.password2" class="form__input" type="password" placeholder="再次输入密码" show-password/>
           </el-form-item>
-          <el-form-item label="再次输入密码" prop="password2">
-            <el-input v-model="createUserForm.password2"></el-input>
+          <el-form-item prop="email">
+            <div style="display: flex;">
+              <el-input v-model="createUserForm.email" class="form__input" type="text" placeholder="邮箱" style="width: 260px;"/>
+              <div class="verify-btn" @click="verify">发送验证码</div>
+            </div>
           </el-form-item>
-          <el-form-item label="邮箱" prop="email">
-            <span><el-input v-model="createUserForm.email" style="width: 328px"></el-input></span>
-            <span><el-button type="info" @click="verify()" plain>发送验证码</el-button></span>
+          <el-form-item prop="verifyCode">
+            <el-input v-model="createUserForm.verifyCode" class="form__input" type="text" placeholder="验证码"/>
           </el-form-item>
-          <el-form-item label="验证码" prop="verifyCode">
-            <el-input v-model="createUserForm.verifyCode"></el-input>
+          <el-form-item>
+            <div class="primary-btn" @click="register">立即注册</div>
           </el-form-item>
         </el-form>
-        <!-- 注册弹窗底部区 -->
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="register()">确 定</el-button>
-        </span>
-      </el-dialog>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" style="margin-right: 70px" @click="login()">登 录</el-button>
-<!--        <el-button @click="outerVisible = false">取 消</el-button>-->
-<!--        <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>-->
-        <a id="toRegister" @click="innerVisible = true">还未注册？点这里去注册</a>
       </div>
-    </el-dialog>
+      <div :class="['container', 'container-login', { 'is-txl is-z200': isLogin }]">
+        <el-form :rules="loginRules" :model="loginForm">
+          <h2 class="title">登录</h2>
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" class="form__input" type="text" placeholder="用户名"  />
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="loginForm.password" class="form__input" type="password" placeholder="密码" show-password/>
+          </el-form-item>
+          <el-form-item>
+            <div class="primary-btn" @click="login">立即登录</div>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div :class="['switch', { login: isLogin }]">
+        <div class="switch__circle"></div>
+        <div class="switch__circle switch__circle_top"></div>
+        <div class="switch__container">
+          <h2>{{ isLogin ? '期待您的加入' : '欢迎回来' }}</h2>
+          <p>
+            {{
+              isLogin
+                  ? '还没有账号？点击下方按钮前往注册'
+                  : '已创建过账号？点击下方按钮立即登录'
+            }}
+          </p>
+          <div class="primary-btn" @click="isLogin = !isLogin">
+            {{ isLogin ? '立即注册' : '立即登录' }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import qs from "qs"
+import qs from "qs";
 
 export default {
-  name: "home",
+  name: 'LoginBox',
   data() {
     let checkUsername = (rule, value, callback) => {
       let userName = /[_a-zA-Z0-9]{2,12}/;
@@ -100,8 +106,7 @@ export default {
       callback(new Error("邮箱格式：xx@xx.xx，只含数字、大小写字母、下划线、横杠"));
     };
     return {
-      innerVisible: false,
-      outerVisible: false,
+      isLogin: false,
       loginForm: {
         username: '',
         password: '',
@@ -119,14 +124,13 @@ export default {
         password: [{required: true, message: '请输入密码', trigger: 'blur'}, {validator: checkNewPwd, trigger: 'blur'}],
       },
       registerRules: {
-        name: [{required: true, message: '请输入真实姓名', trigger: 'blur'}],
         username: [{required: true, message: '请输入用户名', trigger: 'blur'}, {validator: checkUsername, trigger: 'blur'}],
         password1: [{required: true, message: '请输入密码', trigger: 'blur'}, {validator: checkNewPwd, trigger: 'blur'}],
         password2: [{required: true, message: '请确认密码', trigger: 'blur'}, {validator: checkNewPwd2, trigger: 'blur'}],
         email: [{required: true, message: '请输入邮箱', trigger: 'blur'}, {validator: checkEmail, trigger: 'blur'}],
         verifyCode: [{required: true, message: '请输入验证码', trigger: 'blur'}]
       },
-    };
+    }
   },
   methods:{
     getNowUser() {
@@ -189,7 +193,15 @@ export default {
       }).then((ret) => {
         if (ret.data.errno === 0) {
           this.$message.success("注册成功");
-          this.innerVisible = false;
+          this.isLogin = !this.isLogin;
+          this.createUserForm = {
+            name: '',
+            username: '',
+            password1: '',
+            password2: '',
+            email: '',
+            verifyCode: '',
+          };
         } else {
           alert(ret.data.msg);
           this.$message.error("登录失败");
@@ -220,11 +232,201 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.main-box {
+  margin-left: 17%;
+  position: relative;
+  width: 66%;
+  min-width: 1000px;
+  min-height: 600px;
+  height: 600px;
+  padding: 25px;
+  background-color: #ecf0f3;
+  box-shadow: 10px 10px 10px #d1d9e6, -10px -10px 10px #f9f9f9;
+  border-radius: 12px;
+  overflow: hidden;
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    width: 600px;
+    height: 100%;
+    padding: 25px;
+    background-color: #ecf0f3;
+    transition: all 1.25s;
+    form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      color: #a0a5a8;
+      .title {
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 3;
+        color: #181818;
+      }
+      .text {
+        margin-top: 30px;
+        margin-bottom: 12px;
+      }
+      .form__input {
+        width: 350px;
+        height: 40px;
+        margin: 4px 0;
+        padding-left: 25px;
+        font-size: 13px;
+        letter-spacing: 0.15px;
+        border: none;
+        outline: none;
+        // font-family: 'Montserrat', sans-serif;
+        background-color: #ecf0f3;
+        transition: 0.25s ease;
+        border-radius: 8px;
+        box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9;
+        &::placeholder {
+          color: #a0a5a8;
+        }
+      }
+    }
+  }
+  .container-register {
+    z-index: 100;
+    left: calc(100% - 600px);
+  }
+  .container-login {
+    left: calc(100% - 600px);
+    z-index: 0;
+  }
+  .is-txl {
+    left: 0;
+    transition: 1.25s;
+    transform-origin: right;
+  }
+  .is-z200 {
+    z-index: 200;
+    transition: 1.25s;
+  }
+  .switch {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 400px;
+    padding: 50px;
+    z-index: 200;
+    transition: 1.25s;
+    background-color: #ecf0f3;
+    overflow: hidden;
+    box-shadow: 4px 4px 10px #d1d9e6, -4px -4px 10px #f9f9f9;
+    color: #a0a5a8;
+    .switch__circle {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background-color: #ecf0f3;
+      box-shadow: inset 8px 8px 12px #d1d9e6, inset -8px -8px 12px #f9f9f9;
+      bottom: -60%;
+      left: -60%;
+      transition: 1.25s;
+    }
+    .switch__circle_top {
+      top: -30%;
+      left: 60%;
+      width: 300px;
+      height: 300px;
+    }
+    .switch__container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      position: absolute;
+      width: 400px;
+      padding: 50px 55px;
+      transition: 1.25s;
+      h2 {
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 3;
+        color: #181818;
+      }
+      p {
+        font-size: 14px;
+        letter-spacing: 0.25px;
+        text-align: center;
+        line-height: 1.6;
+      }
+    }
+  }
+  .login {
+    left: calc(100% - 400px);
+    .switch__circle {
+      left: 0;
+    }
+  }
+  .primary-btn {
+    transition: all 0.3s;
+    width: 180px;
+    height: 50px;
+    border-radius: 25px;
+    margin-top: 25px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    background-color: #4b70e2;
+    color: #f9f9f9;
+    cursor: pointer;
+    box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #f9f9f9;
+    &:hover {
+      box-shadow: 4px 4px 6px 0 rgb(255 255 255 / 50%),
+      -4px -4px 6px 0 rgb(116 125 136 / 50%),
+      inset -4px -4px 6px 0 rgb(255 255 255 / 20%),
+      inset 4px 4px 6px 0 rgb(0 0 0 / 40%);
+    }
+  }
+}
+.verify-btn{
+  cursor: pointer;
+  width: 80px;
+  padding: 0 5px 0 5px;
+  margin-top: 4px;
+  margin-left: 10px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 13px;
+  border-radius: 8px;
+  background-color: #ecf0f3;
+  box-shadow: 2px 2px 4px #d1d9e6, -2px -2px 4px #f9f9f9;
+}
+.verify-btn:hover{
+  box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9;
+}
+.verify-btn:active{
+  font-weight: bold;
+  background-color: ghostwhite;
+}
+::v-deep .el-input__inner{
+  background-color: #ecf0f3 !important;
+  border: none 0 !important;
+  padding-left: 0 !important;
+  height: 30px !important;
+  line-height: 30px !important;
+}
+.body-box{
+}
 #topBar-login{
   position: relative;
   display: flex;
-  background-color: white;
   height: 70px;
   padding: 0;
 }
@@ -242,59 +444,5 @@ export default {
   width: 70px;
   font-size: 30px;
 }
-#main{
-  background-image:url('../assets/mainBk.png');
-  background-size: 100% 100%;
-  background-position: center center;
-  width: 100%;
-  height: 710px;
-  /*background-color: #42b983;*/
-}
-
-.name{
-  font-size: 50px;
-  background-clip: border-box;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-  text-shadow: 0 0 7px #ffd800;
-  background-image: linear-gradient(90deg,#ffd800 0%,#ff512f 100%,#fff);
-  animation:glow-animation 2s infinite linear;
-  color: #FFC0CB;
-  box-sizing: border-box;
-  vertical-align: inherit;
-  position: relative;
-  top: 200px;
-  font-family: NSimSun sans-serif;
-}
-.name1{
-  font-family: STHeiTi sans-serif;
-  position:relative;
-  top:220px;
-  font-size: 60px;
-}
-.name2{
-  position:relative;
-  top:250px;
-  font-size:25px;
-  color: #808080;
-}
-@keyframes glow-animation {
-  0%{filter: hue-rotate(360deg)}
-  /*25%{filter: hue-rotate(360deg)}*/
-  /*50%{filter: hue-rotate(-360deg)}*/
-  /*75%{filter: hue-rotate(360deg)}*/
-  4000%{filter: hue-rotate(-360deg)}
-}
-
-#toRegister{
-  color: black;
-  text-decoration:underline;
-}
-
-#toRegister:hover{
-  color: #0997F7;
-  cursor:pointer;
-}
-
 </style>
+
