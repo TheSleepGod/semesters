@@ -193,6 +193,16 @@ export default {
       username:'',
       projectsFolder,
       otherFolders,
+      currentDoc:{
+        project_id: '',
+        folder_id: '',
+        docId: '',
+        docName: '',
+        docRoom: '',
+        openType:'',
+        content: {},
+        type: '',
+      },
     }
   },
   methods: {
@@ -255,7 +265,7 @@ export default {
       this.createDocVisible = true;
     },
     openDoc(doc ,id){
-      let tempDoc = {
+      this.currentDoc = {
         project_id: id,
         folder_id: id,
         docId: doc.docId,
@@ -265,8 +275,7 @@ export default {
         content: doc.content,
         type: doc.type,
       }
-      this.$emit('input',tempDoc);
-
+      this.$emit('input',this.currentDoc);
       this.$parent.changeRoom();
       doc.openType = '';
     },
@@ -338,6 +347,10 @@ export default {
         if(res.data.errno===0){
           this.$message.success("重命名成功");
           this.getTeamAllDocs();
+          if(this.currentDoc.docId===this.renameDoc.docId && this.currentDoc.type===this.renameDoc.type){
+            this.currentDoc.docName = this.renameDoc.newName;
+            this.$emit('input',this.currentDoc);
+          }
           this.beClose();
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
@@ -362,6 +375,10 @@ export default {
         if(res.data.errno===0){
           this.$notify.success("文档 "+doc.docName+" 已删除");
           this.getTeamAllDocs();
+          if(this.currentDoc.docId===doc.docId && this.currentDoc.type===doc.type){
+            this.currentDoc={project_id:'',folder_id:'',docId:'',docName:'',docRoom:'initial_#'+this.$route.query.teamId+'q6Ul'+this.$route.query.teamId+'Q3nC3'+this.$route.query.teamId+'g3XEo'+this.$route.query.teamId[0],openType:'',content:{},type:'',};
+            this.openDoc(this.currentDoc)
+          }
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
     },
@@ -384,6 +401,10 @@ export default {
         if(res.data.errno===0){
           this.$notify.success("文件夹 "+folder.folderName+" 已整体删除");
           this.getTeamAllDocs();
+          if(this.currentDoc.folder_id===folder.folderId){
+            this.currentDoc={project_id:'',folder_id:'',docId:'',docName:'',docRoom:'initial_#'+this.$route.query.teamId+'q6Ul'+this.$route.query.teamId+'Q3nC3'+this.$route.query.teamId+'g3XEo'+this.$route.query.teamId[0],openType:'',content:{},type:'',};
+            this.openDoc(this.currentDoc)
+          }
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
     },
@@ -479,7 +500,6 @@ export default {
                 }
               } else this.$notify.error(res.data.msg)
             }).catch((error)=>{console.log(error)})}
-          console.log(this.otherFolders)
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
     },

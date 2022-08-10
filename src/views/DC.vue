@@ -124,7 +124,7 @@ export default {
         folder_id: '',
         docId: '',
         docName: '',
-        docRoom: '',
+        docRoom: uniqueNum,
         openType:'',
         content: {},
         type: '',
@@ -680,7 +680,7 @@ export default {
   background-color: ghostwhite;
 }
 .center-doc-title{
-  height: 20px;
+  height: 50px;
   line-height: 50px;
   font-size: 24px;
 }
