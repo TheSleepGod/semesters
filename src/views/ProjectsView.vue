@@ -35,7 +35,7 @@
           <div class="projectsCard" id="commonPrCard" v-for="item in projectsList" :key="item.data" v-if="item.isRecycled===0"
                @click="gotoProject(item)" @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
             <div class="projectsCardFoot">
-              <span class="projectsNameSpan">{{item.name}}</span>
+              <span class="projectsNameSpan" :title="item.name">{{item.name}}</span>
               <span class="projectsBtn">
                 <i class="el-icon-document-copy" v-if="item.isHover" title="生成副本" style="margin-right: 5px" @click.stop="copy(item)"/>
                 <i class="el-icon-edit-outline" v-if="item.isHover" title="重命名" style="margin-right: 5px" @click.stop="showRename(item)"/>
@@ -58,7 +58,7 @@
           <div class="projectsCard" id="recyclePrCard" v-for="item in projectsList" :key="item.data" v-if="item.isRecycled!==0"
                @mouseenter="showIcon(item)" @mouseleave="hideIcon(item)">
             <div class="projectsCardFoot">
-              <span class="projectsNameSpan">{{item.name}}</span>
+              <span class="projectsNameSpan" :title="item.name">{{item.name}}</span>
               <span class="projectsBtn">
                   <i class="el-icon-refresh-left" v-if="item.isHover" title="恢复" style="margin-right: 10px" @click.stop="recover(item)"></i>
                   <i class="el-icon-delete-solid" v-if="item.isHover" title="彻底删除" style="margin-right: -20px" @click.stop="confirmDelete(item)"></i>
@@ -301,19 +301,33 @@ export default {
       })
     },
     copy(item){
-      // this.$axios.post(
-      //     'http://43.138.22.20:8000/api/user/copy_project',
-      //     qs.stringify({
-      //       project_id: item.id
-      //     })
-      // ).then((res)=>{
-      //   if(res.data.errno===0){
-      //     this.$notify.success("已生成项目副本：副本-"+item.name);
-      //     this.getTeamProjects();
-      //   } else this.$notify.error("副本生成失败,"+res.data.msg);
-      // }).catch((error)=>{
-      //   console.log(error)
-      // })
+      let tmpName = item.name;
+      let flag = true;
+      while (flag){
+        let isRepeat = false;
+        for(let i in this.projectsList){
+          if(tmpName === this.projectsList[i].name){
+            isRepeat = true;
+            tmpName += '_副本';
+            break;
+          }
+        }
+        if(!isRepeat) flag = false;
+      }
+      this.$axios.post(
+          'http://43.138.22.20:8000/api/user/copy_project',
+          qs.stringify({
+            project_id: item.id,
+            project_name: tmpName,
+          })
+      ).then((res)=>{
+        if(res.data.errno===0){
+          this.$notify.success("已生成项目副本："+item.name+"_副本");
+          this.getTeamProjects();
+        } else this.$notify.error("副本生成失败,"+res.data.msg);
+      }).catch((error)=>{
+        console.log(error)
+      })
     },
     rename(){
       this.$axios.post(
