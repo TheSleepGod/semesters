@@ -14,7 +14,6 @@
   text-align: center;
   color: #2c3e50;
   background: whitesmoke;
-  position:fixed;
   top:0;
   left:0;
   bottom:0;
