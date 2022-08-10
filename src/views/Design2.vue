@@ -5,7 +5,7 @@
           <div class="newCreate" @click="switchVis"><i class="el-icon-document-add"></i>&nbsp&nbsp新建原型图</div>
         <el-dialog title="新建原型图" :visible.sync="createVisible" style="width:60%;margin-left: 20%">
           <div style="margin-bottom: 30px">
-          <el-select v-model="model_value" placeholder="请选择" @change="getModel">
+          <el-select v-model="model_value" placeholder="请选择你的模板" @change="getModel">
             <el-option
                 v-for="item in models"
                 :key="item.value"
