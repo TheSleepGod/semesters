@@ -49,8 +49,12 @@
             <h1 style="margin-left: 60px;margin-top: 8px">{{this.name}}</h1>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
+<<<<<<< HEAD
             <button v-on:click="stopHtml">关闭页面</button>
             <button v-on:click="keepDesign">共享页面</button>
+=======
+            <button v-on:click="exportImage">共享页面</button>
+>>>>>>> c448f8fd53747a14a5415699ab6f0f9b45875966
           </div>
 
             <EmailEditor ref="emailEditor" v-on:load="editorLoaded" v-on:ready="editorReady" />
@@ -411,8 +415,8 @@ html, body {
   border: 1px solid black;
 }
 .newCreate{
-  margin-top: 10px;
-  margin-bottom: 10px;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   font-size: 20px;
