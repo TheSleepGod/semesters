@@ -65,14 +65,14 @@ export default {
         tools:{
           image: {
             enabled: false
-          }
+          },
+
         },
         source: {
           name: pkg.name,
           version: pkg.version,
         },
       });
-
 
       this.$emit('load');
 
