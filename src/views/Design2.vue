@@ -157,6 +157,8 @@ export default {
                   console.log(res);
                   this.$message("del success");
                   this.ShowPrototype();
+                  this.$refs.emailEditor.editor.loadDesign(this.models_list[1].content);
+                  this.name='电子邮件模板';
                 })
               }
             },
