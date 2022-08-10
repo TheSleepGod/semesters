@@ -39,13 +39,14 @@
           style="text-align: left"
         >
           <template v-slot:prepend="{ item, open }" >
-            <div @click="chooseDoc(item)" @contextmenu.prevent="onContextmenu($event,item)">
+            <div @click="chooseDoc(item)" @contextmenu.prevent="onContextmenu($event,item)" style="position: relative; float: left">
               <v-icon v-if="!item.file">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
               <v-icon v-else>
                 {{ files[item.file]}}
               </v-icon>
+              <div @contextmenu.prevent="onContextmenu($event,item)" style="height: 30px; width: 200px; position: relative; float: right; margin-right: -200px;" @click="loadDesign(item)"></div>
             </div>
           </template>
         </v-treeview>
