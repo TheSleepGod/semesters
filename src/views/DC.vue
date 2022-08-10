@@ -5,11 +5,11 @@
     <div class="main-box">
       <div class="main-center-box">
         <div class="center-head-box">
-          <div class="center-head-font">
-            <div class="head-font font-1" style="border-radius: 5px; width: 150px; height: 50px; background: coral; text-align: center;line-height: 50px;">
+          <div class="center-head-font font-1">
+            <div class="head-font head-teamName-font">
               {{team.teamName}}
             </div>
-            <div class="head-font font-1" >
+            <div class="head-font">
               <img src="../assets/png/document.png" alt="" style="height: 60px; width: 60px; left: 20px; position: relative; ">
               <span style="position: relative; float: right; top: -5px; left: 20px;">文档中心</span>
             </div>
@@ -571,13 +571,25 @@ export default {
 
 <style scoped>
 
+.font-1 {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+}
 .head-font{
   font-size: 28px;
   float: left;
   text-align: left;
 }
-.font-1 {
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+.head-teamName-font{
+  cursor: default;
+  border-radius: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  min-width: 100px;
+  height: 50px;
+  background-color: white;
+  text-align: center;
+  line-height: 50px;
+  box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9;
 }
 .body-box{
 }

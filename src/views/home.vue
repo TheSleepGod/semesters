@@ -147,9 +147,8 @@ export default {
           //console.log(ret.data.data);
           this.$notify.info('已检测到登录信息,即将跳转...')
           setTimeout(()=>{this.$router.push('/team');},2000)
-        } else this.$notify.error(ret.data.msg);
-        //console.log(this.user_id);
-      })
+        } else if(ret.data.errno !== 5003)this.$notify.error(ret.data.msg);
+      }).catch((error)=>{console.log(error)})
     },
     login: function () {
       let con = {
@@ -171,10 +170,7 @@ export default {
           this.$message.success("登录成功");
           console.log("我要跳转啦");
           this.$router.push('/team');
-        } else {
-          this.$notify.error(ret.data.msg);
-          this.$message.error("登录失败");
-        }
+        } else this.$notify.error(ret.data.msg+"，登录失败");
       })
     },
     register: function () {
@@ -202,10 +198,7 @@ export default {
             email: '',
             verifyCode: '',
           };
-        } else {
-          alert(ret.data.msg);
-          this.$message.error("登录失败");
-        }
+        } else this.$notify.error(ret.data.msg+"，注册失败");
       })
     },
     verify: function () {
