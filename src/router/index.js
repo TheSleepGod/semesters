@@ -116,6 +116,11 @@ const routes = [
     path: '/welcome',
     name: 'showDesign',
     component: () => import('../views/ShowDesign'),
+  },
+  {
+    path: '/home1',
+    name: 'home1',
+    component: () => import('../views/home1'),
   }
 ]
 
