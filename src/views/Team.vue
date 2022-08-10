@@ -19,16 +19,16 @@
       <div id="showCase2" v-if="isChanging">
         <div class="left-changeMesForm">
           <div class="left-changeMesForm-line">
+            <span class="changeMesForm-label">UID</span>
+            <input :placeholder = "this.user_id" class="changeMesForm-input" maxlength="16" v-model="user_id" disabled="disabled"/>
+          </div>
+          <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">昵称</span>
-            <input :placeholder = "this.username" class="changeMesForm-input" maxlength="16" v-model="newName" disabled="disabled"/>
+            <input :placeholder = "this.username" class="changeMesForm-input" maxlength="16" v-model="username" disabled="disabled"/>
           </div>
           <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">邮箱</span>
-            <input :placeholder = "this.mail" class="changeMesForm-input" maxlength="16" v-model="newPhone" disabled="disabled"/>
-          </div>
-          <div class="left-changeMesForm-line">
-            <span class="changeMesForm-label">uid</span>
-            <input :placeholder = "this.user_id" class="changeMesForm-input" maxlength="16" v-model="newName" disabled="disabled"/>
+            <input :placeholder = "this.mail" class="changeMesForm-input" maxlength="16"  disabled="disabled"/>
           </div>
           <div class="left-changeMesForm-line">
             <span class="changeMesForm-label">真实姓名</span>
@@ -163,7 +163,7 @@ export default {
         let ans = res.data;
         if(ans.errno===0){
           this.$message({
-            message: '修改成功！！！',
+            message: '修改成功',
             type: 'success'
           });
         }
