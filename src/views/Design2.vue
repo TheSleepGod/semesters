@@ -292,10 +292,10 @@ export default {
             console.log(design);
             console.log(typeof design)
             this.design=design;
+            this.exportHtml();
+            this.$router.push({path:'/welcome',query:{projectId:  this.project_id}})
           }
       );
-      this.exportHtml();
-      this.$router.push({path:'/welcome',query:{projectId: this.projectId}})
     },
     ShowPrototype(){
       this.items[0].children=[];
