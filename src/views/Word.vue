@@ -134,6 +134,8 @@ export default {
         type: '',
         projectId: '',
         folderId: '',
+        openType: '',
+        content: ''
       },
       renameDocVisible: false,
       delVisible: false,
@@ -233,6 +235,8 @@ export default {
             project_id: this.renameDoc.projectId,
             folder_id: this.renameDoc.folderId,
             document_type: this.renameDoc.type,
+            content: '',
+            open_type:this.renameDoc.openType
           })
       ).then((res)=>{
         if(res.data.errno===0){
@@ -244,7 +248,9 @@ export default {
             newName: '',
             projectId: '',
             folderId: '',
-            type: ''
+            type: '',
+            content: '',
+            openType: '',
           };
         } else this.$notify.error(res.data.msg)
       }).catch((error)=>{console.log(error)})
@@ -463,7 +469,7 @@ export default {
               docId: docArray[j].document_id,
               name: docArray[j].title,
               docRoom: docArray[j].room_name,
-              //TODO
+
               file: 'txt',
             })
           }

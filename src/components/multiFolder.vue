@@ -182,6 +182,8 @@ export default {
         type: '',
         projectId: '',
         folderId: '',
+        content: '',
+        openType: '',
       },
       username:'',
       projectsFolder,
@@ -195,7 +197,7 @@ export default {
   },
   methods: {
     beClose(){
-      this.renameDocVisible = false; this.renameDoc={id:'',newName:'',docId:'',type:'',projectId:'',folderId: ''};
+      this.renameDocVisible = false; this.renameDoc={id:'',newName:'',docId:'',type:'',projectId:'',folderId: '',content: '',openType: ''};
       this.createDocVisible = false; this.newDoc={projectId: '', folderId: '', name: '', type: 0};
       this.createFolderVisible = false; this.newFolder.name='';
     },
@@ -209,7 +211,9 @@ export default {
         newName: doc.docName,
         projectId: id,
         folderId: id,
-        type: type===0 ? 'project_document':'other_document'
+        type: type===0 ? 'project_document':'other_document',
+        content: doc.content,
+        openType: doc.openType,
       }
       this.renameDocVisible = true;
     },
@@ -289,6 +293,8 @@ export default {
             project_id: this.renameDoc.projectId,
             folder_id: this.renameDoc.folderId,
             document_type: this.renameDoc.type,
+            content: this.renameDoc.content,
+            open_type: this.renameDoc.openType
           })
       ).then((res)=>{
         if(res.data.errno===0){
