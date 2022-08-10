@@ -12,7 +12,9 @@
       </div>
       <div class = "icon-head-box">
         <el-dropdown @command="handleHeadCommand" placement="bottom" trigger="hover">
-          <img class = "icon-head" src="../assets/icon.jpg" alt="" @click="goHome">
+<!--          <img class = "icon-head" src="../assets/icon.jpg" alt="" @click="goHome">-->
+          <Avatar class="icon-head" :username="username" :src="username" :background-color="extractColorByName(username)"
+                  color="#fff" style="vertical-align: middle;" :inline="true"/>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="gotoTeams">我的团队</el-dropdown-item>
             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
@@ -25,18 +27,24 @@
 
 <script>
 import axios from "axios";
-
+import Avatar from "vue-avatar";
 export default {
   name: "topBar",
   props:['username'],
+  components:{Avatar},
   data(){
     return{
       //username: 'lsc1111',
     }
   },
   methods:{
-    goHome() {
-      this.$router.push({path:'/team'})
+    extractColorByName(name) {
+      let temp = [];
+      temp.push("#");
+      for (let index = 0; index < name.length; index++) {
+        temp.push(parseInt(name[index].charCodeAt(0), 10).toString(16));
+      }
+      return temp.slice(0, 5).join('').slice(0, 4);
     },
     handleHeadCommand(command){
       switch (command){
