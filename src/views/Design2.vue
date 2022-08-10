@@ -211,6 +211,7 @@ export default {
             console.log(design);
             console.log(typeof design)
             this.design=design;
+            this.putProToProject(1,this.nowProjectId,"test");
           }
       )
     },
@@ -220,6 +221,20 @@ export default {
             console.log('exportHtml', data);
           }
       )
+    },
+    putProToProject(testId,projectId,title) {
+      let param = {
+        test_id: testId,
+        title: title,
+        project_id: projectId
+      };
+      this.$axios( {
+        method: 'post',
+        url: 'http://101.42.160.94:8000/api/user_web/update_prototype',
+        data: JSON.stringify(param)
+      }).then((res) => {
+        console.log(res);
+      }) 
     },
     //todo:分享页面
     shareDesign() {
@@ -236,7 +251,7 @@ export default {
     },
     //todo:查看项目下原型图
     ShowPrototype(){
-      let toSend={
+      let toSend = {
         project_id:this.project_id
       }
       this.$axios({
