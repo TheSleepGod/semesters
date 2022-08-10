@@ -46,7 +46,7 @@
         <div id="example">
         <div class="container">
           <div id="bar">
-            <h1 style="margin-left: 60px">{{this.name}}</h1>
+            <h1 style="margin-left: 60px;margin-top: 8px">{{this.name}}</h1>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
             <button v-on:click="shareDesign">共享页面</button>
@@ -76,7 +76,7 @@ export default {
   data(){
     let nowProjectId;
     return{
-      name:'设计图1',
+      name:'model1',
       design:{},
       newName:'',
       createVisible:false,
@@ -135,17 +135,18 @@ export default {
               icon:'el-icon-document-delete',
               onClick: () => {
                 let toSend={
-                  id:item.id
+                  test_id:item.id
                 };
                 //todo:删除原型图
                 this.$axios({
                   method:'post',
-                  url:'http://',
+                  url:'http://101.42.160.94:8000/api/user_web/delete_prototype',
                   data:JSON.stringify(toSend)
                 }).then((res) =>{
                   console.log(res);
+                  this.$message("del success");
+                  this.ShowPrototype();
                 })
-                this.$message("del success");
               }
             },
           ],
@@ -159,9 +160,6 @@ export default {
       }
       return false;
     },
-    beSure(model){
-      this.design=this.models_list[model].content;
-    },
     getModel(val){
       let obj={}
       obj = this.models.find((item)=>{
@@ -172,7 +170,6 @@ export default {
       this.model_value=getName;
       console.log(getName)
     },
-    //todo:新建原型图
     CreatePic(){
       this.design=this.models_list[this.model_value].content;
       this.$axios({
@@ -209,8 +206,9 @@ export default {
           url : 'http://101.42.160.94:8000/api/user_web/get_prototype',
           data : JSON.stringify(toSend)
         }).then((res) =>{
-          console.log(res.data.data);
+          console.log(res.data);
           this.design=res.data.data;
+          this.name=res.data.title;
           console.log(this.design)
           setTimeout(() =>{
             this.$refs.emailEditor.editor.loadDesign(this.design);
@@ -269,7 +267,6 @@ export default {
       //   } else this.$notify.error(res.data.msg);
       // }).catch((error)=>{console.log(error)})
     },
-    //todo:查看项目下原型图
     ShowPrototype(){
       this.items[0].children=[];
       let toSend = {
