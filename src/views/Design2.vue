@@ -49,7 +49,7 @@
             <h1 style="margin-left: 60px;margin-top: 8px">{{this.name}}</h1>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
-            <button v-on:click="shareDesign">共享页面</button>
+            <button v-on:click="exportImage">共享页面</button>
           </div>
 
             <EmailEditor ref="emailEditor" v-on:load="editorLoaded" v-on:ready="editorReady" />
@@ -247,6 +247,20 @@ export default {
       this.$refs.emailEditor.editor.exportHtml(
           (data) => {
             console.log('exportHtml', data);
+          }
+      )
+    },
+    exportText() {
+      this.$refs.emailEditor.editor.exportPlainText(
+          (data) => {
+            console.log('exportText', data);
+          }
+      )
+    },
+    exportImage() {
+      this.$refs.emailEditor.editor.exportImage(
+          (data) => {
+            console.log('exportImage', data);
           }
       )
     },
