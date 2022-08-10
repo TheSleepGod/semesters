@@ -1,7 +1,7 @@
 <template>
   <div id="topBar">
     <div class="webLogo-box">
-      <img class="webLogo" src="../assets/ink_black.png" alt=""/>
+      <img class="webLogo" src="../assets/final_logo.png" alt=""/>
     </div>
     <div class="logo-font-box">
       <div style="padding-top: 15px;">墨书</div>
@@ -106,6 +106,7 @@ export default {
   caret-color: transparent;
 }
 .webLogo-box{
+  margin-left: 5px;
   float: left;
   height: 70px;
   width: 70px;
@@ -113,13 +114,15 @@ export default {
 .webLogo{
   padding-top: 5px;
   height: 60px;
+  width: 60px;
 }
 .logo-font-box{
+  font-family:华文行楷,serif;
   cursor: default;
   display: table-cell;
   vertical-align: middle;
   width: 70px;
-  font-size: 30px;
+  font-size: 35px;
 }
 .icon-head-box {
   float: right;

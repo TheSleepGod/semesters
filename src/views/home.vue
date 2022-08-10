@@ -2,7 +2,7 @@
   <div class="body-box">
     <div id="topBar-login">
       <div class="webLogo-box">
-        <img class="webLogo" src="../assets/ink_black.png" alt=""/>
+        <img class="webLogo" src="../assets/final_logo.png" alt=""/>
       </div>
       <div class="logo-font-box">
         <div style="padding-top: 10px;">墨书</div>
@@ -425,18 +425,22 @@ export default {
   padding: 0;
 }
 .webLogo-box{
+  margin-left: 5px;
   float: left;
   height: 70px;
   width: 70px;
 }
 .webLogo{
-  margin-top: 2px;
+  padding-top: 5px;
   height: 60px;
+  width: 60px;
 }
 .logo-font-box{
+  padding-top: 5px;
+  font-family:华文行楷,serif;
   display: table-cell;
   width: 70px;
-  font-size: 30px;
+  font-size: 35px;
 }
 </style>
 
