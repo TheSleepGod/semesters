@@ -25,11 +25,13 @@
               <div class = "second-folder" v-for="(oneProjectFolder) in projectsFolder.projectsList">
                 <div class="second-folder-title" @click="reverseVisible(oneProjectFolder)"
                      @mouseenter="showIcon(oneProjectFolder)" @mouseleave="hideIcon(oneProjectFolder)">
-                  <div style="margin-left: 37px;">
-                    <i class="el-icon-caret-right folder-tool-icon" v-if="!oneProjectFolder.isActive">&nbsp</i>
-                    <i class="el-icon-caret-bottom folder-tool-icon" v-if="oneProjectFolder.isActive">&nbsp</i>
-                    <i class="el-icon-folder" v-if="!oneProjectFolder.isActive">{{oneProjectFolder.projectName}}</i>
-                    <i class="el-icon-folder-opened" v-if="oneProjectFolder.isActive">{{oneProjectFolder.projectName}}</i>
+                  <div style="margin-left: 37px;" class="second-folder-title-box">
+                    <div class="second-folder-title-font">
+                      <i class="el-icon-caret-right folder-tool-icon" v-if="!oneProjectFolder.isActive">&nbsp</i>
+                      <i class="el-icon-caret-bottom folder-tool-icon" v-if="oneProjectFolder.isActive">&nbsp</i>
+                      <i class="el-icon-folder" v-if="!oneProjectFolder.isActive">{{oneProjectFolder.projectName}}</i>
+                      <i class="el-icon-folder-opened" v-if="oneProjectFolder.isActive">{{oneProjectFolder.projectName}}</i>
+                    </div>
                     <i class="el-icon-plus folder-tool-icon folder-tool-icon-right" title="新建文档"
                        v-if="oneProjectFolder.isHover" @click.stop="showCreateDoc(0,oneProjectFolder.projectId)"/>
                   </div>
@@ -558,12 +560,24 @@ export default {
 
 }
 .second-folder-title{
+  max-width: 100%;
   cursor: pointer;
   transition: all 0.5s;
 }
 .second-folder-title:hover{
   background-color: whitesmoke;
   color: dodgerblue;
+}
+.second-folder-title-box{
+  min-width: 0;
+}
+.second-folder-title-font{
+  max-width: 200px;
+  margin-right: 5px;
+  width: 97%;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.25s;
 }
 .second-folder-content{
 
