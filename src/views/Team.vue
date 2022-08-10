@@ -4,7 +4,9 @@
     <div class="left">
       <div id="showCase1" v-if="!isChanging">
         <div class = "left-head-box">
-          <img class = "left-head-img" src="../assets/icon.jpg" alt="">
+<!--          <img class = "left-head-img" src="../assets/icon.jpg" alt="">-->
+          <Avatar class="left-head-img" :username="username" :src="username" :background-color="extractColorByName(username)"
+                  color="#fff" style="vertical-align: middle;" :inline="true"/>
         </div>
         <div class = "left-message-box" style="margin-top: 10px">
           <div class = "left-id-box">
@@ -89,10 +91,11 @@
 
 <script>
 import topBar from "@/components/topBar";
+import Avatar from "vue-avatar";
 import qs from "qs";
 export default {
   components:{
-    topBar
+    topBar,Avatar
   },
   name: "Team",
   data() {
@@ -116,6 +119,14 @@ export default {
     }
   },
   methods: {
+    extractColorByName(name) {
+      let temp = [];
+      temp.push("#");
+      for (let index = 0; index < name.length; index++) {
+        temp.push(parseInt(name[index].charCodeAt(0), 10).toString(16));
+      }
+      return temp.slice(0, 5).join('').slice(0, 4);
+    },
     gotoTeamOne(team) {
       this.$router.push({path:'/projects',query:{teamName:team.teamName,teamId:team.id}})
     },
@@ -308,9 +319,13 @@ export default {
   margin-left: 10%;
   caret-color: transparent;
 }
+.vue-avatar--wrapper{
+  font-size: 120px !important;
+}
 .left-head-img {
   position: relative;
-  width: 80%;
+  min-width: 240px;
+  min-height: 240px;
   margin-top: 10%;
   border-radius: 150px;
 }
