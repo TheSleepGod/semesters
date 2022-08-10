@@ -1,5 +1,5 @@
 <template>
-  <div id="topBar" @click="goHome" style="cursor: pointer">
+  <div id="topBar">
     <div class="webLogo-box">
       <img class="webLogo" src="../assets/ink_black.png" alt=""/>
     </div>
@@ -12,7 +12,7 @@
       </div>
       <div class = "icon-head-box">
         <el-dropdown @command="handleHeadCommand" placement="bottom" trigger="hover">
-          <img class = "icon-head" src="../assets/icon.jpg" alt="">
+          <img class = "icon-head" src="../assets/icon.jpg" alt="" @click="goHome">
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="gotoTeams">我的团队</el-dropdown-item>
             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
@@ -115,6 +115,7 @@ export default {
   height: 60px;
 }
 .logo-font-box{
+  cursor: default;
   display: table-cell;
   vertical-align: middle;
   width: 70px;
@@ -134,6 +135,7 @@ export default {
   border-radius: 35px;
 }
 .username {
+  cursor: default;
   display: inline-block;
   position: relative;
   margin-right: 10px;

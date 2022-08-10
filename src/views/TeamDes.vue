@@ -324,7 +324,7 @@ export default {
 .right-box {
   position: relative;
   padding: 0;
-  left: 160px;
+  left: 170px;
 }
 .right-head-box {
   position: relative;
@@ -336,8 +336,15 @@ export default {
   position: relative;
   float: left;
   font-size: 28px;
-  text-align: left;
+  text-align: center;
   margin-top: 11px;
+  cursor: default;
+  border-radius: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: white;
+  line-height: 50px;
+  box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9;
 }
 .right-head-name-box {
   height: 60px;
@@ -365,7 +372,7 @@ export default {
   height: 25px;
   margin-left: 10px;
   background: darkgrey;
-  top:20px;
+  top:25px;
   text-align: center;
   border-radius: 5px;
   cursor: default;
@@ -391,20 +398,21 @@ export default {
   display: flex;
 }
 .right-people-mes-box {
+  background-color: white;
   width: 380px;
   height: 140px;
   position: relative;
   border-radius: 30px;
-  box-shadow: 1px 1px 2px 0 darkgrey;
+  box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9;
   margin-right: 25px;
   margin-bottom: 25px;
   flex-wrap: wrap;
-  transition: all 0.25s;
+  transition: all 0.5s;
 }
 .right-people-mes-box:hover{
   cursor: default;
   transform: translateY(-5px);
-  box-shadow: 2px 2px 5px 1px grey;
+  box-shadow: 3px 3px 6px 1px grey;
 }
 .rpm-left {
   height: 115px;
@@ -522,7 +530,7 @@ export default {
   transition: all 0.25s;
 }
 .right-head-invite:hover{
-  background-color: whitesmoke;
+  background-color: white;
   border-radius: 15px;
   font-size: 24px;
   cursor: pointer;
