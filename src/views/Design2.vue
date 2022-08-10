@@ -49,7 +49,8 @@
             <h1 style="margin-left: 60px;margin-top: 8px">{{this.name}}</h1>
             <button v-on:click="saveDesign">保存页面</button>
             <button v-on:click="exportHtml">导出页面</button>
-            <button v-on:click="shareDesign">共享页面</button>
+            <button v-on:click="stopHtml">关闭页面</button>
+            <button v-on:click="keepDesign">共享页面</button>
           </div>
 
             <EmailEditor ref="emailEditor" v-on:load="editorLoaded" v-on:ready="editorReady" />
@@ -248,7 +249,7 @@ export default {
           (data) => {
             console.log('exportHtml', data);
             let params = {
-              html: data,
+              html: data.html,
               test_id:  this.test_id
             }
             this.$axios({
@@ -261,6 +262,19 @@ export default {
             })
           }
       )
+    },
+    stopHtml() {
+      let params = {
+        test_id:  this.test_id
+      }
+      this.$axios({
+        method:'post',
+        url:'http://43.138.22.20:8000/api/user/delete_html', //todo
+        data:qs.stringify(params),
+      }).then((res) =>{
+        console.log("删除预览");
+        console.log(res);
+      })
     },
     putProToProject(testId,projectId,title,design) {
       let param = {
@@ -292,10 +306,12 @@ export default {
             console.log(design);
             console.log(typeof design)
             this.design=design;
-            this.exportHtml();
-            this.$router.push({path:'/welcome',query:{projectId:  this.project_id}})
           }
       );
+    },
+    keepDesign() {
+      this.exportHtml();
+      this.$router.push({path:'/welcome',query:{projectId:  this.project_id}})
     },
     ShowPrototype(){
       this.items[0].children=[];
