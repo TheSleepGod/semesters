@@ -253,9 +253,10 @@ export default {
             }
             this.$axios({
               method:'post',
-              url:'http://43.138.22.20:8000/api/user/check_project_prototype', //todo
+              url:'http://43.138.22.20:8000/api/user/save_html', //todo
               data:qs.stringify(params),
             }).then((res) =>{
+              console.log("看我下面");
               console.log(res);
             })
           }

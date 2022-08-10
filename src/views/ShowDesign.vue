@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   name: "ShowDesign",
   data(){
@@ -93,20 +95,22 @@ export default {
     }
   },
   mounted() {
-    // this.nowProjectId = this.$route.query.projectId;
+    this.nowProjectId = this.$route.query.projectId;
+    this.project_id = this.nowProjectId;
     this.ShowPrototype();
   },
   methods: {
     ShowPrototype(){
       this.items[0].children=[];
       let toSend = {
-        project_id:this.project_id
+        project_id:this.nowProjectId
       }
       this.$axios({
         method:'post',
         url:'http://43.138.22.20:8000/api/user/check_project_prototype',
         data:qs.stringify(toSend),
       }).then((res) =>{
+        console.log("看我！！！！");
         console.log(res);
         let ans=res.data;
         if(ans.errno===0){
