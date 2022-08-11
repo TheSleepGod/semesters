@@ -375,14 +375,15 @@ export default {
                   checkCount = 0
                 }
               }
+              let i = position - 1;
               height = Math.round(i - position) || Math.min(leftHeight, a4HeightRef);
               if(height<=0){
                 height = a4HeightRef;
               }
-            } else {
+             else {
               height = leftHeight;
             }
-
+            }
             canvas1.width = canvas.width;
             canvas1.height = height;
 
