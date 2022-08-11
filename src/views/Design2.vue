@@ -311,7 +311,7 @@ export default {
     },
     keepDesign() {
       this.exportHtml();
-      this.$router.push({path:'/welcome',query:{projectId:  this.project_id}})
+      this.$router.push({path:'/welcome',query:{projectId:this.project_id}})
     },
     ShowPrototype(){
       this.items[0].children=[];
@@ -366,9 +366,9 @@ html, body {
 }
 #example {
   height: 100%;
-  margin: 0px;
-  padding: 0px;
-  border: 0px;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 #example .container {
   display: flex;
@@ -400,7 +400,7 @@ html, body {
   font-weight: bold;
   background-color: #000;
   color: #FFF;
-  border: 0px;
+  border: 0;
   max-width: 150px;
   cursor: pointer;
 }
