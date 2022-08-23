@@ -111,7 +111,7 @@ export default {
     const ydoc = new Y.Doc()
 
     this.provider = new HocuspocusProvider({
-      url: 'wss://connect.gethocuspocus.com',
+      url: 'wss://connect.hocuspocus.cloud',
       parameters: {
         key: 'write_bqgvQ3Zwl34V4Nxt43zR',
       },
